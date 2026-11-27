@@ -23,7 +23,7 @@
                     </button>
 
                     <div x-cloak x-show="dropdownOpen" x-transition.origin.top.right role="menu"
-                        class="listbox-panel left-auto! right-0! z-[90]! w-52! min-w-52!">
+                        class="listbox-panel left-0! right-auto! sm:left-auto! sm:right-0! z-[90]! w-52! min-w-52!">
                         <x-modal-input title="{{ __('modal.new_github_app') }}" :closeOutside="false">
                             <x-slot:content>
                                 <button type="button" @click="dropdownOpen = false"
