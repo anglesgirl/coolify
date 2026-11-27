@@ -368,7 +368,9 @@
         submitAction="confirmServerRoleChange" :confirmWithText="false" :confirmWithPassword="false"
         :step2ButtonText="__('Enable deployments and builds')"
         :warningMessage="__('Builds can use a large amount of CPU and memory. During a build, deployed resources on this server can become slow or unreachable.')"
-        :actions="[__('Enable builds on this deployment server.')]"]>
+        :actions="[
+            __('Enable builds on this deployment server.'),
+        ]">
         <x-slot:trigger>
             <button id="server-role-confirmation-trigger" type="button" class="hidden" aria-hidden="true"></button>
         </x-slot:trigger>
