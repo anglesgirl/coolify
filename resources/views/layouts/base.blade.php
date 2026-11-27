@@ -256,6 +256,7 @@
             navItems: localStorage.getItem('navItems') === 'flat' ? 'flat' : '3d',
             chartTimes: localStorage.getItem('chartTimes') === 'utc' ? 'utc' : 'local',
             uiScale: window.storedUiScale(),
+            locale: (document.cookie.match(/(?:^|; )locale=([^;]*)/)?.[1] || localStorage.getItem('locale') || 'en'),
             presets: window.customThemePresets,
             // The custom theme dialog edits a draft; Save applies it. A null draft is the built-in Dark theme.
             dialogOpen: false,
@@ -270,6 +271,12 @@
                 this.theme = type;
                 localStorage.setItem('theme', type);
                 window.applyStoredTheme();
+            },
+            setLocale(locale) {
+                this.locale = locale;
+                localStorage.setItem('locale', locale);
+                document.cookie = `locale=${locale};path=/;max-age=31536000;samesite=lax`;
+                window.location.reload();
             },
             openCustomDialog() {
                 this.setDraft(this.theme === 'custom' ? { ...this.customTheme } : null);

@@ -280,6 +280,39 @@
         </div>
     </section>
 
+    <section class="application-settings-section">
+        <div class="application-settings-section-header">
+            <div>
+                <h2>Language</h2>
+                <p>Choose the language used in this browser.</p>
+            </div>
+        </div>
+        <div class="application-settings-section-body grid gap-3 sm:grid-cols-2">
+            @foreach ([
+                ['value' => 'en', 'label' => 'English', 'description' => 'Use English for the interface.'],
+                ['value' => 'zh-cn', 'label' => '中文', 'description' => '使用中文界面。'],
+            ] as $option)
+                <button type="button" @click="setLocale('{{ $option['value'] }}')"
+                    class="group overflow-hidden rounded-[10px] border border-neutral-200 bg-white text-left transition-[border-color,box-shadow] hover:border-neutral-300 hover:shadow-sm dark:border-white/[0.07] dark:bg-white/[0.05] dark:hover:border-white/[0.12]"
+                    :class="locale === '{{ $option['value'] }}'
+                        ? 'border-coollabs! bg-coollabs/[0.06]! ring-2 ring-coollabs/25 dark:border-brand-light! dark:bg-brand-light/[0.08]! dark:ring-brand-light/25'
+                        : ''">
+                    <div class="flex h-20 items-center justify-center border-b border-neutral-200 bg-neutral-50 px-4 dark:border-white/[0.07] dark:bg-black/15">
+                        <span class="text-xl font-semibold text-black dark:text-fg">{{ $option['label'] }}</span>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-sm font-semibold text-black dark:text-fg">{{ $option['label'] }}</span>
+                            <x-reicon name="check-circle" class="size-4 text-coollabs dark:text-brand-light"
+                                x-show="locale === '{{ $option['value'] }}'" x-cloak />
+                        </div>
+                        <p class="mt-1 text-xs leading-5 text-neutral-500 dark:text-fg-dim">{{ $option['description'] }}</p>
+                    </div>
+                </button>
+            @endforeach
+        </div>
+    </section>
+
     {{-- Custom theme dialog: presets, a preview, four colors, and a share code. Save applies the draft. --}}
     <template x-teleport="body">
         <div x-show="dialogOpen" x-cloak @keydown.escape.window="dialogOpen = false"
