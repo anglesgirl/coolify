@@ -70,7 +70,7 @@
     },
 }">
     <x-slot:title>
-        {{ data_get_str($service, 'name')->limit(10) }} > Backups | Coolify
+        {{ data_get_str($service, 'name')->limit(10) }} > {{ __('menu.backups') }} | Coolify
     </x-slot>
     <livewire:project.service.heading :service="$service" :parameters="$parameters" :query="request()->query()"
         wire:key="service-heading-volume-backup-index" />
@@ -79,10 +79,10 @@
         @php
             $selectedSchedule = $selectedDatabaseBackup ?: $selectedVolumeBackup;
         @endphp
-        <x-modal-input :title="'Edit backup schedule'"
+        <x-modal-input :title="__('Edit backup schedule')"
             :subtitle="($selectedDatabaseBackup
                 ? ($selectedDatabaseBackup->database->human_name ?: $selectedDatabaseBackup->database->name)
-                : $selectedVolumeBackup->targetName()).' · '.$selectedSchedule->frequency.' schedule'"
+                : $selectedVolumeBackup->targetName()).' · '.$selectedSchedule->frequency.' '.__('schedule')"
             wireOpen="scheduleModalOpen" :wireIgnore="false" isLarge fixedHeight
             canGate="update" :canResource="$service">
             <x-slot:content><span></span></x-slot:content>
@@ -114,11 +114,11 @@
                 current-route="project.service.volume-backups.index" />
 
             <div class="application-settings-form min-w-0 flex flex-col gap-6">
-        <x-application.settings-section title="Backups"
-            helper="Manage database, persistent volume, and directory backup schedules for this service.">
+        <x-application.settings-section title="{{ __('menu.backups') }}"
+            helper="{{ __('Manage database, persistent volume, and directory backup schedules for this service.') }}">
             @can('update', $service)
                 <x-slot:actions>
-                    <x-modal-input title="Import backup" buttonTitle="Import backup">
+                    <x-modal-input title="{{ __('Import backup') }}" buttonTitle="{{ __('Import backup') }}">
                         <livewire:project.service.import-backup :service="$service"
                             wire:key="service-import-backup-{{ $service->id }}" />
                     </x-modal-input>
@@ -127,30 +127,30 @@
                             <x-forms.button class="button-highlighted" @click="dropdownOpen = !dropdownOpen"
                                 aria-haspopup="menu" x-bind:aria-expanded="dropdownOpen">
                                 <x-reicon name="plus" class="size-3.5" />
-                                Add backup
+                                {{ __('Add backup') }}
                                 <x-reicon name="chevron-down" class="size-3 opacity-55" />
                             </x-forms.button>
 
                             <div x-show="dropdownOpen" x-cloak role="menu" x-transition.origin.top.left
                                 class="listbox-panel left-0! right-auto! z-[90]! w-52! min-w-52! sm:left-auto! sm:right-0!">
-                            <x-modal-input title="New storage backup" :wireIgnore="false">
+                            <x-modal-input title="{{ __('New storage backup') }}" :wireIgnore="false">
                                 <x-slot:content>
                                     <button type="button" role="menuitem" @click="dropdownOpen = false"
                                         class="listbox-option justify-start! gap-2.5!">
                                         <x-reicon name="storages" class="size-3.5" />
-                                        Storage backup
+                                        {{ __('Storage backup') }}
                                     </button>
                                 </x-slot:content>
                                 <livewire:project.service.volume-backup.create :service="$service"
                                     wire:key="create-volume-backup-{{ $service->id }}" />
                             </x-modal-input>
                             @if ($databaseTargets->isNotEmpty())
-                                <x-modal-input title="New database backup" :wireIgnore="false">
+                                <x-modal-input title="{{ __('New database backup') }}" :wireIgnore="false">
                                     <x-slot:content>
                                         <button type="button" role="menuitem" @click="dropdownOpen = false"
                                             class="listbox-option justify-start! gap-2.5!">
                                             <x-reicon name="database" class="size-3.5" />
-                                            Database backup
+                                            {{ __('Database backup') }}
                                         </button>
                                     </x-slot:content>
                                     <livewire:project.database.create-scheduled-backup :service="$service"
@@ -165,19 +165,19 @@
 
             <div class="grid gap-4 sm:grid-cols-3">
                 <div>
-                    <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">Schedules</p>
+                    <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">{{ __('Schedules') }}</p>
                     <p class="mt-1 text-xl font-semibold tabular-nums text-neutral-950 dark:text-fg">
                         {{ $backups->count() + $databaseBackups->count() }}
                     </p>
                 </div>
                 <div>
-                    <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">Enabled</p>
+                    <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">{{ __('scheduled_task.enabled') }}</p>
                     <p class="mt-1 text-xl font-semibold tabular-nums text-neutral-950 dark:text-fg">
                         {{ $backups->where('enabled', true)->count() + $databaseBackups->where('enabled', true)->count() }}
                     </p>
                 </div>
                 <div>
-                    <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">Total executions</p>
+                    <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">{{ __('Total executions') }}</p>
                     <p class="mt-1 text-xl font-semibold tabular-nums text-neutral-950 dark:text-fg">
                         {{ $backups->sum('executions_count') + $databaseBackups->sum('executions_count') }}
                     </p>
@@ -189,11 +189,11 @@
             <div class="relative w-full sm:max-w-sm">
                 <x-reicon name="search"
                     class="pointer-events-none absolute top-1/2 left-2.5 z-10 size-3.5 -translate-y-1/2 text-neutral-400 dark:text-fg-faint" />
-                <input type="search" x-model="search" placeholder="Search backups" aria-label="Search backups"
+                <input type="search" x-model="search" placeholder="{{ __('Search backups') }}" aria-label="{{ __('Search backups') }}"
                     class="input h-8! w-full py-0! pr-8! pl-8!" />
                 <button x-cloak x-show="search" x-on:click="search = ''" type="button"
                     class="absolute top-1/2 right-2 flex size-5 -translate-y-1/2 items-center justify-center rounded text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-black dark:text-fg-faint dark:hover:bg-white/[0.07] dark:hover:text-fg"
-                    aria-label="Clear search">
+                    aria-label="{{ __('Clear search') }}">
                     <span class="text-sm leading-none">×</span>
                 </button>
             </div>
@@ -205,7 +205,7 @@
                             <path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.7"
                                 stroke-linecap="round" />
                         </svg>
-                        Filter
+                        {{ __('Filter') }}
                     </button></x-slot:trigger>
                         <template x-for="option in filterOptions" :key="option.value">
                             <button type="button"
@@ -223,27 +223,27 @@
             </div>
         </div>
 
-        <x-application.settings-section title="Schedules"
-            helper="Database, persistent volume, and directory backup schedules for this service."
+        <x-application.settings-section title="{{ __('Schedules') }}"
+            helper="{{ __('Database, persistent volume, and directory backup schedules for this service.') }}"
             :flush="$backups->isNotEmpty() || $databaseBackups->isNotEmpty()">
-            <x-table.loading target="openSchedule" text="Loading schedule..." />
+            <x-table.loading target="openSchedule" text="{{ __('Loading schedule...') }}" />
 
             <div x-cloak x-show="backups.length > 0 && filteredBackups.length === 0">
-                <x-empty size="sm" title="No backups found"
-                    description="No scheduled backups match your search." />
+                <x-empty size="sm" title="{{ __('No backups found') }}"
+                    description="{{ __('No scheduled backups match your search.') }}" />
             </div>
 
             @if ($backups->isNotEmpty() || $databaseBackups->isNotEmpty())
                 <div class="data-table w-full overflow-x-auto" x-show="filteredBackups.length > 0">
                     <div class="flex min-w-[64rem] flex-col">
                     <div class="data-table-header backup-table-grid service-backup-table-grid">
-                        <x-table.sort-header label="Target" asc="target_asc" desc="target_desc" />
-                        <x-table.sort-header label="Type" asc="type_asc" desc="type_desc" />
-                        <x-table.sort-header label="Schedule" asc="schedule_asc" desc="schedule_desc" />
-                        <x-table.sort-header label="Status" asc="status_asc" desc="status_desc" />
+                        <x-table.sort-header label="{{ __('Target') }}" asc="target_asc" desc="target_desc" />
+                        <x-table.sort-header label="{{ __('backup.type') }}" asc="type_asc" desc="type_desc" />
+                        <x-table.sort-header label="{{ __('Schedule') }}" asc="schedule_asc" desc="schedule_desc" />
+                        <x-table.sort-header label="{{ __('Status') }}" asc="status_asc" desc="status_desc" />
                         <x-table.sort-header label="S3" asc="s3_asc" desc="s3_desc" />
-                        <x-table.sort-header label="Last run" asc="lastrun_asc" desc="lastrun_desc" first="desc" />
-                        <span class="text-right">Actions</span>
+                        <x-table.sort-header label="{{ __('Last run') }}" asc="lastrun_asc" desc="lastrun_desc" first="desc" />
+                        <span class="text-right">{{ __('Actions') }}</span>
                     </div>
 
                     @foreach ($databaseBackups as $databaseBackup)
@@ -251,10 +251,10 @@
                             $latestExecution = $databaseBackup->latest_log;
                             $status = $latestExecution?->status;
                             $statusLabel = match ($status) {
-                                'running' => 'In progress',
-                                'success' => 'Success',
-                                'failed' => 'Failed',
-                                default => $databaseBackup->enabled ? 'Waiting' : 'Disabled',
+                                'running' => __('In progress'),
+                                'success' => __('task_execution.status_success'),
+                                'failed' => __('task_execution.status_failed'),
+                                default => $databaseBackup->enabled ? __('Waiting') : __('Disabled'),
                             };
                             $statusType = match ($status) {
                                 'running' => 'warning',
@@ -264,7 +264,7 @@
                             };
                             $databaseBackupId = 'database:'.$databaseBackup->id;
                             $databaseS3s = ($databaseBackup->s3Storages->isNotEmpty() ? $databaseBackup->s3Storages : collect([$databaseBackup->s3])->filter())->where('team_id', $serviceTeamId);
-                            $databaseS3Tooltip = ! $databaseBackup->save_s3 ? 'S3 storage: Not configured' : ($databaseS3s->isNotEmpty() ? 'S3 storage: '.$databaseS3s->map(fn ($s3) => $s3->name.' ('.($s3->isS3() ? 'bucket: '.$s3->bucket : $s3->type->label()).')')->join(', ') : 'S3 storage: Unavailable');
+                            $databaseS3Tooltip = ! $databaseBackup->save_s3 ? __('S3 storage: Not configured') : ($databaseS3s->isNotEmpty() ? __('S3 storage: :storages', ['storages' => $databaseS3s->map(fn ($s3) => $s3->name.' ('.($s3->isS3() ? __('bucket: :bucket', ['bucket' => $s3->bucket]) : $s3->type->label()).')')->join(', ')]) : __('S3 storage: Unavailable'));
                         @endphp
                         <div wire:key="database-backup-{{ $databaseBackup->uuid }}"
                             x-show="isVisible(@js($databaseBackupId))"
@@ -277,25 +277,25 @@
                             </span>
                             <span class="min-w-0">
                                 <button type="button" class="table-filter-value"
-                                    title="Filter by Database"
+                                    title="{{ __('Filter by Database') }}"
                                     x-on:click.stop="typeFilter = typeFilter === 'database' ? 'all' : 'database'"
-                                    x-on:keydown.enter.stop>Database</button>
+                                    x-on:keydown.enter.stop>{{ __('database.database') }}</button>
                             </span>
                             <span>{{ $databaseBackup->frequency }}</span>
                             <span><x-status-badge :status="$statusLabel" :type="$statusType" /></span>
                             <span class="min-w-0">
                                 <x-backup-s3-storage :enabled="$databaseBackup->save_s3" :names="$databaseS3s->pluck('name')" :tooltip="$databaseS3Tooltip" />
                             </span>
-                            <span>{{ $latestExecution?->finished_at?->diffForHumans() ?? ($status === 'running' ? 'Running now' : 'Never') }}</span>
+                            <span>{{ $latestExecution?->finished_at?->diffForHumans() ?? ($status === 'running' ? __('Running now') : __('Never')) }}</span>
                             <span class="flex justify-end" x-on:click.stop x-on:keydown.enter.stop>
                                 @can('update', $service)
-                                    <x-table.row-actions label="Backup schedule actions">
+                                    <x-table.row-actions label="{{ __('Backup schedule actions') }}">
                                         <x-table.row-action
                                             :disabled="! str($databaseBackup->database->status)->startsWith('running')"
-                                            :title="! str($databaseBackup->database->status)->startsWith('running') ? 'The database must be running to start a backup.' : null"
-                                            wire:click="backupNow('database', '{{ $databaseBackup->uuid }}')">Back up now</x-table.row-action>
+                                            :title="! str($databaseBackup->database->status)->startsWith('running') ? __('The database must be running to start a backup.') : null"
+                                            wire:click="backupNow('database', '{{ $databaseBackup->uuid }}')">{{ __('Back up now') }}</x-table.row-action>
                                         <x-table.row-action
-                                            wire:click="openSchedule('{{ $databaseBackup->uuid }}')">Edit</x-table.row-action>
+                                            wire:click="openSchedule('{{ $databaseBackup->uuid }}')">{{ __('Edit') }}</x-table.row-action>
                                     </x-table.row-actions>
                                 @endcan
                             </span>
@@ -306,13 +306,13 @@
                         @php
                             $latestExecution = $backup->latestExecution;
                             $volumeS3s = ($backup->s3Storages->isNotEmpty() ? $backup->s3Storages : collect([$backup->s3])->filter())->where('team_id', $serviceTeamId);
-                            $volumeS3Tooltip = ! $backup->save_s3 ? 'S3 storage: Not configured' : ($volumeS3s->isNotEmpty() ? 'S3 storage: '.$volumeS3s->map(fn ($s3) => $s3->name.' ('.($s3->isS3() ? 'bucket: '.$s3->bucket : $s3->type->label()).')')->join(', ') : 'S3 storage: Unavailable');
+                            $volumeS3Tooltip = ! $backup->save_s3 ? __('S3 storage: Not configured') : ($volumeS3s->isNotEmpty() ? __('S3 storage: :storages', ['storages' => $volumeS3s->map(fn ($s3) => $s3->name.' ('.($s3->isS3() ? __('bucket: :bucket', ['bucket' => $s3->bucket]) : $s3->type->label()).')')->join(', ')]) : __('S3 storage: Unavailable'));
                             $status = $latestExecution?->status;
                             $statusLabel = match ($status) {
-                                'running' => 'In progress',
-                                'success' => 'Success',
-                                'failed' => 'Failed',
-                                default => $backup->enabled ? 'Waiting' : 'Disabled',
+                                'running' => __('In progress'),
+                                'success' => __('task_execution.status_success'),
+                                'failed' => __('task_execution.status_failed'),
+                                default => $backup->enabled ? __('Waiting') : __('Disabled'),
                             };
                             $statusType = match ($status) {
                                 'running' => 'warning',
@@ -333,7 +333,7 @@
                             </span>
                             <span class="min-w-0">
                                 <button type="button" class="table-filter-value"
-                                    title="Filter by {{ $backup->targetType() }}"
+                                    title="{{ __('Filter by :type', ['type' => $backup->targetType()]) }}"
                                     x-on:click.stop="typeFilter = typeFilter === @js(strtolower($backup->targetType())) ? 'all' : @js(strtolower($backup->targetType()))"
                                     x-on:keydown.enter.stop>{{ $backup->targetType() }}</button>
                             </span>
@@ -343,15 +343,15 @@
                                 <x-backup-s3-storage :enabled="$backup->save_s3" :names="$volumeS3s->pluck('name')" :tooltip="$volumeS3Tooltip" />
                             </span>
                             <span>
-                                {{ $latestExecution?->finished_at?->diffForHumans() ?? ($status === 'running' ? 'Running now' : 'Never') }}
+                                {{ $latestExecution?->finished_at?->diffForHumans() ?? ($status === 'running' ? __('Running now') : __('Never')) }}
                             </span>
                             <span class="flex justify-end" x-on:click.stop x-on:keydown.enter.stop>
                                 @can('update', $service)
-                                    <x-table.row-actions label="Backup schedule actions">
+                                    <x-table.row-actions label="{{ __('Backup schedule actions') }}">
                                         <x-table.row-action
-                                            wire:click="backupNow('storage', '{{ $backup->uuid }}')">Back up now</x-table.row-action>
+                                            wire:click="backupNow('storage', '{{ $backup->uuid }}')">{{ __('Back up now') }}</x-table.row-action>
                                         <x-table.row-action
-                                            wire:click="openSchedule('{{ $backup->uuid }}')">Edit</x-table.row-action>
+                                            wire:click="openSchedule('{{ $backup->uuid }}')">{{ __('Edit') }}</x-table.row-action>
                                     </x-table.row-actions>
                                 @endcan
                             </span>
@@ -360,8 +360,8 @@
                     </div>
                 </div>
             @else
-                <x-empty size="sm" title="No scheduled backups"
-                    description="Add a database, persistent volume, or directory backup schedule to protect service data."
+                <x-empty size="sm" title="{{ __('No scheduled backups') }}"
+                    description="{{ __('Add a database, persistent volume, or directory backup schedule to protect service data.') }}"
                     icon-name="storages" />
             @endif
         </x-application.settings-section>

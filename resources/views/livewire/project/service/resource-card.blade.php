@@ -10,7 +10,7 @@
 @endphp
 
 <x-modal-input title="{{ $resourceName }}"
-    subtitle="{{ $isApplication ? 'Identity, image, and public access for this compose application.' : 'Identity, image, and public access for this compose database.' }}"
+    subtitle="{{ $isApplication ? __('Identity, image, and public access for this compose application.') : __('Identity, image, and public access for this compose database.') }}"
     :contentClicks="false" :wireIgnore="false" isLarge>
     <x-slot:content>
     <div x-data="{
@@ -40,7 +40,7 @@
                 @if ($resource->is_removed_from_compose)
                 <span class="inline-flex h-6 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-red-200 bg-red-50 px-2 text-xs font-medium leading-none text-red-700 dark:border-red-500/30 dark:bg-red-500/15 dark:text-red-300">
                     <span class="size-1.5 shrink-0 rounded-full bg-red-500"></span>
-                    <span class="truncate">Not in Compose file</span>
+                    <span class="truncate">{{ __('Not in Compose file') }}</span>
                 </span>
             @else
                 <x-status-badge :status="$statusLabel" :type="$statusType" />
@@ -50,11 +50,11 @@
 
             @if ($resource->is_removed_from_compose)
                 <p class="mt-2 text-xs leading-5 text-neutral-500 dark:text-fg-dim">
-                    This resource is not in the Docker Compose file. Add it back to use it again, or delete it in its settings.
+                    {{ __('This resource is not in the Docker Compose file. Add it back to use it again, or delete it in its settings.') }}
                 </p>
             @elseif ($resource->configuration_required)
                 <div class="mt-2">
-                    <x-status-badge status="Configuration required" type="warning" />
+                    <x-status-badge status="{{ __('Configuration required') }}" type="warning" />
                 </div>
             @elseif ($resource->description)
                 <p class="mt-2 line-clamp-2 text-xs leading-5 text-neutral-500 dark:text-fg-dim">
@@ -68,32 +68,32 @@
         <div
             class="flex items-center justify-end gap-1 border-t border-neutral-200 bg-neutral-50 px-3 py-2 dark:border-white/[0.06] dark:bg-white/[0.02]">
         @if ($isDatabase && ($resource->isBackupSolutionAvailable() || $resource->is_migrated))
-            <a class="icon-button" title="Service backups" aria-label="Service backups" {{ wireNavigate() }}
+            <a class="icon-button" title="{{ __('Service backups') }}" aria-label="{{ __('Service backups') }}" {{ wireNavigate() }}
                 href="{{ route('project.service.volume-backups.index', $parameters) }}">
                 <x-reicon name="database" class="size-4" />
             </a>
         @endif
         @if ($isApplication && $resource->fqdn)
             @can('update', $service)
-                <a class="icon-button" title="Manage domains" aria-label="Manage domains" {{ wireNavigate() }}
+                <a class="icon-button" title="{{ __('Manage domains') }}" aria-label="{{ __('Manage domains') }}" {{ wireNavigate() }}
                     href="{{ route('project.service.domains', $parameters) }}">
                     <x-reicon name="globe" class="size-4" />
                 </a>
             @endcan
         @endif
-        <button type="button" class="icon-button" title="Resource settings" aria-label="Resource settings"
+        <button type="button" class="icon-button" title="{{ __('Resource settings') }}" aria-label="{{ __('Resource settings') }}"
             @click="modalOpen = true">
             <x-reicon name="settings" class="size-4" />
         </button>
         @if (str($resource->status)->contains('running'))
             @can('update', $service)
                 <x-modal-confirmation
-                    :title="$isApplication ? 'Confirm Service Application Restart?' : 'Confirm Service Database Restart?'"
-                    buttonTitle="Restart" submitAction="restart" :actions="$isApplication
-                        ? ['The selected service application will be unavailable during the restart.']
-                        : ['This service database will be unavailable during the restart.']"
+                    :title="$isApplication ? __('service.confirm_restart_app_title') : __('service.confirm_restart_db_title')"
+                    buttonTitle="{{ __('database.restart') }}" submitAction="restart" :actions="$isApplication
+                        ? [__('service.confirm_restart_app_action_1')]
+                        : [__('service.confirm_restart_db_action_1')]"
                     :confirmWithText="false" :confirmWithPassword="false"
-                    :step2ButtonText="$isApplication ? 'Restart Service Container' : 'Restart Database'" />
+                    :step2ButtonText="$isApplication ? __('service.restart_service_container') : __('service.restart_database')" />
             @endcan
         @endif
         </div>
@@ -101,7 +101,7 @@
 
     <div x-cloak x-show="viewMode === 'table'"
         x-on:click="openSettings($event)" x-on:keydown.enter="openSettings($event)"
-        role="link" tabindex="0" aria-label="Open {{ $resourceName }} settings"
+        role="link" tabindex="0" aria-label="{{ __('Open :name settings', ['name' => $resourceName]) }}"
         class="grid min-h-14 min-w-[48rem] cursor-pointer grid-cols-[minmax(14rem,1fr)_minmax(12rem,1fr)_12rem_5rem] items-center gap-3 border-b border-neutral-200 px-4 py-2.5 last:border-b-0 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary dark:border-white/[0.07] dark:hover:bg-white/[0.025]">
         <div class="flex min-w-0 items-center gap-3">
             <div
@@ -116,11 +116,11 @@
             {{ $resource->image }}
         </div>
         <div class="flex flex-wrap items-center gap-1"
-            @if ($resource->is_removed_from_compose) title="Not in the Docker Compose file. Add it back to use it again, or delete it in its settings." @endif>
+            @if ($resource->is_removed_from_compose) title="{{ __('Not in the Docker Compose file. Add it back to use it again, or delete it in its settings.') }}" @endif>
             @if ($resource->is_removed_from_compose)
                 <span class="inline-flex h-6 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-red-200 bg-red-50 px-2 text-xs font-medium leading-none text-red-700 dark:border-red-500/30 dark:bg-red-500/15 dark:text-red-300">
                     <span class="size-1.5 shrink-0 rounded-full bg-red-500"></span>
-                    <span class="truncate">Not in Compose file</span>
+                    <span class="truncate">{{ __('Not in Compose file') }}</span>
                 </span>
             @else
                 <x-status-badge :status="$statusLabel" :type="$statusType" />
@@ -133,17 +133,17 @@
         @endphp
         <div class="flex items-center justify-end">
             @if ($hasBackupsAction || $hasDomainsAction)
-                <x-table.row-actions label="Resource actions">
+                <x-table.row-actions label="{{ __('Resource actions') }}">
                     @if ($hasBackupsAction)
-                        <x-table.row-action :href="route('project.service.volume-backups.index', $parameters)">Backups</x-table.row-action>
+                        <x-table.row-action :href="route('project.service.volume-backups.index', $parameters)">{{ __('menu.backups') }}</x-table.row-action>
                     @endif
                     @if ($hasDomainsAction)
-                        <x-table.row-action :href="route('project.service.domains', $parameters)">Domains</x-table.row-action>
+                        <x-table.row-action :href="route('project.service.domains', $parameters)">{{ __('application.domains') }}</x-table.row-action>
                     @endif
-                    <x-table.row-action @click="modalOpen = true">Settings</x-table.row-action>
+                    <x-table.row-action @click="modalOpen = true">{{ __('service.settings') }}</x-table.row-action>
                 </x-table.row-actions>
             @else
-                <button type="button" class="icon-button" title="Resource settings" aria-label="Resource settings"
+                <button type="button" class="icon-button" title="{{ __('Resource settings') }}" aria-label="{{ __('Resource settings') }}"
                     @click="modalOpen = true">
                     <x-reicon name="settings" class="size-4" />
                 </button>

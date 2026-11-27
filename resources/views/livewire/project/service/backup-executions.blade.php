@@ -9,54 +9,54 @@
         $server = $service->server;
     @endphp
     @if ($selectedExecution)
-        <x-modal-input title="Backup execution" wireOpen="executionModalOpen" :wireIgnore="false" isLarge>
+        <x-modal-input title="{{ __('Backup execution') }}" wireOpen="executionModalOpen" :wireIgnore="false" isLarge>
             <x-slot:content><span></span></x-slot:content>
             <div class="flex flex-col gap-5">
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Target</p><p class="mt-1 text-sm font-medium">{{ $selectedExecution['target'] }}</p></div>
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Status</p><p class="mt-1 text-sm font-medium">{{ str($selectedExecution['status'])->headline() }}</p></div>
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Started</p><p class="mt-1 text-sm font-medium" title="{{ $selectedExecution['started_at']->diffForHumans() }}">{{ formatDateInServerTimezone($selectedExecution['started_at'], $server) }}</p></div>
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ $selectedExecution['status'] === 'running' ? 'Running for' : 'Ended' }}</p><p class="mt-1 text-sm font-medium">@if ($selectedExecution['status'] === 'running'){{ calculateDuration($selectedExecution['started_at'], now()) }}@else{{ formatDateInServerTimezone($selectedExecution['finished_at'], $server) }}<span class="block text-xs font-normal text-neutral-500 dark:text-fg-dim">Took {{ calculateDuration($selectedExecution['started_at'], $selectedExecution['finished_at']) }}</span>@endif</p></div>
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Size</p><p class="mt-1 text-sm font-medium">{{ $selectedExecution['size'] ? formatBytes($selectedExecution['size']) : '-' }}</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Target') }}</p><p class="mt-1 text-sm font-medium">{{ $selectedExecution['target'] }}</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Status') }}</p><p class="mt-1 text-sm font-medium">{{ str($selectedExecution['status'])->headline() }}</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Started') }}</p><p class="mt-1 text-sm font-medium" title="{{ $selectedExecution['started_at']->diffForHumans() }}">{{ formatDateInServerTimezone($selectedExecution['started_at'], $server) }}</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ $selectedExecution['status'] === 'running' ? __('backup.running_for') : __('Ended') }}</p><p class="mt-1 text-sm font-medium">@if ($selectedExecution['status'] === 'running'){{ calculateDuration($selectedExecution['started_at'], now()) }}@else{{ formatDateInServerTimezone($selectedExecution['finished_at'], $server) }}<span class="block text-xs font-normal text-neutral-500 dark:text-fg-dim">{{ __('Took :duration', ['duration' => calculateDuration($selectedExecution['started_at'], $selectedExecution['finished_at'])]) }}</span>@endif</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('backup.size') }}</p><p class="mt-1 text-sm font-medium">{{ $selectedExecution['size'] ? formatBytes($selectedExecution['size']) : '-' }}</p></div>
                 </div>
                 @if ($selectedExecution['filename'])
                     <div>
-                        <p class="text-xs text-neutral-500 dark:text-fg-dim">Backup path</p>
+                        <p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Backup path') }}</p>
                         <div class="mt-1 flex items-center gap-2 rounded-md bg-neutral-100 p-3 dark:bg-black/20">
                             <code class="min-w-0 flex-1 overflow-x-auto text-xs">{{ $selectedExecution['filename'] }}</code>
-                            <x-copy-button :value="$selectedExecution['filename']" label="Copy backup path" />
+                            <x-copy-button :value="$selectedExecution['filename']" label="{{ __('Copy backup path') }}" />
                         </div>
                     </div>
                 @endif
                 @if ($selectedExecution['message'])
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Output</p><pre class="mt-1 max-h-80 overflow-auto rounded-md bg-neutral-100 p-3 font-mono text-xs whitespace-pre-wrap dark:bg-black/20">{{ $selectedExecution['message'] }}</pre></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Output') }}</p><pre class="mt-1 max-h-80 overflow-auto rounded-md bg-neutral-100 p-3 font-mono text-xs whitespace-pre-wrap dark:bg-black/20">{{ $selectedExecution['message'] }}</pre></div>
                 @endif
             </div>
         </x-modal-input>
     @endif
 
-    <x-application.settings-section title="Executions"
-        helper="Review backup runs across every database and storage target in this service." flush>
+    <x-application.settings-section title="{{ __('Executions') }}"
+        helper="{{ __('Review backup runs across every database and storage target in this service.') }}" flush>
         @if ($executions->total() > 10)
             <x-slot:actions>
                 <x-page-size-select model="perPage" livewire />
             </x-slot:actions>
         @endif
         @if ($executions->isEmpty())
-            <x-empty size="sm" title="No backup executions"
-                description="Execution history appears here after a backup schedule runs." icon-name="browser-terminal" />
+            <x-empty size="sm" title="{{ __('No backup executions') }}"
+                description="{{ __('Execution history appears here after a backup schedule runs.') }}" icon-name="browser-terminal" />
         @else
             <div class="data-table relative w-full overflow-x-auto">
-                <x-table.loading target="previousPage,nextPage,setPage,perPage,sortExecutions" text="Loading executions..." />
+                <x-table.loading target="previousPage,nextPage,setPage,perPage,sortExecutions" text="{{ __('Loading executions...') }}" />
                 <div class="flex min-w-[64rem] flex-col">
                 <div class="data-table-header service-backup-table-grid">
-                    <x-table.sort-header label="Target" asc="target_asc" desc="target_desc" action="sortExecutions" :current="$sortBy" />
-                    <x-table.sort-header label="Type" asc="type_asc" desc="type_desc" action="sortExecutions" :current="$sortBy" />
-                    <x-table.sort-header label="Schedule" asc="schedule_asc" desc="schedule_desc" action="sortExecutions" :current="$sortBy" />
-                    <x-table.sort-header label="Status" asc="status_asc" desc="status_desc" action="sortExecutions" :current="$sortBy" />
-                    <x-table.sort-header label="Time" asc="started_asc" desc="started_desc" first="desc" action="sortExecutions" :current="$sortBy" />
-                    <x-table.sort-header label="Size" asc="size_asc" desc="size_desc" first="desc" action="sortExecutions" :current="$sortBy" />
-                    <span class="text-right">Actions</span>
+                    <x-table.sort-header label="{{ __('Target') }}" asc="target_asc" desc="target_desc" action="sortExecutions" :current="$sortBy" />
+                    <x-table.sort-header label="{{ __('backup.type') }}" asc="type_asc" desc="type_desc" action="sortExecutions" :current="$sortBy" />
+                    <x-table.sort-header label="{{ __('Schedule') }}" asc="schedule_asc" desc="schedule_desc" action="sortExecutions" :current="$sortBy" />
+                    <x-table.sort-header label="{{ __('Status') }}" asc="status_asc" desc="status_desc" action="sortExecutions" :current="$sortBy" />
+                    <x-table.sort-header label="{{ __('Time') }}" asc="started_asc" desc="started_desc" first="desc" action="sortExecutions" :current="$sortBy" />
+                    <x-table.sort-header label="{{ __('backup.size') }}" asc="size_asc" desc="size_desc" first="desc" action="sortExecutions" :current="$sortBy" />
+                    <span class="text-right">{{ __('Actions') }}</span>
                 </div>
                 @foreach ($executions as $execution)
                     @php
@@ -83,9 +83,9 @@
                         <span><x-status-badge :status="str($execution['status'])->headline()" :type="$statusType" /></span>
                         <span>
                             <span class="block text-[11px] text-neutral-500 dark:text-fg-faint" tabindex="0"
-                                title="Started: {{ formatDateInServerTimezone($execution['started_at'], $server) }}@if ($execution['status'] !== 'running')&#10;Ended: {{ formatDateInServerTimezone($execution['finished_at'], $server) }}@endif">
+                                title="{{ __('Started: :started', ['started' => formatDateInServerTimezone($execution['started_at'], $server)]) }}@if ($execution['status'] !== 'running')&#10;{{ __('Ended: :ended', ['ended' => formatDateInServerTimezone($execution['finished_at'], $server)]) }}@endif">
                                 @if ($execution['status'] === 'running')
-                                    Running for {{ calculateDuration($execution['started_at'], now()) }}
+                                    {{ __('backup.running_for') }} {{ calculateDuration($execution['started_at'], now()) }}
                                 @else
                                     <span class="block text-[13px] text-black dark:text-fg">{{ formatDateInServerTimezone($execution['finished_at'], $server) }}</span>
                                     {{ $execution['finished_at']->diffForHumans() }} · {{ calculateDuration($execution['started_at'], $execution['finished_at']) }}
@@ -96,13 +96,13 @@
                         <span class="flex justify-end">
                             @if ($execution['download_url'] && $s3Downloads)
                                 <button type="button" wire:click.stop="downloadExecution('{{ $execution['uuid'] }}')"
-                                    class="icon-button shrink-0" title="Download backup" aria-label="Download backup">
+                                    class="icon-button shrink-0" title="{{ __('Download backup') }}" aria-label="{{ __('Download backup') }}">
                                     <x-reicon name="upload" class="size-3.5 rotate-180" />
                                 </button>
                             @elseif ($execution['download_url'])
                                 <a href="{{ $execution['download_url'] }}" target="_blank" rel="noopener"
-                                    @click.stop class="icon-button shrink-0" title="Download backup"
-                                    aria-label="Download backup">
+                                    @click.stop class="icon-button shrink-0" title="{{ __('Download backup') }}"
+                                    aria-label="{{ __('Download backup') }}">
                                     <x-reicon name="upload" class="size-3.5 rotate-180" />
                                 </a>
                             @endif
