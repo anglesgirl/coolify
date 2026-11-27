@@ -59,7 +59,7 @@
     },
 }">
     <x-slot:title>
-        {{ data_get_str($application, 'name')->limit(10) }} > Backups | Coolify
+        {{ data_get_str($application, 'name')->limit(10) }} > {{ __('Backups | Coolify') }}
     </x-slot>
     <livewire:project.shared.configuration-checker :resource="$application" />
     <livewire:project.application.heading :application="$application"
@@ -71,16 +71,16 @@
                 current-route="project.application.backup.index" />
 
             <div class="application-settings-form flex min-w-0 flex-col gap-6">
-            <x-application.settings-section title="Storage backups"
-                helper="Schedule backups for persistent volumes and directory mounts attached to this application.">
+            <x-application.settings-section :title="__('Storage backups')"
+                :helper="__('Schedule backups for persistent volumes and directory mounts attached to this application.')">
                 @can('update', $application)
                     <x-slot:actions>
-                        <x-modal-input title="New scheduled backup" :wireIgnore="false">
+                        <x-modal-input :title="__('New scheduled backup')" :wireIgnore="false">
                             <x-slot:content>
                                 <button type="button"
                                     class="button button-highlighted">
                                     <x-reicon name="plus" class="size-3.5" />
-                                    Add
+                                    {{ __('button.add') }}
                                 </button>
                             </x-slot:content>
                             <livewire:project.application.backup.create :application="$application"
@@ -91,19 +91,19 @@
 
                 <div class="grid gap-4 sm:grid-cols-3">
                     <div>
-                        <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">Schedules</p>
+                        <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">{{ __('Schedules') }}</p>
                         <p class="mt-1 text-xl font-semibold tabular-nums text-neutral-950 dark:text-fg">
                             {{ $backups->count() }}
                         </p>
                     </div>
                     <div>
-                        <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">Enabled</p>
+                        <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">{{ __('scheduled_task.enabled') }}</p>
                         <p class="mt-1 text-xl font-semibold tabular-nums text-neutral-950 dark:text-fg">
                             {{ $backups->where('enabled', true)->count() }}
                         </p>
                     </div>
                     <div>
-                        <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">Total executions</p>
+                        <p class="text-xs font-medium text-neutral-500 dark:text-fg-dim">{{ __('Total executions') }}</p>
                         <p class="mt-1 text-xl font-semibold tabular-nums text-neutral-950 dark:text-fg">
                             {{ $backups->sum('executions_count') }}
                         </p>
@@ -115,11 +115,11 @@
                 <div class="relative w-full sm:max-w-sm">
                     <x-reicon name="search"
                         class="pointer-events-none absolute top-1/2 left-2.5 z-10 size-3.5 -translate-y-1/2 text-neutral-400 dark:text-fg-faint" />
-                    <input type="search" x-model="search" placeholder="Search backups" aria-label="Search backups"
+                    <input type="search" x-model="search" placeholder="{{ __('Search backups') }}" aria-label="{{ __('Search backups') }}"
                         class="input h-8! w-full py-0! pr-8! pl-8!" />
                     <button x-cloak x-show="search" x-on:click="search = ''" type="button"
                         class="absolute top-1/2 right-2 flex size-5 -translate-y-1/2 items-center justify-center rounded text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-black dark:text-fg-faint dark:hover:bg-white/[0.07] dark:hover:text-fg"
-                        aria-label="Clear search">
+                        aria-label="{{ __('Clear search') }}">
                         <span class="text-sm leading-none">×</span>
                     </button>
                 </div>
@@ -131,7 +131,7 @@
                                 <path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.7"
                                     stroke-linecap="round" />
                             </svg>
-                            Filter
+                            {{ __('common.filter') }}
                         </button></x-slot:trigger>
                             <template x-for="option in filterOptions" :key="option.value">
                                 <button type="button"
@@ -149,24 +149,24 @@
                 </div>
             </div>
 
-            <x-application.settings-section title="Schedules"
-                helper="Persistent volume and directory backup schedules for this application."
+            <x-application.settings-section :title="__('Schedules')"
+                :helper="__('Persistent volume and directory backup schedules for this application.')"
                 :flush="$backups->isNotEmpty()">
                 <div x-cloak x-show="backups.length > 0 && filteredBackups.length === 0">
-                    <x-empty size="sm" title="No backups found"
-                        description="No scheduled backups match your search." />
+                    <x-empty size="sm" :title="__('No backups found')"
+                        :description="__('No scheduled backups match your search.')" />
                 </div>
 
                 @if ($backups->isNotEmpty())
                     <div class="data-table flex w-full flex-col overflow-x-auto" x-show="filteredBackups.length > 0">
                         <div class="data-table-header backup-table-grid">
-                            <x-table.sort-header label="Target" asc="target_asc" desc="target_desc" />
-                            <x-table.sort-header label="Type" asc="type_asc" desc="type_desc" />
-                            <x-table.sort-header label="Schedule" asc="schedule_asc" desc="schedule_desc" />
-                            <x-table.sort-header label="Status" asc="status_asc" desc="status_desc" />
+                            <x-table.sort-header :label="__('Target')" asc="target_asc" desc="target_desc" />
+                            <x-table.sort-header :label="__('backup.type')" asc="type_asc" desc="type_desc" />
+                            <x-table.sort-header :label="__('Schedule')" asc="schedule_asc" desc="schedule_desc" />
+                            <x-table.sort-header :label="__('Status')" asc="status_asc" desc="status_desc" />
                             <x-table.sort-header label="S3" asc="s3_asc" desc="s3_desc" />
-                            <x-table.sort-header label="Last run" asc="lastrun_asc" desc="lastrun_desc" first="desc" />
-                            <x-table.sort-header label="Executions" asc="executions_asc" desc="executions_desc" first="desc"
+                            <x-table.sort-header :label="__('Last run')" asc="lastrun_asc" desc="lastrun_desc" first="desc" />
+                            <x-table.sort-header :label="__('Executions')" asc="executions_asc" desc="executions_desc" first="desc"
                                 class="justify-self-end" />
                         </div>
 
@@ -176,10 +176,10 @@
                                 $s3StorageNames = ($backup->s3Storages->isNotEmpty() ? $backup->s3Storages : collect([$backup->s3])->filter())->pluck('name');
                                 $status = $latestExecution?->status;
                                 $statusLabel = match ($status) {
-                                    'running' => 'In progress',
-                                    'success' => 'Success',
-                                    'failed' => 'Failed',
-                                    default => $backup->enabled ? 'Waiting' : 'Disabled',
+                                    'running' => __('In progress'),
+                                    'success' => __('Success'),
+                                    'failed' => __('Failed'),
+                                    default => $backup->enabled ? __('Waiting') : __('Disabled'),
                                 };
                                 $statusType = match ($status) {
                                     'running' => 'warning',
@@ -200,7 +200,7 @@
                                 </span>
                                 <span class="min-w-0">
                                     <span role="button" tabindex="0" class="table-filter-value"
-                                        title="Filter by {{ $backup->targetType() }}"
+                                        title="{{ __('Filter by :name', ['name' => $backup->targetType()]) }}"
                                         x-on:click.prevent.stop="typeFilter = typeFilter === @js(strtolower($backup->targetType())) ? 'all' : @js(strtolower($backup->targetType()))"
                                         x-on:keydown.enter.prevent.stop="$el.click()">{{ $backup->targetType() }}</span>
                                 </span>
@@ -208,10 +208,10 @@
                                 <span><x-status-badge :status="$statusLabel" :type="$statusType" /></span>
                                 <span class="min-w-0">
                                     <x-backup-s3-storage :enabled="$backup->save_s3" :names="$s3StorageNames"
-                                        :tooltip="$backup->save_s3 ? ($s3StorageNames->isNotEmpty() ? 'S3 storage: '.$s3StorageNames->join(', ') : 'S3 storage: Unavailable') : 'S3 storage: Not configured'" />
+                                        :tooltip="$backup->save_s3 ? ($s3StorageNames->isNotEmpty() ? __('S3 storage: ').$s3StorageNames->join(', ') : __('S3 storage: Unavailable')) : __('S3 storage: Not configured')" />
                                 </span>
                                 <span>
-                                    {{ $latestExecution?->finished_at?->diffForHumans() ?? ($status === 'running' ? 'Running now' : 'Never') }}
+                                    {{ $latestExecution?->finished_at?->diffForHumans() ?? ($status === 'running' ? __('Running now') : __('Never')) }}
                                 </span>
                                 <span class="text-right tabular-nums text-neutral-950 dark:text-fg">
                                     {{ $backup->executions_count }}
@@ -220,8 +220,8 @@
                         @endforeach
                     </div>
                 @else
-                    <x-empty size="sm" title="No scheduled backups"
-                        description="Add a persistent volume or directory backup schedule to protect application data."
+                    <x-empty size="sm" :title="__('No scheduled backups')"
+                        :description="__('Add a persistent volume or directory backup schedule to protect application data.')"
                         icon-name="storages" />
                 @endif
             </x-application.settings-section>

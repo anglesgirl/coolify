@@ -10,27 +10,27 @@
         <x-unsaved-bar action="submit"
             targets="name,description,buildPack,staticImage,baseDirectory,dockerComposeLocation,dockerComposeCustomBuildCommand,dockerComposeCustomStartCommand,watchPaths,dockerfileLocation,dockerfileTargetBuild,publishDirectory,installCommand,buildCommand,startCommand,customNginxConfiguration,dockerfile,dockerRegistryImageName,dockerRegistryImageTag,portsExposes,portsMappings,customNetworkAliases,customDockerRunOptions,httpBasicAuthUsername,httpBasicAuthPassword,preDeploymentCommand,preDeploymentCommandContainer,postDeploymentCommand,postDeploymentCommandContainer,isContainerLabelReadonlyEnabled,isContainerLabelEscapeEnabled,customLabels" />
         <div class="application-settings-grid flex flex-col gap-6">
-            <x-application.settings-section id="application-details-section" title="Application details" helper="Name the application and choose the build strategy Coolify should use to deploy it." class="application-details-card">
+            <x-application.settings-section id="application-details-section" :title="__('Application details')" :helper="__('Name the application and choose the build strategy Coolify should use to deploy it.')" class="application-details-card">
             @if ($buildPack === 'dockercompose' && filled($dockerComposeRaw))
                 <x-slot:actions>
                     <x-forms.button canGate="update" :canResource="$application" wire:target='initLoadingCompose'
                         x-on:click="$wire.dispatch('loadCompose', false)">
-                        Reload compose
+                        {{ __('Reload compose') }}
                     </x-forms.button>
                 </x-slot:actions>
             @endif
             <div class="grid gap-4">
-                <x-forms.input x-bind:disabled="shouldDisable()" id="name" label="Name" required />
-                <x-forms.input x-bind:disabled="shouldDisable()" id="description" label="Description" />
+                <x-forms.input x-bind:disabled="shouldDisable()" id="name" :label="__('scheduled_task.name_label')" required />
+                <x-forms.input x-bind:disabled="shouldDisable()" id="description" :label="__('input.description')" />
             </div>
 
             </x-application.settings-section>
 
-            <x-application.settings-section id="access-section" title="Access" helper="Manage how this application is reached publicly, who can access it, and how it is reached from the Docker network.">
+            <x-application.settings-section id="access-section" :title="__('Access')" :helper="__('Manage how this application is reached publicly, who can access it, and how it is reached from the Docker network.')">
             <section id="public-access-section" @class([
                 'border-b border-neutral-200 pb-5 dark:border-white/[0.07]' => $buildPack !== 'dockercompose',
             ])>
-            <h3 class="mb-3 text-sm font-semibold text-black dark:text-fg">Public access</h3>
+            <h3 class="mb-3 text-sm font-semibold text-black dark:text-fg">{{ __('Public access') }}</h3>
             @php
                 $domainCount = 0;
                 $primaryDomain = null;
@@ -66,7 +66,7 @@
             @endphp
             <div class="group relative flex items-center gap-3 rounded-lg border border-neutral-200 bg-neutral-50/60 px-4 py-3 transition-colors hover:bg-neutral-100 focus-within:ring-2 focus-within:ring-coollabs/40 dark:border-white/[0.07] dark:bg-white/[0.05] dark:hover:bg-white/[0.08] dark:focus-within:ring-brand-light/40">
                 <a class="flex min-w-0 flex-1 items-center gap-3 after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
-                    aria-label="{{ $domainCount > 0 ? 'Manage application domains' : 'Add an application domain' }}"
+                    aria-label="{{ $domainCount > 0 ? __('Manage application domains') : __('Add an application domain') }}"
                     href="{{ $applicationDomainsUrl }}" {{ wireNavigate() }}>
                     <div class="flex size-9 shrink-0 items-center justify-center rounded-md bg-neutral-200/70 text-neutral-600 dark:bg-white/[0.07] dark:text-fg-dim">
                         <x-reicon name="globe" class="size-4" />
@@ -76,53 +76,53 @@
                             @if ($primaryDomain)
                                 <span class="block truncate">{{ $primaryDomain }}</span>
                             @else
-                                No public domain configured
+                                {{ __('No public domain configured') }}
                             @endif
                         </p>
                         <p class="text-xs text-neutral-500 dark:text-fg-dim">
                             @if ($additionalDomainCount > 0)
                                 +{{ $additionalDomainCount }} more {{ Str::plural('domain', $additionalDomainCount) }}
                             @elseif ($domainCount === 0)
-                                Make this application available from a URL
+                                {{ __('Make this application available from a URL') }}
                             @else
-                                Manage DNS checks and redirect settings
+                                {{ __('Manage DNS checks and redirect settings') }}
                             @endif
                         </p>
                     </div>
                 </a>
-                <a class="button relative z-10 ml-auto shrink-0" aria-label="{{ $domainCount > 0 ? 'Manage application domains' : 'Add an application domain' }}"
+                <a class="button relative z-10 ml-auto shrink-0" aria-label="{{ $domainCount > 0 ? __('Manage application domains') : __('Add an application domain') }}"
                     href="{{ $applicationDomainsUrl }}" {{ wireNavigate() }}>
-                    {{ $domainCount > 0 ? 'Manage domains' : 'Add domain' }}
+                    {{ $domainCount > 0 ? __('Manage domains') : __('Add domain') }}
                     <x-reicon name="arrow-right" class="size-4" />
                 </a>
             </div>
             </section>
 
             @if ($buildPack !== 'dockercompose')
-                <x-application.settings-subsection id="security-section" title="Authentication" first class="border-b border-neutral-200 py-5 dark:border-white/[0.07]">
+                <x-application.settings-subsection id="security-section" :title="__('Authentication')" first class="border-b border-neutral-200 py-5 dark:border-white/[0.07]">
                     @if ($application->settings->is_container_label_readonly_enabled == false)
-                    <x-empty size="sm" title="Authentication is managed through labels"
-                        description="Authentication is managed via manual proxy labels. Switch label management back to Coolify to configure it here."
+                    <x-empty size="sm" :title="__('Authentication is managed through labels')"
+                        :description="__('Authentication is managed via manual proxy labels. Switch label management back to Coolify to configure it here.')"
                         icon-name="admin">
                         <x-slot:contents>
                             <button type="button" class="button"
                                 @click="window.scrollToSettingsSection?.('container-labels-section')">
-                                Go to Container labels
+                                {{ __('Go to Container labels') }}
                             </button>
                         </x-slot:contents>
                     </x-empty>
                     @else
-                    <x-forms.listbox id="isHttpBasicAuthEnabled" label="Method" onChange="instantSave"
-                        helper="HTTP Basic Authentication adds the required authentication labels to the proxy. Coolify currently supports a single username and password."
+                    <x-forms.listbox id="isHttpBasicAuthEnabled" :label="__('health_check.method')" onChange="instantSave"
+                        :helper="__('HTTP Basic Authentication adds the required authentication labels to the proxy. Coolify currently supports a single username and password.')"
                         :options="[
-                            ['value' => false, 'label' => 'None'],
-                            ['value' => true, 'label' => 'HTTP Basic Authentication'],
+                            ['value' => false, 'label' => __('None')],
+                            ['value' => true, 'label' => __('application.http_basic_auth')],
                         ]" x-bind:disabled="!canUpdate" />
                     @if ($isHttpBasicAuthEnabled)
                         <div class="mt-5 grid w-full gap-4 border-t border-neutral-200 pt-5 sm:grid-cols-2 dark:border-white/[0.07]">
-                            <x-forms.input id="httpBasicAuthUsername" label="Username" required
+                            <x-forms.input id="httpBasicAuthUsername" :label="__('database.username')" required
                                 x-bind:disabled="!canUpdate" />
-                            <x-forms.input id="httpBasicAuthPassword" type="password" label="Password" required
+                            <x-forms.input id="httpBasicAuthPassword" type="password" :label="__('database.password')" required
                                 x-bind:disabled="!canUpdate" />
                         </div>
                         @php
@@ -131,33 +131,33 @@
                             $usesArgon2id = $httpBasicAuthHashAlgorithm === HttpBasicAuthHashAlgorithm::ARGON2ID->value;
                         @endphp
                         <div class="mt-5 border-t border-neutral-200 pt-5 dark:border-white/[0.07]">
-                            <h3 class="mb-3 text-sm font-semibold text-black dark:text-fg">Password hashing</h3>
+                            <h3 class="mb-3 text-sm font-semibold text-black dark:text-fg">{{ __('Password hashing') }}</h3>
                             <div class="grid w-full gap-4 {{ $usesArgon2id ? 'sm:grid-cols-3' : 'sm:grid-cols-2' }}">
-                                <x-forms.listbox id="httpBasicAuthHashAlgorithm" label="Algorithm" onChange="instantSave"
-                                    helper="Algorithm that hashes the password for the proxy labels.<br><br>Traefik supports only bcrypt. Argon2id needs the Caddy proxy, version 2.11 or newer. With Argon2id, labels generated for Traefik use bcrypt."
+                                <x-forms.listbox id="httpBasicAuthHashAlgorithm" :label="__('Algorithm')" onChange="instantSave"
+                                    :helper="__('Algorithm that hashes the password for the proxy labels.<br><br>Traefik supports only bcrypt. Argon2id needs the Caddy proxy, version 2.11 or newer. With Argon2id, labels generated for Traefik use bcrypt.')"
                                     :options="[
-                                        ['value' => HttpBasicAuthHashAlgorithm::BCRYPT->value, 'label' => 'bcrypt', 'description' => 'Works with every proxy'],
+                                        ['value' => HttpBasicAuthHashAlgorithm::BCRYPT->value, 'label' => 'bcrypt', 'description' => __('Works with every proxy')],
                                         ['value' => HttpBasicAuthHashAlgorithm::ARGON2ID->value, 'label' => 'Argon2id', 'disabled' => ! $supportsArgon2id, 'description' => match (true) {
-                                            $supportsArgon2id => 'Memory-hard, more resistant to cracking',
-                                            $server->proxyType() === ProxyTypes::CADDY->value => 'Needs Caddy 2.11 or newer on this server',
-                                            default => 'Only supported by the Caddy proxy',
+                                            $supportsArgon2id => __('Memory-hard, more resistant to cracking'),
+                                            $server->proxyType() === ProxyTypes::CADDY->value => __('Needs Caddy 2.11 or newer on this server'),
+                                            default => __('Only supported by the Caddy proxy'),
                                         }],
                                     ]" x-bind:disabled="!canUpdate" />
                                 @if ($usesArgon2id)
                                     <div wire:key="http-basic-auth-argon2id-memory-cost" class="min-w-0">
-                                        <x-forms.listbox id="httpBasicAuthArgon2idMemoryCost" label="Memory" onChange="instantSave"
-                                            helper="Memory that the proxy needs to check a password. More memory makes the hash harder to crack, but every login attempt that the proxy has not seen before uses this much memory on the server."
+                                        <x-forms.listbox id="httpBasicAuthArgon2idMemoryCost" :label="__('Memory')" onChange="instantSave"
+                                            :helper="__('Memory that the proxy needs to check a password. More memory makes the hash harder to crack, but every login attempt that the proxy has not seen before uses this much memory on the server.')"
                                             :options="collect([8, 16, 32, 64, 128, 256])->map(fn (int $mebibytes) => ['value' => $mebibytes * 1024, 'label' => $mebibytes.' MiB'])->all()" x-bind:disabled="!canUpdate" />
                                     </div>
                                     <div wire:key="http-basic-auth-argon2id-time-cost" class="min-w-0">
-                                        <x-forms.listbox id="httpBasicAuthArgon2idTimeCost" label="Iterations" onChange="instantSave"
-                                            helper="Number of passes over the memory. More iterations make the hash harder to crack and a password check slower."
+                                        <x-forms.listbox id="httpBasicAuthArgon2idTimeCost" :label="__('Iterations')" onChange="instantSave"
+                                            :helper="__('Number of passes over the memory. More iterations make the hash harder to crack and a password check slower.')"
                                             :options="collect(range(1, 12))->map(fn (int $iterations) => ['value' => $iterations, 'label' => (string) $iterations])->all()" x-bind:disabled="!canUpdate" />
                                     </div>
                                 @else
                                     <div wire:key="http-basic-auth-bcrypt-cost" class="min-w-0">
-                                        <x-forms.listbox id="httpBasicAuthBcryptCost" label="Cost factor" onChange="instantSave"
-                                            helper="Each step doubles the work to check or crack the password. Traefik checks the password on every request, so a higher cost makes every request slower."
+                                        <x-forms.listbox id="httpBasicAuthBcryptCost" :label="__('Cost factor')" onChange="instantSave"
+                                            :helper="__('Each step doubles the work to check or crack the password. Traefik checks the password on every request, so a higher cost makes every request slower.')"
                                             :options="collect(range(4, 14))->map(fn (int $cost) => ['value' => $cost, 'label' => (string) $cost])->all()" x-bind:disabled="!canUpdate" />
                                     </div>
                                 @endif
@@ -174,19 +174,19 @@
             @endif
             </x-application.settings-section>
 
-            <x-application.settings-section id="build-pipeline-section" title="Build & deploy" helper="How Coolify builds the application, where it pushes the image, and the commands it runs around each deployment.">
+            <x-application.settings-section id="build-pipeline-section" :title="__('Build & deploy')" :helper="__('How Coolify builds the application, where it pushes the image, and the commands it runs around each deployment.')">
             @if (!$application->dockerfile && $application->build_pack !== 'dockerimage')
                 <div class="application-build-pack-options mb-5 border-b border-neutral-200 pb-5 dark:border-white/[0.07]">
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <x-forms.listbox id="buildPack" label="Build strategy" live :options="[
+                        <x-forms.listbox id="buildPack" :label="__('Build strategy')" live :options="[
                             ['value' => 'railpack', 'label' => 'Railpack'],
-                            ['value' => 'nixpacks', 'label' => 'Nixpacks (deprecated)'],
+                            ['value' => 'nixpacks', 'label' => __('Nixpacks (deprecated)')],
                             ['value' => 'static', 'label' => 'Static'],
-                            ['value' => 'dockerfile', 'label' => 'Dockerfile'],
-                            ['value' => 'dockercompose', 'label' => 'Compose'],
+                            ['value' => 'dockerfile', 'label' => __('application.dockerfile')],
+                            ['value' => 'dockercompose', 'label' => __('Compose')],
                         ]" x-bind:disabled="shouldDisable()" />
                         @if ($isStatic || $buildPack === 'static')
-                            <x-forms.listbox id="staticImage" label="Web server" required :options="[
+                            <x-forms.listbox id="staticImage" :label="__('Web server')" required :options="[
                                 ['value' => 'nginx:alpine', 'label' => 'nginx:alpine'],
                                 ['value' => 'apache:alpine', 'label' => 'apache:alpine', 'disabled' => true],
                             ]" x-bind:disabled="!canUpdate" />
@@ -197,19 +197,19 @@
             @if ($application->could_set_build_commands() || ($isStatic && $buildPack !== 'static'))
                 <div class="mb-5 w-full border-b border-neutral-200 pb-5 dark:border-white/[0.07]">
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <x-forms.listbox id="siteType" label="Site type" onChange="setSiteType" :options="[
-                            ['value' => 'dynamic', 'label' => 'Dynamic'],
+                        <x-forms.listbox id="siteType" :label="__('Site type')" onChange="setSiteType" :options="[
+                            ['value' => 'dynamic', 'label' => __('Dynamic')],
                             ['value' => 'static', 'label' => 'Static'],
-                            ['value' => 'spa', 'label' => 'SPA (single-page application)'],
+                            ['value' => 'spa', 'label' => __('SPA (single-page application)')],
                         ]"
-                            helper="Static: the final build assets are served as a static site. SPA: a static site with single-page-app routing."
+                            helper="{{ __('Static: the final build assets are served as a static site. SPA: a static site with single-page-app routing.') }}"
                             x-bind:disabled="!canUpdate" />
                     </div>
                 </div>
             @endif
             <div class="flex flex-col gap-5">
                 @if ($application->build_pack === 'dockerimage')
-                    <p class="text-sm text-neutral-500 dark:text-fg-dim">Nothing to build. This application deploys a prebuilt Docker image.</p>
+                    <p class="text-sm text-neutral-500 dark:text-fg-dim">{{ __('Nothing to build. This application deploys a prebuilt Docker image.') }}</p>
                 @else
                     <div class="flex flex-col gap-5">
                         @if ($buildPack === 'dockercompose')
@@ -219,41 +219,41 @@
                                     defaultFile="/docker-compose.yaml" disabled="shouldDisable()" />
                                 <div class="w-full sm:w-96">
                                     <x-forms.checkbox instantSave id="isPreserveRepositoryEnabled"
-                                        label="Preserve repository during deployment"
-                                        helper="Git repository (based on the base directory settings) will be copied to the deployment directory."
+                                        :label="__('Preserve repository during deployment')"
+                                        :helper="__('application.preserve_repository_helper')"
                                         x-bind:disabled="shouldDisable()" />
                                 </div>
                                 <div class="grid gap-4 pt-4">
                                         <div class="grid gap-4 lg:grid-cols-2">
                                             <x-forms.input x-bind:disabled="shouldDisable()"
-                                                placeholder="docker compose build" id="dockerComposeCustomBuildCommand"
-                                                helper="The compose file path (<span class='dark:text-brand-light'>-f</span> flag) and environment variables (<span class='dark:text-brand-light'>--env-file</span> flag) are automatically injected based on your Base Directory and Docker Compose Location settings. You can override by providing your own <span class='dark:text-brand-light'>-f</span> or <span class='dark:text-brand-light'>--env-file</span> flags.<br><br>If you use this, you need to specify paths relatively and should use the same compose file in the custom command, otherwise the automatically configured labels / etc won't work.<br><br>Example usage: <span class='dark:text-brand-light'>docker compose build</span>"
-                                                label="Custom build command" />
+                                                :placeholder="__('application.custom_build_command_placeholder')" id="dockerComposeCustomBuildCommand"
+                                                :helper="__('The compose file path (<span class=\'dark:text-brand-light\'>-f</span> flag) and environment variables (<span class=\'dark:text-brand-light\'>--env-file</span> flag) are automatically injected based on your Base Directory and Docker Compose Location settings. You can override by providing your own <span class=\'dark:text-brand-light\'>-f</span> or <span class=\'dark:text-brand-light\'>--env-file</span> flags.<br><br>If you use this, you need to specify paths relatively and should use the same compose file in the custom command, otherwise the automatically configured labels / etc won\'t work.<br><br>Example usage: <span class=\'dark:text-brand-light\'>docker compose build</span>')"
+                                                label="{{ __('Custom build command') }}" />
                                             <x-forms.input x-bind:disabled="shouldDisable()"
-                                                placeholder="docker compose up -d" id="dockerComposeCustomStartCommand"
-                                                helper="The compose file path (<span class='dark:text-brand-light'>-f</span> flag) and environment variables (<span class='dark:text-brand-light'>--env-file</span> flag) are automatically injected based on your Base Directory and Docker Compose Location settings. You can override by providing your own <span class='dark:text-brand-light'>-f</span> or <span class='dark:text-brand-light'>--env-file</span> flags.<br><br>If you use this, you need to specify paths relatively and should use the same compose file in the custom command, otherwise the automatically configured labels / etc won't work.<br><br>Example usage: <span class='dark:text-brand-light'>docker compose up -d</span>"
-                                                label="Custom start command" />
+                                                :placeholder="__('application.custom_start_command_placeholder')" id="dockerComposeCustomStartCommand"
+                                                :helper="__('The compose file path (<span class=\'dark:text-brand-light\'>-f</span> flag) and environment variables (<span class=\'dark:text-brand-light\'>--env-file</span> flag) are automatically injected based on your Base Directory and Docker Compose Location settings. You can override by providing your own <span class=\'dark:text-brand-light\'>-f</span> or <span class=\'dark:text-brand-light\'>--env-file</span> flags.<br><br>If you use this, you need to specify paths relatively and should use the same compose file in the custom command, otherwise the automatically configured labels / etc won\'t work.<br><br>Example usage: <span class=\'dark:text-brand-light\'>docker compose up -d</span>')"
+                                                label="{{ __('Custom start command') }}" />
                                         </div>
                                         @if ($this->dockerComposeCustomBuildCommand)
                                             <div wire:key="docker-compose-build-preview">
                                                 <x-forms.input readonly value="{{ $this->dockerComposeBuildCommandPreview }}"
-                                                    label="Final build command (preview)"
-                                                    helper="This shows the actual command that will be executed with auto-injected flags." />
+                                                    label="{{ __('Final build command (preview)') }}"
+                                                    helper="{{ __('application.final_start_command_helper') }}" />
                                             </div>
                                         @endif
                                         @if ($this->dockerComposeCustomStartCommand)
                                             <div wire:key="docker-compose-start-preview">
                                                 <x-forms.input readonly value="{{ $this->dockerComposeStartCommandPreview }}"
-                                                    label="Final start command (preview)"
-                                                    helper="This shows the actual command that will be executed with auto-injected flags." />
+                                                    label="{{ __('Final start command (preview)') }}"
+                                                    helper="{{ __('application.final_start_command_helper') }}" />
                                             </div>
                                         @endif
                                 </div>
                                 @if ($this->application->supportsWatchPaths())
                                     <div class="pt-4">
                                         <x-forms.textarea
-                                            helper="Order-based pattern matching to filter Git webhook deployments. Enter one pattern per line. Commas do not separate patterns. Supports wildcards (*, **, ?) and negation (!). Last matching pattern wins."
-                                            placeholder="services/api/**" id="watchPaths" label="Watch paths"
+                                            :helper="__('Order-based pattern matching to filter Git webhook deployments. Enter one pattern per line. Commas do not separate patterns. Supports wildcards (*, **, ?) and negation (!). Last matching pattern wins.')"
+                                            :placeholder="__('application.watch_paths_placeholder')" id="watchPaths" :label="__('Watch paths')"
                                             x-bind:disabled="shouldDisable()" />
                                     </div>
                                 @endif
@@ -264,54 +264,54 @@
                                 fileLabel="Dockerfile location" defaultFile="/Dockerfile" disabled="!canUpdate">
                                 @if ($application->could_set_build_commands())
                                     @if ($application->settings->is_static)
-                                        <x-forms.input placeholder="/dist" id="publishDirectory"
-                                            label="Publish directory" required x-bind:disabled="!canUpdate" />
+                                        <x-forms.input :placeholder="__('application.publish_directory_placeholder')" id="publishDirectory"
+                                            :label="__('Publish directory')" required x-bind:disabled="!canUpdate" />
                                     @else
                                         <x-forms.input placeholder="/" id="publishDirectory"
-                                            label="Publish directory" x-bind:disabled="!canUpdate" />
+                                            :label="__('Publish directory')" x-bind:disabled="!canUpdate" />
                                     @endif
                                 @endif
                             </x-forms.repository-paths>
                             @if ($this->application->supportsWatchPaths())
                                 <div class="pb-4">
                                     <x-forms.textarea
-                                        helper="Order-based pattern matching to filter Git webhook deployments. Enter one pattern per line. Commas do not separate patterns. Supports wildcards (*, **, ?) and negation (!). Last matching pattern wins."
-                                        placeholder="src/pages/**" id="watchPaths" label="Watch paths"
+                                        :helper="__('Order-based pattern matching to filter Git webhook deployments. Enter one pattern per line. Commas do not separate patterns. Supports wildcards (*, **, ?) and negation (!). Last matching pattern wins.')"
+                                        :placeholder="__('application.watch_paths_placeholder_2')" id="watchPaths" :label="__('Watch paths')"
                                         x-bind:disabled="!canUpdate" />
                                 </div>
                             @endif
                             @if ($application->could_set_build_commands() && ($buildPack === 'nixpacks' || $buildPack === 'railpack'))
                                 <div class="grid gap-4 lg:grid-cols-3">
-                                    <x-forms.input helper="If you modify this, you probably need to have a {{ $buildPack === 'railpack' ? 'railpack.json' : 'nixpacks.toml' }}"
-                                        id="installCommand" label="Install command" x-bind:disabled="!canUpdate" />
-                                    <x-forms.input helper="If you modify this, you probably need to have a {{ $buildPack === 'railpack' ? 'railpack.json' : 'nixpacks.toml' }}"
-                                        id="buildCommand" label="Build command" x-bind:disabled="!canUpdate" />
-                                    <x-forms.input helper="If you modify this, you probably need to have a {{ $buildPack === 'railpack' ? 'railpack.json' : 'nixpacks.toml' }}"
-                                        id="startCommand" label="Start command" x-bind:disabled="!canUpdate" />
+                                    <x-forms.input helper="{{ __('If you modify this, you probably need to have a') }} {{ $buildPack === 'railpack' ? 'railpack.json' : 'nixpacks.toml' }}"
+                                        id="installCommand" :label="__('Install command')" x-bind:disabled="!canUpdate" />
+                                    <x-forms.input helper="{{ __('If you modify this, you probably need to have a') }} {{ $buildPack === 'railpack' ? 'railpack.json' : 'nixpacks.toml' }}"
+                                        id="buildCommand" :label="__('Build command')" x-bind:disabled="!canUpdate" />
+                                    <x-forms.input helper="{{ __('If you modify this, you probably need to have a') }} {{ $buildPack === 'railpack' ? 'railpack.json' : 'nixpacks.toml' }}"
+                                        id="startCommand" :label="__('Start command')" x-bind:disabled="!canUpdate" />
                                 </div>
                             @endif
                             @if ($buildPack !== 'dockercompose')
                                 @php
                                     $hasBuildServers = \App\Models\Server::buildServers($application->team()?->id)->exists();
                                     $buildServerOptions = [
-                                        ['value' => false, 'label' => 'Deployment server'],
+                                        ['value' => false, 'label' => __('Deployment server')],
                                         $hasBuildServers
-                                            ? ['value' => true, 'label' => 'Available build server (auto-select)']
-                                            : ['value' => true, 'label' => 'No build servers connected', 'disabled' => true],
+                                            ? ['value' => true, 'label' => __('Available build server (auto-select)')]
+                                            : ['value' => true, 'label' => __('No build servers connected'), 'disabled' => true],
                                     ];
                                     $buildServerFallbackPolicy = $application->environment->project->team->is_build_server_fallback_enabled
-                                        ? 'If no usable build server is available, Coolify builds on the deployment server.'
-                                        : 'If no usable build server is available, the deployment fails.';
+                                        ? __('If no usable build server is available, Coolify builds on the deployment server.')
+                                        : __('If no usable build server is available, the deployment fails.');
                                 @endphp
                                 <div class="grid gap-4 pt-2 sm:grid-cols-2">
                                     @if ($buildPack === 'dockerfile')
-                                        <x-forms.input id="dockerfileTargetBuild" label="Docker build stage target"
-                                            helper="Useful if you have multi-staged dockerfile."
+                                        <x-forms.input id="dockerfileTargetBuild" :label="__('Docker build stage target')"
+                                            :helper="__('application.docker_build_target_helper')"
                                             x-bind:disabled="!canUpdate" />
                                     @endif
-                                    <x-forms.listbox id="isBuildServerEnabled" label="Builder selection"
+                                    <x-forms.listbox id="isBuildServerEnabled" :label="__('Builder selection')"
                                         onChange="instantSave" :options="$buildServerOptions"
-                                        helper="Build your application on a dedicated build server. Only servers with the role <strong>Builds only</strong> are used. Servers with the role <strong>Deployments and builds</strong> are not used. If several build servers are connected, Coolify picks an available one automatically. {{ $buildServerFallbackPolicy }} More info in the <a href='https://coolify.io/docs/knowledge-base/server/build-server' class='underline' target='_blank'>documentation</a>."
+                                        helper="Build your application on a dedicated build server. Only servers with the role <strong>{{ __('Builds only') }}</strong> {{ __('are used. Servers with the role') }} <strong>{{ __('Deployments and builds') }}</strong> {{ __('are not used. If several build servers are connected, Coolify picks an available one automatically.') }} {{ $buildServerFallbackPolicy }} {{ __('More info in the') }} <a href='https://coolify.io/docs/knowledge-base/server/build-server' class='underline' target='_blank'>{{ __('onboarding.documentation') }}</a>."
                                         x-bind:disabled="!canUpdate" />
                                 </div>
                             @endif
@@ -323,23 +323,21 @@
                 <div class="mt-5 border-t border-neutral-200 pt-5 dark:border-white/[0.07]">
                     <div class="mb-1.5 flex items-center justify-between gap-3">
                         <label class="flex w-fit items-center gap-1.5" style="margin-bottom: 0">
-                            Custom Nginx configuration
-                            <x-helper helper="You can add custom Nginx configuration here." />
+                            {{ __('Custom Nginx configuration') }}
+                            <x-helper :helper="__('application.custom_nginx_helper')" />
                         </label>
                         @can('update', $application)
-                            <x-modal-confirmation title="Confirm Nginx Configuration Generation?"
-                                buttonTitle="Generate default"
+                            <x-modal-confirmation :title="__('application.generate_nginx_config_title')"
+                                :buttonTitle="__('Generate default')"
                                 submitAction="generateNginxConfiguration('{{ $application->settings->is_spa ? 'spa' : 'static' }}')"
                                 :actions="[
-                                    'This will overwrite your current custom Nginx configuration.',
-                                    'The default configuration will be generated based on your application type (' .
-                                    ($application->settings->is_spa ? 'SPA' : 'static') .
-                                    ').',
+                                    __('application.generate_nginx_action_1'),
+                                    __('The default configuration will be generated based on your application type (:type).', ['type' => $application->settings->is_spa ? 'SPA' : 'static']),
                                 ]" />
                         @endcan
                     </div>
                     <x-forms.textarea id="customNginxConfiguration"
-                        placeholder="Empty means default configuration will be used." rows="10"
+                        :placeholder="__('application.custom_nginx_placeholder')" rows="10"
                         monacoEditorLanguage="nginx" useMonacoEditor x-bind:disabled="!canUpdate" />
                 </div>
             @endif
@@ -347,41 +345,41 @@
                 <div x-data="{ showRaw: true }" class="mt-5">
                     @can('update', $application)
                         <div class="mb-2 flex items-center justify-between gap-4">
-                            <h3>Docker Compose</h3>
+                            <h3>{{ __('application.docker_compose') }}</h3>
                             <x-forms.button x-show="{{ $application->settings->is_raw_compose_deployment_enabled ? 'false' : 'true' }}"
                                 @click.prevent="showRaw = !showRaw"
                                 x-text="showRaw ? 'Show deployable compose' : 'Show raw compose'"></x-forms.button>
                         </div>
                         @if ($application->settings->is_raw_compose_deployment_enabled)
                             <x-forms.textarea rows="10" readonly id="dockerComposeRaw"
-                                label="Docker compose content (applicationId: {{ $application->id }})"
-                                helper="You need to modify the docker compose file in the git repository."
+                                label="{{ __('Docker compose content (applicationId: :id)', ['id' => $application->id]) }}"
+                                helper="{{ __('application.docker_compose_modify_git') }}"
                                 monacoEditorLanguage="yaml" useMonacoEditor />
                         @else
                             @if ((int) $application->compose_parsing_version >= 3)
                                 <div x-show="showRaw">
                                     <x-forms.textarea rows="10" readonly id="dockerComposeRaw"
-                                        label="Docker compose content (raw)"
-                                        helper="You need to modify the docker compose file in the git repository."
+                                        :label="__('Docker compose content (raw)')"
+                                        :helper="__('application.docker_compose_modify_git')"
                                         monacoEditorLanguage="yaml" useMonacoEditor />
                                 </div>
                             @endif
                             <div x-show="showRaw === false">
                                 <x-forms.textarea rows="10" readonly id="dockerCompose"
-                                    label="Docker compose content"
-                                    helper="You need to modify the docker compose file in the git repository."
+                                    :label="__('Docker compose content')"
+                                    :helper="__('application.docker_compose_modify_git')"
                                     monacoEditorLanguage="yaml" useMonacoEditor />
                             </div>
                         @endif
                     @else
-                        <h3 class="mb-2">Docker Compose</h3>
-                        <x-callout type="info" title="Hidden (only admins can view)" class="mb-4">
-                            The Docker Compose file can contain secrets.
+                        <h3 class="mb-2">{{ __('application.docker_compose') }}</h3>
+                        <x-callout type="info" :title="__('Hidden (only admins can view)')" class="mb-4">
+                            {{ __('The Docker Compose file can contain secrets.') }}
                         </x-callout>
                     @endcan
                     <div class="w-full sm:w-96">
-                        <x-forms.checkbox label="Escape special characters in labels?"
-                            helper="By default, $ (and other chars) is escaped. So if you write $ in the labels, it will be saved as $$.<br><br>If you want to use env variables inside the labels, turn this off."
+                        <x-forms.checkbox :label="__('application.escape_special_chars')"
+                            :helper="__('By default, $ (and other chars) is escaped. So if you write $ in the labels, it will be saved as $$.<br><br>If you want to use env variables inside the labels, turn this off.')"
                             id="isContainerLabelEscapeEnabled" instantSave
                             x-bind:disabled="!canUpdate"></x-forms.checkbox>
                         {{-- <x-forms.checkbox label="Readonly labels"
@@ -392,32 +390,32 @@
             @endif
             @if ($application->dockerfile)
                 <div class="mt-6">
-                    <x-forms.textarea label="Dockerfile" id="dockerfile" monacoEditorLanguage="dockerfile"
+                    <x-forms.textarea :label="__('application.dockerfile')" id="dockerfile" monacoEditorLanguage="dockerfile"
                         useMonacoEditor rows="6" x-bind:disabled="!canUpdate"> </x-forms.textarea>
                 </div>
             @endif
             @if ($buildPack !== 'dockercompose')
-                <x-application.settings-subsection id="container-image-section" :title="$application->build_pack === 'dockerimage' ? 'Image' : 'Image registry'">
+                <x-application.settings-subsection id="container-image-section" :title="$application->build_pack === 'dockerimage' ? __('Image') : __('Image registry')">
                     @if ($application->destination->server->isSwarm())
                         @if ($application->build_pack !== 'dockerimage')
-                            <div>Docker Swarm requires the image to be available in a registry. More info <a
+                            <div>{{ __('Docker Swarm requires the image to be available in a registry. More info') }} <a
                                     class="underline" href="https://coolify.io/docs/knowledge-base/docker/registry"
-                                    target="_blank">here</a>.</div>
+                                    target="_blank">{{ __('teams.here') }}</a>.</div>
                         @endif
                     @endif
                     <div class="grid gap-4 lg:grid-cols-2">
                         @if ($application->build_pack === 'dockerimage')
                             @if ($application->destination->server->isSwarm())
-                                <x-forms.input required id="dockerRegistryImageName" label="Image" placeholder="nginx"
+                                <x-forms.input required id="dockerRegistryImageName" :label="__('Image')" placeholder="nginx"
                                     x-bind:disabled="!canUpdate" />
-                                <x-forms.input id="dockerRegistryImageTag" label="Tag" placeholder="alpine"
-                                    helper="Enter a tag (e.g., 'latest', 'v1.2.3') or SHA256 hash (e.g., 'sha256-59e02939b1bf39f16c93138a28727aec520bb916da021180ae502c61626b3cf0')"
+                                <x-forms.input id="dockerRegistryImageTag" :label="__('Tag')" placeholder="alpine"
+                                    :helper="__('application.docker_image_tag_helper')"
                                     x-bind:disabled="!canUpdate" />
                             @else
-                                <x-forms.input id="dockerRegistryImageName" label="Image" placeholder="nginx"
+                                <x-forms.input id="dockerRegistryImageName" :label="__('Image')" placeholder="nginx"
                                     x-bind:disabled="!canUpdate" />
-                                <x-forms.input id="dockerRegistryImageTag" label="Tag" placeholder="alpine"
-                                    helper="Enter a tag (e.g., 'latest', 'v1.2.3') or SHA256 hash (e.g., 'sha256-59e02939b1bf39f16c93138a28727aec520bb916da021180ae502c61626b3cf0')"
+                                <x-forms.input id="dockerRegistryImageTag" :label="__('Tag')" placeholder="alpine"
+                                    :helper="__('application.docker_image_tag_helper')"
                                     x-bind:disabled="!canUpdate" />
                             @endif
                         @else
@@ -426,46 +424,46 @@
                                     $application->additional_servers->count() > 0 ||
                                     $application->settings->is_build_server_enabled ||
                                     ! $application->destination->server->canBuildApplications())
-                                <x-forms.input id="dockerRegistryImageName" required label="Image"
+                                <x-forms.input id="dockerRegistryImageName" required :label="__('Image')"
                                     placeholder="ghcr.io/your-org/your-app" x-bind:disabled="!canUpdate" />
                                 <x-forms.input id="dockerRegistryImageTag"
-                                    helper="If set, Coolify also tags the built image with this tag. The commit SHA tag stays, and the container runs it. <br><br>Example: If you set it to 'latest', Coolify pushes the image with the commit SHA tag and the latest tag. <br><br>Two applications cannot push the same Docker image name, also with different tags. Use a different image name for each application, for example ghcr.io/your-org/your-app-staging."
-                                    placeholder="latest" label="Tag"
+                                    :helper="__('If set, Coolify also tags the built image with this tag. The commit SHA tag stays, and the container runs it. <br><br>Example: If you set it to \'latest\', Coolify pushes the image with the commit SHA tag and the latest tag. <br><br>Two applications cannot push the same Docker image name, also with different tags. Use a different image name for each application, for example ghcr.io/your-org/your-app-staging.')"
+                                    placeholder="{{ __('application.tag_placeholder') }}" label="{{ __('Tag') }}"
                                     x-bind:disabled="!canUpdate" />
                             @else
                                 <x-forms.input id="dockerRegistryImageName"
-                                    helper="Empty means it won't push the image to a docker registry. Pre-tag the image with your registry url if you want to push it to a private registry (default: Dockerhub). <br><br>Example: ghcr.io/myimage"
+                                    :helper="__('Empty means it won\'t push the image to a docker registry. Pre-tag the image with your registry url if you want to push it to a private registry (default: Dockerhub). <br><br>Example: ghcr.io/myimage')"
                                     placeholder="ghcr.io/your-org/your-app"
-                                    label="Image" x-bind:disabled="!canUpdate" />
+                                    label="{{ __('Image') }}" x-bind:disabled="!canUpdate" />
                                 <x-forms.input id="dockerRegistryImageTag"
-                                    placeholder="latest"
-                                    helper="If set, Coolify also tags the built image with this tag. The commit SHA tag stays, and the container runs it. <br><br>Example: If you set it to 'latest', Coolify pushes the image with the commit SHA tag and the latest tag. <br><br>Two applications cannot push the same Docker image name, also with different tags. Use a different image name for each application, for example ghcr.io/your-org/your-app-staging."
-                                    label="Tag" x-bind:disabled="!canUpdate" />
+                                    :placeholder="__('application.tag_placeholder')"
+                                    :helper="__('If set, Coolify also tags the built image with this tag. The commit SHA tag stays, and the container runs it. <br><br>Example: If you set it to \'latest\', Coolify pushes the image with the commit SHA tag and the latest tag. <br><br>Two applications cannot push the same Docker image name, also with different tags. Use a different image name for each application, for example ghcr.io/your-org/your-app-staging.')"
+                                    label="{{ __('Tag') }}" x-bind:disabled="!canUpdate" />
                             @endif
                         @endif
                     </div>
                 </x-application.settings-subsection>
             @endif
-            <x-application.settings-subsection id="deployment-lifecycle-section" title="Deployment commands">
+            <x-application.settings-subsection id="deployment-lifecycle-section" :title="__('Deployment commands')">
             <div class="grid gap-4 sm:grid-cols-2">
                 <div class="flex flex-col gap-4">
-                    <x-forms.input x-bind:disabled="shouldDisable()" placeholder="php artisan migrate"
-                        id="preDeploymentCommand" label="Pre-deployment"
-                        helper="An optional script or command to execute in the existing container before the deployment begins.<br>It is always executed with 'sh -c', so you do not need add it manually." />
+                    <x-forms.input x-bind:disabled="shouldDisable()" :placeholder="__('application.pre_deployment_placeholder')"
+                        id="preDeploymentCommand" :label="__('Pre-deployment')"
+                        :helper="__('An optional script or command to execute in the existing container before the deployment begins.<br>It is always executed with \'sh -c\', so you do not need add it manually.')" />
                     @if ($buildPack === 'dockercompose')
                         <x-forms.input x-bind:disabled="shouldDisable()" id="preDeploymentCommandContainer"
-                            label="Container name"
-                            helper="The name of the container to execute within. You can leave it blank if your application only has one container." />
+                            :label="__('scheduled_task.container_label')"
+                            :helper="__('application.container_name_helper')" />
                     @endif
                 </div>
                 <div class="flex flex-col gap-4">
-                    <x-forms.input x-bind:disabled="shouldDisable()" placeholder="php artisan migrate"
-                        id="postDeploymentCommand" label="Post-deployment"
-                        helper="An optional script or command to execute in the newly built container after the deployment completes.<br>It is always executed with 'sh -c', so you do not need add it manually." />
+                    <x-forms.input x-bind:disabled="shouldDisable()" :placeholder="__('application.pre_deployment_placeholder')"
+                        id="postDeploymentCommand" :label="__('Post-deployment')"
+                        :helper="__('An optional script or command to execute in the newly built container after the deployment completes.<br>It is always executed with \'sh -c\', so you do not need add it manually.')" />
                     @if ($buildPack === 'dockercompose')
                         <x-forms.input x-bind:disabled="shouldDisable()" id="postDeploymentCommandContainer"
-                            label="Container name"
-                            helper="The name of the container to execute within. You can leave it blank if your application only has one container." />
+                            :label="__('scheduled_task.container_label')"
+                            :helper="__('application.container_name_helper')" />
                     @endif
                 </div>
             </div>
@@ -479,10 +477,10 @@
                         'environment_uuid' => $application->environment->uuid,
                         'application_uuid' => $application->uuid,
                     ]);
-                    $portsExposesDomainHint = "You can also set a different internal port for each domain on the <a class='underline dark:text-white' href='{$applicationDomainsUrl}'>Domains</a> page.";
+                    $portsExposesDomainHint = __('You can also set a different internal port for each domain on the :link page.', ['link' => "<a class='underline dark:text-white' href='{$applicationDomainsUrl}'>".__('application.domains').'</a>']);
                 @endphp
-                <x-modal-input title="Networking" class="hidden" :wireIgnore="false"
-                    wireOpen="networkingModalOpen" subtitle="Ports the container exposes, host port mappings and internal network aliases."
+                <x-modal-input :title="__('Networking')" class="hidden" :wireIgnore="false"
+                    wireOpen="networkingModalOpen" :subtitle="__('Ports the container exposes, host port mappings and internal network aliases.')"
                     @open-networking-modal.window="modalOpen = true">
                 <x-slot:content></x-slot:content>
                 <form wire:submit="submit" class="flex flex-col">
@@ -498,10 +496,8 @@
                             <div>
                                 <span class="font-semibold">PORT environment variable detected
                                     ({{ $this->detectedPortInfo['port'] }})</span>
-                                <p class="mt-1">Your Ports Exposes field is empty. Consider setting it to
-                                    <strong>{{ $this->detectedPortInfo['port'] }}</strong> to ensure the proxy routes
-                                    traffic
-                                    correctly.
+                                <p class="mt-1">{{ __('Your Ports Exposes field is empty. Consider setting it to') }}
+                                    <strong>{{ $this->detectedPortInfo['port'] }}</strong> {{ __('to ensure the proxy routes traffic correctly.') }}
                                 </p>
                             </div>
                         </div>
@@ -514,11 +510,9 @@
                                     clip-rule="evenodd" />
                             </svg>
                             <div>
-                                <span class="font-semibold">PORT mismatch detected</span>
-                                <p class="mt-1">Your PORT environment variable is set to
-                                    <strong>{{ $this->detectedPortInfo['port'] }}</strong>, but it's not in your Ports
-                                    Exposes
-                                    configuration. Ensure they match for proper proxy routing.
+                                <span class="font-semibold">{{ __('application.port_mismatch_warning') }}</span>
+                                <p class="mt-1">{{ __('Your PORT environment variable is set to') }}
+                                    <strong>{{ $this->detectedPortInfo['port'] }}</strong>{{ __(", but it's not in your Ports Exposes configuration. Ensure they match for proper proxy routing.") }}
                                 </p>
                             </div>
                         </div>
@@ -531,99 +525,97 @@
                                     clip-rule="evenodd" />
                             </svg>
                             <div>
-                                <span class="font-semibold">PORT environment variable configured</span>
-                                <p class="mt-1">Your PORT environment variable
-                                    ({{ $this->detectedPortInfo['port'] }}) matches
-                                    your Ports Exposes configuration.</p>
+                                <span class="font-semibold">{{ __('application.port_configured_ok') }}</span>
+                                <p class="mt-1">{{ __('Your PORT environment variable') }}
+                                    ({{ $this->detectedPortInfo['port'] }}) {{ __('matches') }}
+                                    {{ __('your Ports Exposes configuration.') }}</p>
                             </div>
                         </div>
                     @endif
                 @endif
                 @if ((empty($portsExposes) || $portsExposes === '0') && !empty($fqdn))
-                    <x-callout type="info" title="No ports exposed" class="mb-4">
-                        This application does not expose any ports and will not be reachable through the proxy or your domains.
-                        This behavior is normal for background workers, bots, or scheduled tasks.
-                        If your application needs to handle HTTP traffic, please specify the port(s) it listens on.
+                    <x-callout type="info" :title="__('No ports exposed')" class="mb-4">
+                        {{ __('This application does not expose any ports and will not be reachable through the proxy or your domains. This behavior is normal for background workers, bots, or scheduled tasks. If your application needs to handle HTTP traffic, please specify the port(s) it listens on.') }}
                     </x-callout>
                 @endif
                 <div class="grid gap-4 lg:grid-cols-[14rem_16rem_minmax(0,1fr)]">
                     <div class="min-w-0">
                     @if ($isStatic || $buildPack === 'static')
-                        <x-forms.input id="portsExposes" label="Ports exposes" readonly
+                        <x-forms.input id="portsExposes" :label="__('Ports exposes')" readonly
                             :helper="$portsExposesDomainHint"
                             canGate="update" :canResource="$application"
                             x-bind:disabled="!canUpdate" />
                     @else
                         @if ($application->settings->is_container_label_readonly_enabled === false)
-                            <x-forms.input placeholder="3000,3001" id="portsExposes" label="Ports exposes" readonly
-                                :helper="'Readonly labels are disabled. You can set the ports manually in the labels section.<br><br>'.$portsExposesDomainHint"
+                            <x-forms.input placeholder="3000,3001" id="portsExposes" :label="__('Ports exposes')" readonly
+                                :helper="__('Readonly labels are disabled. You can set the ports manually in the labels section.<br><br>').$portsExposesDomainHint"
                                 canGate="update" :canResource="$application"
                                 x-bind:disabled="!canUpdate" />
                         @else
-                            <x-forms.input placeholder="3000,3001" id="portsExposes" label="Ports exposes"
-                                :helper="'A comma separated list of ports your application uses. The first port will be used as default healthcheck port if nothing defined in the Healthcheck menu. Be sure to set this correctly.<br><br>'.$portsExposesDomainHint"
+                            <x-forms.input placeholder="3000,3001" id="portsExposes" :label="__('Ports exposes')"
+                                :helper="__('A comma separated list of ports your application uses. The first port will be used as default healthcheck port if nothing defined in the Healthcheck menu. Be sure to set this correctly.<br><br>').$portsExposesDomainHint"
                                 canGate="update" :canResource="$application"
                                 x-bind:disabled="!canUpdate" />
                         @endif
                     @endif
                     <p class="mt-1.5 text-xs text-neutral-500 dark:text-fg-dim">
-                        You can also set an internal port per domain on
-                        <a class="underline dark:text-white" href="{{ $applicationDomainsUrl }}" {{ wireNavigate() }}>Domains</a>.
+                        {{ __('You can also set an internal port per domain on') }}
+                        <a class="underline dark:text-white" href="{{ $applicationDomainsUrl }}" {{ wireNavigate() }}>{{ __('application.domains') }}</a>.
                     </p>
                     </div>
                     @if (!$application->destination->server->isSwarm())
-                        <x-forms.input placeholder="3000:3000" id="portsMappings" label="Port mappings"
-                            helper="A comma separated list of ports you would like to map to the host system. Useful when you do not want to use domains.<br><br><span class='inline-block font-bold dark:text-brand-light'>Format:</span> host:container<br><br><span class='inline-block font-bold dark:text-brand-light'>Example:</span> 3000:3000,3002:3002<br><br>Rolling update is not supported if you have a port mapped to the host."
+                        <x-forms.input placeholder="3000:3000" id="portsMappings" :label="__('Port mappings')"
+                            :helper="__('A comma separated list of ports you would like to map to the host system. Useful when you do not want to use domains.<br><br><span class=\'inline-block font-bold dark:text-brand-light\'>Format:</span> host:container<br><br><span class=\'inline-block font-bold dark:text-brand-light\'>Example:</span> 3000:3000,3002:3002<br><br>Rolling update is not supported if you have a port mapped to the host.')"
                             x-bind:disabled="!canUpdate" />
                     @endif
                     @if (!$application->destination->server->isSwarm())
-                        <x-forms.input id="customNetworkAliases" label="Network aliases"
-                            helper="A comma separated list of custom network aliases you would like to add for container in Docker network.<br><br><span class='inline-block font-bold dark:text-brand-light'>Example:</span><br>api.internal,api.local"
+                        <x-forms.input id="customNetworkAliases" :label="__('Network aliases')"
+                            :helper="__('A comma separated list of custom network aliases you would like to add for container in Docker network.<br><br><span class=\'inline-block font-bold dark:text-brand-light\'>Example:</span><br>api.internal,api.local')"
                             wire:model="customNetworkAliases" x-bind:disabled="!canUpdate" />
                     @endif
                 </div>
                 <div class="mt-5 flex justify-end gap-2 border-t border-neutral-200 pt-4 dark:border-white/[0.07]">
-                    <x-forms.button type="button" @click="modalOpen = false">Close</x-forms.button>
-                    <x-forms.button type="submit" isHighlighted canGate="update" :canResource="$application">Save</x-forms.button>
+                    <x-forms.button type="button" @click="modalOpen = false">{{ __('common.close') }}</x-forms.button>
+                    <x-forms.button type="submit" isHighlighted canGate="update" :canResource="$application">{{ __('button.save') }}</x-forms.button>
                 </div>
                 </form>
                 </x-modal-input>
 
-                <x-application.settings-section id="container-section" title="Container" helper="Options and labels applied to the container when it starts.">
+                <x-application.settings-section id="container-section" :title="__('execute.container_label')" :helper="__('Options and labels applied to the container when it starts.')">
                     <x-forms.input
-                        helper="You can add custom docker run options that will be used when your container is started.<br>Note: Not all options are supported, as they could mess up Coolify's automation and could cause bad experience for users.<br><br>Check the <a class='underline dark:text-white' href='https://coolify.io/docs/knowledge-base/docker/custom-commands'>docs.</a>"
-                        placeholder="--cap-add SYS_ADMIN --device=/dev/fuse --security-opt apparmor:unconfined --ulimit nofile=1024:1024 --tmpfs /run:rw,noexec,nosuid,size=65536k --hostname=myapp"
-                        id="customDockerRunOptions" label="Custom Docker options" x-bind:disabled="!canUpdate" />
-                <x-application.settings-subsection id="container-labels-section" title="Labels">
+                        :helper="__('You can add custom docker run options that will be used when your container is started.<br>Note: Not all options are supported, as they could mess up Coolify\'s automation and could cause bad experience for users.<br><br>Check the <a class=\'underline dark:text-white\' href=\'https://coolify.io/docs/knowledge-base/docker/custom-commands\'>docs.</a>')"
+                        placeholder="{{ __('application.custom_docker_options_placeholder') }}"
+                        id="customDockerRunOptions" label="{{ __('Custom Docker options') }}" x-bind:disabled="!canUpdate" />
+                <x-application.settings-subsection id="container-labels-section" :title="__('Labels')">
                     <div class="grid w-full gap-4 sm:grid-cols-2">
-                        <x-forms.listbox id="isContainerLabelReadonlyEnabled" label="Label management"
+                        <x-forms.listbox id="isContainerLabelReadonlyEnabled" :label="__('Label management')"
                             onChange="instantSave"
-                            helper="When Coolify manages the labels, they are regenerated automatically and manual edits can be lost.<br><br>If you edit them yourself, be careful: a wrong label set can break the proxy configuration after a restart (you can always reset to the Coolify defaults)."
+                            :helper="__('When Coolify manages the labels, they are regenerated automatically and manual edits can be lost.<br><br>If you edit them yourself, be careful: a wrong label set can break the proxy configuration after a restart (you can always reset to the Coolify defaults).')"
                             :options="[
-                                ['value' => true, 'label' => 'Managed by Coolify (auto-generated)'],
-                                ['value' => false, 'label' => 'Managed manually (edit labels yourself)'],
+                                ['value' => true, 'label' => __('Managed by Coolify (auto-generated)')],
+                                ['value' => false, 'label' => __('Managed manually (edit labels yourself)')],
                             ]" x-bind:disabled="!canUpdate" />
-                        <x-forms.listbox id="isContainerLabelEscapeEnabled" label="Special characters"
+                        <x-forms.listbox id="isContainerLabelEscapeEnabled" :label="__('Special characters')"
                             onChange="instantSave"
-                            helper="By default, $ (and other special characters) are escaped: writing $ saves it as $$.<br><br>Keep them unescaped if you want to use environment variables inside the labels."
+                            :helper="__('By default, $ (and other special characters) are escaped: writing $ saves it as $$.<br><br>Keep them unescaped if you want to use environment variables inside the labels.')"
                             :options="[
                                 ['value' => true, 'label' => 'Escape special characters ($ becomes $$)'],
-                                ['value' => false, 'label' => 'Keep unescaped (allow env variables)'],
+                                ['value' => false, 'label' => __('Keep unescaped (allow env variables)')],
                             ]" x-bind:disabled="!canUpdate" />
                     </div>
                     <div class="mt-5 border-t border-neutral-200 pt-5 dark:border-white/[0.07]">
                         <div class="mb-1.5 flex items-center justify-between gap-3">
-                            <label class="flex w-fit items-center gap-1.5" style="margin-bottom: 0">Active labels</label>
+                            <label class="flex w-fit items-center gap-1.5" style="margin-bottom: 0">{{ __('Active labels') }}</label>
                             @can('update', $application)
-                                <x-modal-confirmation title="Confirm Labels Reset to Coolify Defaults?"
-                                    buttonTitle="Reset to defaults" submitAction="resetDefaultLabels(true)"
+                                <x-modal-confirmation :title="__('application.reset_labels_title')"
+                                    :buttonTitle="__('Reset to defaults')" submitAction="resetDefaultLabels(true)"
                                     :actions="[
-                                        'All your custom proxy labels will be lost.',
-                                        'Proxy labels (traefik, caddy, etc) will be reset to the coolify defaults.',
-                                    ]" confirmationText="{{ $application->fqdn . '/' }}"
-                                    confirmationLabel="Please confirm the execution of the actions by entering the Application URL below"
-                                    shortConfirmationLabel="Application URL" :confirmWithPassword="false"
-                                    step2ButtonText="Permanently Reset Labels" />
+                                        __('application.reset_labels_action_1'),
+                                        __('application.reset_labels_action_2'),
+                                    ]" confirmationText="{{ $application->fqdn . __('application.publish_directory_placeholder_root') }}"
+                                    confirmationLabel="{{ __('application.confirm_application_url') }}"
+                                    shortConfirmationLabel="{{ __('application.application_url') }}" :confirmWithPassword="false"
+                                    step2ButtonText="{{ __('application.permanently_reset_labels') }}" />
                             @endcan
                         </div>
                         @if ($application->settings->is_container_label_readonly_enabled)
