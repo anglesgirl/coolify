@@ -2,19 +2,19 @@
     $destinationRouteParameters = ['destination_uuid' => $destination->uuid];
     $destinationMenuItems = collect([
         [
-            'label' => 'General',
+            'label' => __('menu.general'),
             'route' => 'destination.show',
             'active' => request()->routeIs('destination.show'),
             'icon' => 'settings',
         ],
         $destination->getMorphClass() === 'App\\Models\\StandaloneDocker' ? [
-            'label' => 'Resources',
+            'label' => __('Resources'),
             'route' => 'destination.resources',
             'active' => request()->routeIs('destination.resources'),
             'icon' => 'grid',
         ] : null,
         [
-            'label' => 'Danger Zone',
+            'label' => __('menu.danger_zone'),
             'route' => 'destination.danger',
             'active' => request()->routeIs('destination.danger'),
             'icon' => 'danger',
@@ -24,7 +24,7 @@
 
 <x-main-nav-menu back-label="Destinations" back-title="Back to Integrations" :name="$destination->name"
     data-settings-search-items="{{ json_encode(settingsSearchItems(['Destination' => $destinationMenuItems], $destinationRouteParameters)) }}">
-    <nav aria-label="Destination settings"
+    <nav aria-label="{{ __('Destination settings') }}"
         class="grid grid-cols-1 gap-0.5">
         @foreach ($destinationMenuItems as $menuItem)
             @if ($menuItem['label'] === 'Danger Zone')

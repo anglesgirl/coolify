@@ -1,24 +1,24 @@
 <div class="application-settings-form w-full">
     <x-slot:title>
-        Destinations | Coolify
+        {{ __('destinations.title') }}
     </x-slot>
 
     <header class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div class="min-w-0">
-            <h1 class="truncate text-[24px]! leading-7! font-semibold! tracking-tight!">Destinations</h1>
+            <h1 class="truncate text-[24px]! leading-7! font-semibold! tracking-tight!">{{ __('navbar.destinations') }}</h1>
             <p class="mt-1 text-[13px] text-neutral-500 dark:text-fg-dim">
-                {{ $destinations->count() }} {{ Str::plural('network endpoint', $destinations->count()) }}
+                {{ $destinations->count() }} {{ Str::plural(__('network endpoint'), $destinations->count()) }}
             </p>
         </div>
         @if ($servers->count() > 0)
             @can('createAnyResource')
                 <div class="w-fit shrink-0">
-                    <x-modal-input title="New Destination">
+                    <x-modal-input title="{{ __('modal.new_destination') }}">
                         <x-slot:content>
                             <button type="button"
                                 class="button button-highlighted">
                                 <x-reicon name="plus" class="size-3.5" />
-                                New destination
+                                {{ __('New destination') }}
                             </button>
                         </x-slot:content>
                         <livewire:destination.new.docker />
@@ -29,8 +29,8 @@
     </header>
 
     @if ($destinations->isEmpty())
-        <x-empty title="No destinations yet"
-            description="Add a Docker network endpoint to choose where your resources are deployed."
+        <x-empty title="{{ __('No destinations yet') }}"
+            description="{{ __('Add a Docker network endpoint to choose where your resources are deployed.') }}"
             icon-name="destinations" />
     @else
         @php
@@ -82,9 +82,9 @@
 
                     <div class="mt-auto flex items-center gap-2 pt-4">
                         @if ($destination->getMorphClass() === 'App\Models\SwarmDocker')
-                            <x-status-badge label="Docker Swarm" type="warning" />
+                            <x-status-badge label="{{ __('Docker Swarm') }}" type="warning" />
                         @else
-                            <x-status-badge label="Standalone Docker" type="success" />
+                            <x-status-badge label="{{ __('Standalone Docker') }}" type="success" />
                         @endif
                     </div>
                 </a>
@@ -92,7 +92,7 @@
         </div>
         <div x-show="viewMode === 'table'" class="overflow-x-auto rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-white/[0.08] dark:bg-white/[0.05]">
             <div class="grid min-w-[620px] grid-cols-[minmax(0,1fr)_minmax(10rem,.7fr)_10rem] border-b border-neutral-200 bg-neutral-50 px-4 py-2.5 text-[11px] font-medium text-neutral-500 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-fg-faint">
-                <div>Destination</div><div>Server</div><div>Type</div>
+                <div>{{ __('Destination') }}</div><div>{{ __('Server') }}</div><div>{{ __('backup.type') }}</div>
             </div>
             @foreach ($destinations as $destination)
                 @php($isSwarm = $destination->getMorphClass() === 'App\\Models\\SwarmDocker')
@@ -100,7 +100,7 @@
                     class="grid min-h-14 min-w-[620px] grid-cols-[minmax(0,1fr)_minmax(10rem,.7fr)_10rem] items-center border-b border-neutral-200 px-4 py-2.5 text-[12px] transition-colors last:border-b-0 hover:bg-neutral-50 hover:no-underline dark:border-white/[0.07] dark:hover:bg-white/[0.025]">
                     <div class="truncate font-semibold text-black dark:text-fg">{{ $destination->name }}</div>
                     <div class="truncate text-neutral-500 dark:text-fg-dim">{{ $destination->server->name }}</div>
-                    <div><x-status-badge :label="$isSwarm ? 'Docker Swarm' : 'Standalone Docker'" :type="$isSwarm ? 'warning' : 'success'" /></div>
+                    <div><x-status-badge :label="$isSwarm ? __('Docker Swarm') : __('Standalone Docker')" :type="$isSwarm ? 'warning' : 'success'" /></div>
                 </a>
             @endforeach
         </div>
