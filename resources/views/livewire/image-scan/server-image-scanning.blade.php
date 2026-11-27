@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($server, 'name')->limit(10) }} > Vulnerabilities | Coolify
+        {{ data_get_str($server, 'name')->limit(10) }} > {{ __('Vulnerabilities | Coolify') }}
     </x-slot>
 
     <livewire:server.navbar :server="$server" />
@@ -21,10 +21,10 @@
             default => 'idle',
         };
         $sectionHelper = collect([
-            'Scan the images on this server for known vulnerabilities before and after deployments. Coolify also scans the operating system packages of the server every day.',
+            __('Scan the images on this server for known vulnerabilities before and after deployments. Coolify also scans the operating system packages of the server every day.'),
             "Scanner tools: {$toolVersions}.",
-            'Coolify downloads the latest vulnerability database every day, between 02:00 and 05:00 server time.'
-                .($builtAt ? ' Database built ' . $builtAt->diffForHumans() . '.' : ''),
+            __('Coolify downloads the latest vulnerability database every day, between 02:00 and 05:00 server time.')
+                .($builtAt ? ' '.__('Database built').' '.$builtAt->diffForHumans().'.' : ''),
             $diskUsed ? "Disk used by scanner data: {$diskUsed}." : null,
             $costText,
         ])->filter()->map(fn (string $line) => e($line))->implode('<br><br>');
@@ -36,69 +36,68 @@
 
         <div class="application-settings-form flex w-full min-w-0 flex-col gap-6">
 
-            <x-application.settings-section id="server-image-scanning-section" title="Image scanning"
+            <x-application.settings-section id="server-image-scanning-section" title="{{ __('Image scanning') }}"
                 :helper="$sectionHelper">
                 @can('update', $server)
                     <x-slot:actions>
                         @if ($enabled && ($prepareState === null || $prepareState === 'failed'))
                             <x-forms.button type="button" wire:click="prepareScanner">
-                                {{ $prepareState === 'failed' ? 'Try again' : 'Get scanner' }}
+                                {{ $prepareState === 'failed' ? __('Try again') : __('Get scanner') }}
                             </x-forms.button>
                         @endif
                         {{-- Disabling forgets the cached state, but the files stay on the server. --}}
                         @if (! $enabled || $hasScannerData)
-                            <x-modal-confirmation title="Delete scanner data?" buttonTitle="Delete scanner data"
+                            <x-modal-confirmation title="{{ __('Delete scanner data?') }}" buttonTitle="{{ __('Delete scanner data') }}"
                                 isErrorButton submitAction="deleteScannerData" temporaryDisableTwoStepConfirmation
                                 :confirmWithText="false" :confirmWithPassword="false" :actions="[
-                                    'Coolify removes the stored SBOMs, the vulnerability database, and the scanner images from this server.',
-                                    'Scan results in Coolify stay. The next scan gets the scanner again.',
+                                    __('Coolify removes the stored SBOMs, the vulnerability database, and the scanner images from this server.'),
+                                    __('Scan results in Coolify stay. The next scan gets the scanner again.'),
                                 ]"
-                                step2ButtonText="Delete scanner data" />
+                                step2ButtonText="{{ __('Delete scanner data') }}" />
                         @endif
                         <div wire:key="image-scanning-change-{{ $enabled ? 'on' : 'off' }}">
                             <x-modal-confirmation
-                                title="{{ $enabled ? 'Disable image scanning?' : 'Enable image scanning?' }}"
-                                buttonTitle="{{ $enabled ? 'Disable' : 'Enable' }}"
+                                title="{{ $enabled ? __('Disable image scanning?') : __('Enable image scanning?') }}"
+                                buttonTitle="{{ $enabled ? __('button.disable') : __('application.enable') }}"
                                 submitAction="{{ $enabled ? 'disable' : 'enable' }}"
-                                warningMessage="{{ $enabled ? 'New deployments and running images on this server are no longer checked for vulnerabilities. You can enable it again at any time.' : 'Scans run on this server and use its resources. You can disable it again at any time.' }}"
+                                warningMessage="{{ $enabled ? __('New deployments and running images on this server are no longer checked for vulnerabilities. You can enable it again at any time.') : __('Scans run on this server and use its resources. You can disable it again at any time.') }}"
                                 temporaryDisableTwoStepConfirmation :confirmWithText="false"
                                 :confirmWithPassword="false" :actions="$enabled
-                                    ? ['Coolify stops scanning the images and the operating system packages of this server.', 'Scan results and scanner data on the server stay.']
+                                    ? [__('Coolify stops scanning the images and the operating system packages of this server.'), __('Scan results and scanner data on the server stay.')]
                                     : [$costText]"
-                                step2ButtonText="{{ $enabled ? 'Disable image scanning' : 'Enable image scanning' }}"
+                                step2ButtonText="{{ $enabled ? __('Disable image scanning') : __('Enable image scanning') }}"
                                 :isHighlightedButton="! $enabled" />
                         </div>
                     </x-slot:actions>
                 @endcan
                 @if (! $enabled)
-                    <x-empty size="sm" icon-name="shield-alert" title="Image scanning is off for {{ $server->name }}."
+                    <x-empty size="sm" icon-name="shield-alert" title="{{ __('Image scanning is off for') }} {{ $server->name }}."
                         description="{{ $costText }}">
                         @cannot('update', $server)
                             <x-slot:actions>
-                                <span class="text-[13px] text-neutral-500 dark:text-fg-faint">Ask a team admin to turn it
-                                    on.</span>
+                                <span class="text-[13px] text-neutral-500 dark:text-fg-faint">{{ __('Ask a team admin to turn it on.') }}</span>
                             </x-slot:actions>
                         @endcannot
                     </x-empty>
                 @elseif ($prepareState !== 'ready')
                     <div class="divide-y divide-neutral-200 rounded-lg border border-neutral-200 dark:divide-white/[0.08] dark:border-white/[0.08]">
-                        <x-checkpoint-item title="Get scanner" icon="download" :status="$pullState"
+                        <x-checkpoint-item title="{{ __('Get scanner') }}" icon="download" :status="$pullState"
                             :description="match ($pullState) {
-                                'running' => 'Pulling the scanner images.',
-                                'success' => 'The scanner images are on this server.',
+                                'running' => __('Pulling the scanner images.'),
+                                'success' => __('The scanner images are on this server.'),
                                 'error' => match ($failedStep) {
-                                    'setup' => 'Coolify could not set up the scanner storage on the server. Check that the SSH user can run Docker commands.',
-                                    'connection' => 'Coolify could not connect to the server. Check that the server is reachable, then try again.',
-                                    default => 'Coolify could not pull the scanner images. Check that the server can reach ' . $registries . '.',
+                                    'setup' => __('Coolify could not set up the scanner storage on the server. Check that the SSH user can run Docker commands.'),
+                                    'connection' => __('Coolify could not connect to the server. Check that the server is reachable, then try again.'),
+                                    default => __('Coolify could not pull the scanner images. Check that the server can reach') . ' ' . $registries . '.',
                                 },
-                                default => 'Not done yet.',
+                                default => __('Not done yet.'),
                             }" />
-                        <x-checkpoint-item title="Update database" icon="database" :status="$databaseState"
+                        <x-checkpoint-item title="{{ __('Update database') }}" icon="database" :status="$databaseState"
                             :description="match ($databaseState) {
-                                'running' => 'Downloading the vulnerability database.',
-                                'success' => $builtAt ? 'Database built ' . $builtAt->diffForHumans() . '.' : 'The vulnerability database is up to date.',
-                                'error' => 'Coolify could not download the vulnerability database.',
-                                default => 'Not done yet.',
+                                'running' => __('Downloading the vulnerability database.'),
+                                'success' => $builtAt ? __('Database built') . ' ' . $builtAt->diffForHumans() . '.' : __('The vulnerability database is up to date.'),
+                                'error' => __('Coolify could not download the vulnerability database.'),
+                                default => __('Not done yet.'),
                             }" />
                     </div>
                 @endif
@@ -108,25 +107,25 @@
                     @php
                         $cannotUpdate = auth()->user()->cannot('update', $server);
                     @endphp
-                    <x-application.settings-subsection id="image-scan-limits-section" title="Scanner limits"
-                        helper="Limits of each scanner step on this server. Raise one when a scan stops because it took too long or ran out of memory. A new limit applies to the next scan."
+                    <x-application.settings-subsection id="image-scan-limits-section" title="{{ __('Scanner limits') }}"
+                        helper="{{ __('Limits of each scanner step on this server. Raise one when a scan stops because it took too long or ran out of memory. A new limit applies to the next scan.') }}"
                         first>
                         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                            <x-forms.listbox id="scannerSyftTimeout" label="Syft time limit" onChange="$commit"
+                            <x-forms.listbox id="scannerSyftTimeout" label="{{ __('Syft time limit') }}" onChange="$commit"
                                 :disabled="$cannotUpdate"
-                                helper="Time to export one local image from Docker, and time to list its packages. Large images and slow disks need more time."
+                                helper="{{ __('Time to export one local image from Docker, and time to list its packages. Large images and slow disks need more time.') }}"
                                 :options="$timeoutOptions" />
-                            <x-forms.listbox id="scannerGrypeTimeout" label="Grype time limit" onChange="$commit"
+                            <x-forms.listbox id="scannerGrypeTimeout" label="{{ __('Grype time limit') }}" onChange="$commit"
                                 :disabled="$cannotUpdate"
-                                helper="Time to check the vulnerability database, and time to match the packages of one image with it. Slow disks need more time."
+                                helper="{{ __('Time to check the vulnerability database, and time to match the packages of one image with it. Slow disks need more time.') }}"
                                 :options="$timeoutOptions" />
-                            <x-forms.listbox id="scannerCpus" label="Scanner CPU limit" onChange="$commit"
+                            <x-forms.listbox id="scannerCpus" label="{{ __('Scanner CPU limit') }}" onChange="$commit"
                                 :disabled="$cannotUpdate"
-                                helper="CPUs that each scanner step can use. Values above the CPU count of this server are not listed."
+                                helper="{{ __('CPUs that each scanner step can use. Values above the CPU count of this server are not listed.') }}"
                                 :options="$cpuOptions" />
-                            <x-forms.listbox id="scannerMemoryMb" label="Scanner memory limit" onChange="$commit"
+                            <x-forms.listbox id="scannerMemoryMb" label="{{ __('Scanner memory limit') }}" onChange="$commit"
                                 :disabled="$cannotUpdate"
-                                helper="Memory that each scanner step can use. Values above the memory of this server are not listed. The server must also have this much free memory when a scan runs."
+                                helper="{{ __('Memory that each scanner step can use. Values above the memory of this server are not listed. The server must also have this much free memory when a scan runs.') }}"
                                 :options="$memoryOptions" />
                         </div>
                     </x-application.settings-subsection>

@@ -1,15 +1,15 @@
 <div>
     @if ($title)
-    <x-modal-input :title="$title" :subtitle="$currentSummary ? 'Current access: '.$currentSummary : 'The member gets these scopes when they accept the invitation.'" wireOpen="open"
+    <x-modal-input :title="$title" :subtitle="$currentSummary ? __('Current access:').' '.$currentSummary : __('The member gets these scopes when they accept the invitation.')" wireOpen="open"
         :wireIgnore="false" :closeOutside="false">
         <x-slot:content><span></span></x-slot:content>
 
         @php
             $presetInfo = [
-                'viewer' => ['label' => 'Viewer', 'description' => 'Read the whole team.'],
-                'developer' => ['label' => 'Developer', 'description' => 'Write and deploy in one project.'],
-                'operator' => ['label' => 'Operator', 'description' => 'Write, deploy, and delete in the whole team.'],
-                'full' => ['label' => 'Full access', 'description' => 'Every level in the whole team.'],
+                'viewer' => ['label' => __('Viewer'), 'description' => __('Read the whole team.')],
+                'developer' => ['label' => __('Developer'), 'description' => __('Write and deploy in one project.')],
+                'operator' => ['label' => __('Operator'), 'description' => __('Write, deploy, and delete in the whole team.')],
+                'full' => ['label' => __('Full access'), 'description' => __('Every level in the whole team.')],
             ];
             $presetCard = 'flex w-full flex-col items-start gap-0.5 rounded-lg border px-3 py-2 text-left transition-colors';
             $presetIdle = 'border-neutral-200 hover:bg-neutral-100/80 dark:border-white/[0.08] dark:hover:bg-white/[0.035]';
@@ -63,9 +63,8 @@
         }">
             <section class="flex flex-col gap-2">
                 <div>
-                    <h4 class="text-[13px] font-medium text-neutral-800 dark:text-fg">Start from a preset</h4>
-                    <p class="text-[12px] text-neutral-500 dark:text-fg-faint">A preset replaces the scopes below.
-                        You can change them after.</p>
+                    <h4 class="text-[13px] font-medium text-neutral-800 dark:text-fg">{{ __('Start from a preset') }}</h4>
+                    <p class="text-[12px] text-neutral-500 dark:text-fg-faint">{{ __('A preset replaces the scopes below. You can change them after.') }}</p>
                 </div>
                 <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     @foreach ($presetInfo as $preset => $info)
@@ -110,32 +109,28 @@
 
             <section class="flex flex-col gap-2">
                 <div>
-                    <h4 class="text-[13px] font-medium text-neutral-800 dark:text-fg">Scopes</h4>
-                    <p class="text-[12px] text-neutral-500 dark:text-fg-faint">Each scope gives levels on the whole
-                        team, projects, environments, or resources. Scopes add up.</p>
+                    <h4 class="text-[13px] font-medium text-neutral-800 dark:text-fg">{{ __('Scopes') }}</h4>
+                    <p class="text-[12px] text-neutral-500 dark:text-fg-faint">{{ __('Each scope gives levels on the whole team, projects, environments, or resources. Scopes add up.') }}</p>
                 </div>
 
                 <div x-show="rows.length === 0" x-cloak>
-                    <x-callout type="warning" title="No access">
-                        {{ $forInvitation ? 'The invited member' : 'This member' }} will not see any project, environment, or resource in this team.
+                    <x-callout type="warning" title="{{ __('No access') }}">
+                        {{ $forInvitation ? __('The invited member') : __('This member') }} {{ __('will not see any project, environment, or resource in this team.') }}
                     </x-callout>
                 </div>
 
                 @if ($team->id === 0)
                     <div x-show="rows.some((row) => row.levels.Write || row.levels.Root)" x-cloak>
-                        <x-callout type="warning" title="Write access can give root on the Coolify host">
-                            With write access on a resource that runs on the localhost server, a member can run a
-                            privileged container there. That gives root on the server that runs Coolify, and access to
-                            the data of all teams. Give write access in the root team only to people that you trust as
-                            instance admins.
+                        <x-callout type="warning" title="{{ __('Write access can give root on the Coolify host') }}">
+                            {{ __('With write access on a resource that runs on the localhost server, a member can run a privileged container there. That gives root on the server that runs Coolify, and access to the data of all teams. Give write access in the root team only to people that you trust as instance admins.') }}
                         </x-callout>
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <x-callout type="danger" title="Check the scopes">
+                    <x-callout type="danger" title="{{ __('Check the scopes') }}">
                         @foreach ($errors->getMessages() as $key => $messages)
-                            <p>Scope {{ ((int) explode('.', $key)[1]) + 1 }}: {{ $messages[0] }}</p>
+                            <p>{{ __('Scope') }} {{ ((int) explode('.', $key)[1]) + 1 }}: {{ $messages[0] }}</p>
                         @endforeach
                     </x-callout>
                 @endif
@@ -144,12 +139,12 @@
                     <div class="flex flex-col gap-3 rounded-lg border border-neutral-200 p-3 dark:border-white/[0.08]">
                         <div class="flex items-end gap-2">
                             <div class="min-w-0 flex-1">
-                                <x-forms.listbox htmlId="member-access-targets" label="Applies to" :wire="false" :value="[]"
-                                    x-model="row.targets" :options="$this->scopeOptions" placeholder="Choose scopes"
+                                <x-forms.listbox htmlId="member-access-targets" label="{{ __('Applies to') }}" :wire="false" :value="[]"
+                                    x-model="row.targets" :options="$this->scopeOptions" placeholder="{{ __('Choose scopes') }}"
                                     multiple searchable portal countLabel="resource" />
                             </div>
-                            <button type="button" class="icon-button mb-1 shrink-0" title="Remove scope"
-                                aria-label="Remove this scope" @click="removeRow(row.key)">
+                            <button type="button" class="icon-button mb-1 shrink-0" title="{{ __('Remove scope') }}"
+                                aria-label="{{ __('Remove this scope') }}" @click="removeRow(row.key)">
                                 <x-reicon name="trash" class="size-3.5" />
                             </button>
                         </div>
@@ -175,7 +170,7 @@
                                     <span class="flex min-w-0 flex-col">
                                         <span class="text-[13px] text-neutral-800 dark:text-fg" x-text="level.label"></span>
                                         <span class="text-[12px] text-neutral-500 dark:text-fg-faint"
-                                            x-text="includedBy(row, level.name) ? `Included in ${includedBy(row, level.name)}.` : level.description"></span>
+                                            x-text="includedBy(row, level.name) ? `{{ __('Included in') }} ${includedBy(row, level.name)}.` : level.description"></span>
                                     </span>
                                 </label>
                             </template>
@@ -186,16 +181,16 @@
                 <div>
                     <button type="button" class="button h-7! px-2.5! text-[11px]!" @click="addRow()">
                         <x-reicon name="plus" class="size-3" />
-                        Add scope
+                        {{ __('Add scope') }}
                     </button>
                 </div>
             </section>
         </div>
 
         <x-slot:footer>
-            <x-forms.button @click="modalOpen = false">Cancel</x-forms.button>
+            <x-forms.button @click="modalOpen = false">{{ __('common.cancel') }}</x-forms.button>
             <x-forms.button isHighlighted wire:click="save" canGate="manageMembers"
-                :canResource="$team">Save</x-forms.button>
+                :canResource="$team">{{ __('button.save') }}</x-forms.button>
         </x-slot:footer>
     </x-modal-input>
     @endif

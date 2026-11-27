@@ -1,21 +1,21 @@
 <div>
     @can('manageInvitations', currentTeam())
         @if ($invitations->count() > 0)
-            <x-application.settings-section title="Pending invitations"
-                description="Invitation links that have not been accepted yet." flush>
+            <x-application.settings-section title="{{ __('Pending invitations') }}"
+                description="{{ __('Invitation links that have not been accepted yet.') }}" flush>
                 <div class="overflow-x-auto">
                     <div class="data-table min-w-[600px] transition-opacity" wire:loading.class="opacity-50 pointer-events-none"
                         wire:target="setSort">
                         <div
                             class="data-table-header grid-cols-[minmax(13rem,1fr)_7rem_10rem_4rem_4.5rem]">
-                            <x-table.sort-header label="Email" asc="email-asc" desc="email-desc" action="setSort"
+                            <x-table.sort-header label="{{ __('input.email') }}" asc="email-asc" desc="email-desc" action="setSort"
                                 :current="$sort" />
-                            <x-table.sort-header label="Method" asc="via-asc" desc="via-desc" action="setSort"
+                            <x-table.sort-header label="{{ __('health_check.method') }}" asc="via-asc" desc="via-desc" action="setSort"
                                 :current="$sort" />
-                            <x-table.sort-header label="Role" asc="role-asc" desc="role-desc" first="desc"
+                            <x-table.sort-header label="{{ __('Role') }}" asc="role-asc" desc="role-desc" first="desc"
                                 action="setSort" :current="$sort" />
-                            <span>Link</span>
-                            <span class="text-right">Actions</span>
+                            <span>{{ __('Link') }}</span>
+                            <span class="text-right">{{ __('Actions') }}</span>
                         </div>
                         @foreach ($sortedInvitations as $invite)
                             <div wire:key="team-invitation-{{ $invite->id }}"
@@ -36,18 +36,18 @@
                                     @endif
                                 </div>
                                 <div class="flex items-center">
-                                    <x-copy-button :value="$invite->link" label="Copy invitation link" />
+                                    <x-copy-button :value="$invite->link" label="{{ __('Copy invitation link') }}" />
                                 </div>
                                 <div class="flex justify-end">
-                                    <x-modal-confirmation title="Revoke invitation?"
+                                    <x-modal-confirmation title="{{ __('Revoke invitation?') }}"
                                         submitAction="deleteInvitation({{ $invite->id }})"
-                                        :actions="['The invitation link for ' . $invite->email . ' stops working.']"
+                                        :actions="[__('The invitation link for') . ' ' . $invite->email . ' ' . __('stops working.')]"
                                         :confirmWithText="false" :confirmWithPassword="false"
-                                        step2ButtonText="Revoke invitation">
+                                        step2ButtonText="{{ __('Revoke invitation') }}">
                                         <x-slot:trigger>
                                             <button type="button"
                                                 class="icon-button shrink-0 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
-                                                title="Revoke invitation" aria-label="Revoke invitation for {{ $invite->email }}">
+                                                title="{{ __('Revoke invitation') }}" aria-label="{{ __('Revoke invitation for') }} {{ $invite->email }}">
                                                 <x-reicon name="trash" class="size-3.5" />
                                             </button>
                                         </x-slot:trigger>

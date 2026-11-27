@@ -10,17 +10,17 @@
 
 <div class="flex flex-col gap-6">
     @if ($offState === 'server')
-        <x-empty title="Image scanning is off for {{ $serverName }}."
-            :description="$serverUrl === null ? 'Ask a team admin to turn it on.' : null" icon-name="shield-alert">
+        <x-empty title="{{ __('Image scanning is off for') }} {{ $serverName }}."
+            :description="$serverUrl === null ? __('Ask a team admin to turn it on.') : null" icon-name="shield-alert">
             @if ($serverUrl !== null)
                 <x-slot:actions>
-                    <a class="button normal-case!" href="{{ $serverUrl }}" {{ wireNavigate() }}>Turn on</a>
+                    <a class="button normal-case!" href="{{ $serverUrl }}" {{ wireNavigate() }}>{{ __('Turn on') }}</a>
                 </x-slot:actions>
             @endif
         </x-empty>
     @elseif ($offState === 'application')
-        <x-empty title="Image scanning is off for this app."
-            description="Turn on Scan this app in the settings below." icon-name="shield-alert" />
+        <x-empty title="{{ __('Image scanning is off for this app.') }}"
+            description="{{ __('Turn on Scan this app in the settings below.') }}" icon-name="shield-alert" />
     @else
         @php
             $isScanning = $progress !== null;
@@ -30,7 +30,7 @@
         {{-- Main card (spec 15.7, 15.11): the status sentence and the one action first, then the why-list, the
              provenance, and the running image. One image renders open without a list frame; several images are a list,
              worst first, with the worst one open. --}}
-        <x-application.settings-section id="security-section" title="Security">
+        <x-application.settings-section id="security-section" title="{{ __('Security') }}">
             @if (filled($card['badge'] ?? null))
                 <x-slot:badges>
                     <x-status-badge :type="$card['badgeType']" :label="$card['badge']" />
@@ -39,20 +39,20 @@
             <x-slot:actions>
                 @if ($checkedAt !== null)
                     <span class="{{ $muted }}" data-tooltip="{{ $checkedAt->toDayDateTimeString() }}">
-                        Checked {{ $checkedAt->diffForHumans() }}
+                        {{ __('Checked') }} {{ $checkedAt->diffForHumans() }}
                     </span>
                 @endif
                 @if ($canUpdate)
                     <x-forms.button :isHighlighted="$checkNeeded || ($card === null && ! $isApplication)" class="normal-case!" wire:click="scanNow" :disabled="$isScanning">
                         <x-reicon name="refresh" class="size-3.5" />
-                        Scan now
+                        {{ __('Scan now') }}
                     </x-forms.button>
                 @endif
             </x-slot:actions>
 
             <div class="flex flex-col gap-4">
                 @foreach ($errorMessages as $error)
-                    <x-callout type="danger" title="The last scan could not run">
+                    <x-callout type="danger" title="{{ __('The last scan could not run') }}">
                         {{ $error['message'] }}
                         <x-image-scan.error-log :detail="$error['detail']" />
                     </x-callout>
@@ -69,7 +69,7 @@
 
                 @if ($card === null)
                     @unless ($isScanning || $errorMessages !== [])
-                        <x-empty size="sm" :title="$isApplication ? 'Not scanned yet. The next deploy scans the image.' : 'Not scanned yet.'" />
+                        <x-empty size="sm" :title="$isApplication ? __('Not scanned yet. The next deploy scans the image.') : __('Not scanned yet.')" />
                     @endunless
                 @elseif ($card['single'] && count($card['rows']) === 1)
                     {{-- One image: the open row without the list frame and without a second status (spec 15.11). --}}
@@ -82,7 +82,7 @@
                     @endif
 
                     <ul class="flex flex-col divide-y divide-neutral-200 rounded-lg border border-neutral-200 dark:divide-white/[0.06] dark:border-white/[0.08]"
-                        aria-label="Images">
+                        aria-label="{{ __('Images') }}">
                         @foreach ($card['rows'] as $row)
                             @php
                                 $bodyId = 'security-image-'.$row['key'].'-body';
@@ -111,10 +111,10 @@
                                         @if ($row['badge'] !== null)
                                             <x-status-badge :type="$row['badgeType']" :label="$row['badge']" />
                                         @else
-                                            <span class="{{ $muted }}">{{ $row['status'] === 'ok' ? 'No action needed' : 'Not checked' }}</span>
+                                            <span class="{{ $muted }}">{{ $row['status'] === 'ok' ? __('No action needed') : __('Not checked') }}</span>
                                         @endif
                                         @if ($row['mergedWith'] !== null)
-                                            <span class="{{ $muted }}">Updated with {{ $row['mergedWith'] }}</span>
+                                            <span class="{{ $muted }}">{{ __('Updated with') }} {{ $row['mergedWith'] }}</span>
                                         @elseif ($row['primary'] !== null)
                                             @include('livewire.image-scan.partials.security-action', ['action' => $row['primary'], 'primary' => $loop->first, 'withSentence' => false, 'keyPrefix' => $row['key']])
                                         @endif
@@ -125,7 +125,7 @@
                                     <p class="-mt-1 truncate px-3 pb-2 text-[11px] text-neutral-500 sm:pl-8.5 dark:text-fg-faint" title="{{ $versionNote['text'] }}">
                                         {{ $versionNote['text'] }}
                                         @if ($versionNote['link'] !== null)
-                                            <a href="{{ $versionNote['link'] }}" class="underline underline-offset-4 hover:text-neutral-950 dark:hover:text-fg" {{ wireNavigate() }}>Registry logins</a>
+                                            <a href="{{ $versionNote['link'] }}" class="underline underline-offset-4 hover:text-neutral-950 dark:hover:text-fg" {{ wireNavigate() }}>{{ __('Registry logins') }}</a>
                                         @endif
                                     </p>
                                 @endforeach
@@ -152,7 +152,7 @@
         </x-application.settings-section>
 
         @if ($scans->isNotEmpty())
-            <x-application.settings-section id="all-findings-section" :title="'All findings ('.number_format($findingCount).')'"
+            <x-application.settings-section id="all-findings-section" :title="__('All findings (').number_format($findingCount).')'"
                 collapsible flush>
                 <x-slot:actions>
                     <x-image-scan.export-menu :count="$shownCount" />
@@ -160,19 +160,19 @@
 
                 @if ($truncated)
                     <div class="border-b border-neutral-200 p-3 dark:border-white/[0.08]">
-                        <x-callout type="info" title="Too many results">Only part of the results is shown, with the problems that attackers are using first.</x-callout>
+                        <x-callout type="info" title="{{ __('Too many results') }}">{{ __('Only part of the results is shown, with the problems that attackers are using first.') }}</x-callout>
                     </div>
                 @endif
 
                 <x-table.toolbar class="border-b border-neutral-200 p-3 dark:border-white/[0.08]">
                     <x-slot:search>
-                        <x-table.search placeholder="Search by ID or package" loading-target="search"
+                        <x-table.search placeholder="{{ __('Search by ID or package') }}" loading-target="search"
                             wire:model.live.debounce.300ms="search" />
                     </x-slot:search>
 
                     @unless ($showIgnored)
                         <div class="inline-flex max-w-full flex-wrap items-center gap-0.5 rounded-lg bg-neutral-100 p-1 dark:bg-white/[0.04]"
-                            role="group" aria-label="Fix state">
+                            role="group" aria-label="{{ __('Fix state') }}">
                             @foreach ($fixStates as $value => $label)
                                 <button type="button" wire:click="setFixState('{{ $value }}')"
                                     aria-pressed="{{ $fixState === $value ? 'true' : 'false' }}"
@@ -186,7 +186,7 @@
                     <x-image-scan.image-select :options="$imageOptions" :selected="$images" action="selectImage" />
 
                     <x-table.filter :active-count="count($severities)" reset-action="resetFilters">
-                        <span class="px-2 pb-1 pt-2 text-[10px] font-medium uppercase tracking-wider text-neutral-400 dark:text-fg-faint">Severity</span>
+                        <span class="px-2 pb-1 pt-2 text-[10px] font-medium uppercase tracking-wider text-neutral-400 dark:text-fg-faint">{{ __('Severity') }}</span>
                         @foreach ($severityOptions as $option)
                             @php $selected = in_array($option, $severities, true); @endphp
                             <button type="button" class="listbox-option" role="option"
@@ -207,7 +207,7 @@
 
                     @unless ($showIgnored)
                         <div class="inline-flex items-center gap-0.5 rounded-lg bg-neutral-100 p-1 dark:bg-white/[0.04]"
-                            role="group" aria-label="Group results">
+                            role="group" aria-label="{{ __('Group results') }}">
                             @foreach (['package' => 'By package', 'cve' => 'By CVE'] as $value => $label)
                                 <button type="button" wire:click="$set('view', '{{ $value }}')"
                                     aria-pressed="{{ $view === $value ? 'true' : 'false' }}"
@@ -219,9 +219,9 @@
 
                 @if ($showIgnored)
                     <div class="flex items-center justify-between gap-2 border-b border-neutral-200 px-4 py-2 dark:border-white/[0.08]">
-                        <span class="text-[12px] font-medium text-neutral-700 dark:text-fg">Ignored</span>
+                        <span class="text-[12px] font-medium text-neutral-700 dark:text-fg">{{ __('Ignored') }}</span>
                         <button type="button" class="text-[12px] font-medium text-coollabs hover:underline dark:text-brand-light"
-                            wire:click="$set('showIgnored', false)">Back to the results</button>
+                            wire:click="$set('showIgnored', false)">{{ __('Back to the results') }}</button>
                     </div>
                 @endif
 
@@ -230,32 +230,32 @@
 
                     @if ($items->isEmpty())
                         @if (! $showIgnored && ! $hasFilters && $fixState === 'fixed')
-                            <x-empty size="sm" title="No finding has a fixed version.">
+                            <x-empty size="sm" title="{{ __('No finding has a fixed version.') }}">
                                 @if ($stateCounts['no_fix'] > 0)
                                     <x-slot:actions>
                                         <button type="button" class="button normal-case!" wire:click="setFixState('no_fix')">
-                                            No fix yet ({{ number_format($stateCounts['no_fix']) }})
+                                            {{ __('No fix yet (') }}{{ number_format($stateCounts['no_fix']) }})
                                         </button>
                                     </x-slot:actions>
                                 @endif
                             </x-empty>
                         @elseif ($hasFilters)
-                            <x-empty size="sm" title="No matching findings"
-                                description="Try another search, or reset the filters." />
+                            <x-empty size="sm" title="{{ __('No matching findings') }}"
+                                description="{{ __('Try another search, or reset the filters.') }}" />
                         @else
-                            <x-empty size="sm" :title="$showIgnored ? 'No ignored findings.' : 'No findings in this group.'" />
+                            <x-empty size="sm" :title="$showIgnored ? __('No ignored findings.') : __('No findings in this group.')" />
                         @endif
                     @elseif (! $showIgnored && $view === 'package')
                         <div class="data-table">
                             <div @class(['data-table-header image-scan-packages-grid', 'has-image' => $showsImage])>
-                                <span>Package</span>
+                                <span>{{ __('Package') }}</span>
                                 @if ($showsImage)
-                                    <span class="image-scan-secondary">Image</span>
+                                    <span class="image-scan-secondary">{{ __('Image') }}</span>
                                 @endif
-                                <span class="image-scan-secondary">Version</span>
-                                <span class="image-scan-severity-cell">Severity</span>
-                                <span class="image-scan-secondary">Findings</span>
-                                <span class="sr-only">Actions</span>
+                                <span class="image-scan-secondary">{{ __('Version') }}</span>
+                                <span class="image-scan-severity-cell">{{ __('Severity') }}</span>
+                                <span class="image-scan-secondary">{{ __('Findings') }}</span>
+                                <span class="sr-only">{{ __('Actions') }}</span>
                             </div>
                             @foreach ($items as $group)
                                 <div wire:key="package-{{ $group['key'] }}" x-data="{ open: false }"
@@ -264,7 +264,7 @@
                                         <div class="flex min-w-0 items-center gap-1.5">
                                             <button type="button" class="icon-button" x-on:click="open = !open"
                                                 :aria-expanded="open ? 'true' : 'false'"
-                                                aria-label="Show the findings of {{ $group['package'] }}">
+                                                aria-label="{{ __('Show the findings of') }} {{ $group['package'] }}">
                                                 <x-reicon name="chevron-down" class="size-3.5 transition-transform duration-150"
                                                     ::class="open ? 'rotate-0' : '-rotate-90'" />
                                             </button>
@@ -281,16 +281,16 @@
                                         <span class="image-scan-severity-cell flex min-w-0 flex-wrap items-center gap-1">
                                             <x-image-scan.severity-badge :severity="$group['severity']" />
                                             @if ($group['kev'])
-                                                <span data-tooltip="Attackers are using this, according to CISA.">
-                                                    <x-status-badge type="error" label="Known exploited" />
+                                                <span data-tooltip="{{ __('Attackers are using this, according to CISA.') }}">
+                                                    <x-status-badge type="error" label="{{ __('Known exploited') }}" />
                                                 </span>
                                             @endif
                                         </span>
                                         <span class="image-scan-secondary text-[12px] tabular-nums text-neutral-600 dark:text-fg-dim">{{ number_format($group['count']) }}</span>
                                         <span class="flex justify-end">
                                             @if ($canUpdate)
-                                                <button type="button" class="icon-button" data-tooltip="Ignore package"
-                                                    aria-label="Ignore {{ $group['package'] }}"
+                                                <button type="button" class="icon-button" data-tooltip="{{ __('Ignore package') }}"
+                                                    aria-label="{{ __('Ignore') }} {{ $group['package'] }}"
                                                     x-on:click="$dispatch('open-ignore-modal', {
                                                         target: {{ \Illuminate\Support\Js::from($group['package']) }},
                                                         kind: 'package',
@@ -314,14 +314,14 @@
                     @else
                         <div class="data-table">
                             <div @class(['data-table-header image-scan-findings-grid', 'has-image' => $showsImage])>
-                                <span>Finding</span>
-                                <span class="image-scan-secondary">Package</span>
+                                <span>{{ __('Finding') }}</span>
+                                <span class="image-scan-secondary">{{ __('Package') }}</span>
                                 @if ($showsImage)
-                                    <span class="image-scan-secondary">Image</span>
+                                    <span class="image-scan-secondary">{{ __('Image') }}</span>
                                 @endif
-                                <span class="image-scan-secondary">Version</span>
-                                <span class="image-scan-severity-cell">Severity</span>
-                                <span class="sr-only">Actions</span>
+                                <span class="image-scan-secondary">{{ __('Version') }}</span>
+                                <span class="image-scan-severity-cell">{{ __('Severity') }}</span>
+                                <span class="sr-only">{{ __('Actions') }}</span>
                             </div>
                             @foreach ($items as $row)
                                 @include('livewire.image-scan.partials.finding-row', ['row' => $row, 'nested' => false])
@@ -333,7 +333,7 @@
                 @if ($groupedFindingCount !== null && $items->total() > 0)
                     <p class="border-t border-neutral-200 px-4 py-2.5 {{ $muted }} tabular-nums dark:border-white/[0.08]">
                         {{ trans_choice('{1} 1 finding|[2,*] :count findings', $groupedFindingCount, ['count' => number_format($groupedFindingCount)]) }}
-                        in {{ trans_choice('{1} 1 package|[2,*] :count packages', $items->total(), ['count' => number_format($items->total())]) }}
+                        {{ __('in') }} {{ trans_choice('{1} 1 package|[2,*] :count packages', $items->total(), ['count' => number_format($items->total())]) }}
                     </p>
                 @endif
 
@@ -348,7 +348,7 @@
                 @if ($ignoredCount > 0 && ! $showIgnored)
                     <div class="border-t border-neutral-200 px-4 py-2.5 dark:border-white/[0.08]">
                         <button type="button" class="text-[12px] font-medium text-coollabs hover:underline dark:text-brand-light"
-                            wire:click="$set('showIgnored', true)">{{ number_format($ignoredCount) }} ignored</button>
+                            wire:click="$set('showIgnored', true)">{{ number_format($ignoredCount) }} {{ __('ignored') }}</button>
                     </div>
                 @endif
             </x-application.settings-section>

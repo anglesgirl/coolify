@@ -29,7 +29,7 @@
     @elseif (filled($action['copy']))
         <div class="flex min-w-0 shrink-0 items-center gap-1">
             <code class="{{ $code }}" title="{{ $action['copy'] }}">{{ $action['copy'] }}</code>
-            <x-copy-button :value="$action['copy']" :label="'Copy '.$action['copy']" />
+            <x-copy-button :value="$action['copy']" :label="__('Copy').' '.$action['copy']" />
         </div>
     @endif
 </div>

@@ -15,13 +15,13 @@
         }
     })">
     <x-slot:title>
-        Security | Coolify
+        {{ __('Security | Coolify') }}
     </x-slot>
 
     <div class="min-w-0">
-        <h1 class="min-w-0 text-[24px]! leading-7! font-semibold! tracking-tight!">Security</h1>
+        <h1 class="min-w-0 text-[24px]! leading-7! font-semibold! tracking-tight!">{{ __('Security') }}</h1>
         <p class="mt-1 text-[13px] text-neutral-500 dark:text-fg-dim">
-            What each resource of your team needs, from its last image scan.
+            {{ __('What each resource of your team needs, from its last image scan.') }}
         </p>
     </div>
 
@@ -32,10 +32,10 @@
         <div x-data="{ hidden: localStorage.getItem(@js($serversKey)) === '1' }" x-show="!hidden" x-cloak
             wire:key="servers-not-scanning-{{ $serversNotScanning }}">
             <x-callout type="info" dismissible
-                :title="$serversNotScanning === 1 ? '1 server does not scan images.' : $serversNotScanning.' servers do not scan images.'"
+                :title="$serversNotScanning === 1 ? __('1 server does not scan images.') : $serversNotScanning.__('servers do not scan images.')"
                 on-dismiss="localStorage.setItem({{ \Illuminate\Support\Js::from($serversKey) }}, '1'); hidden = true">
                 <a href="{{ route('server.index') }}" {{ wireNavigate() }}
-                    class="font-medium text-coollabs hover:underline dark:text-brand-light">Go to servers</a>
+                    class="font-medium text-coollabs hover:underline dark:text-brand-light">{{ __('Go to servers') }}</a>
             </x-callout>
         </div>
     @endif
@@ -43,12 +43,12 @@
     <div class="min-w-0 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-white/[0.08] dark:bg-white/[0.05]">
         <x-table.toolbar class="border-b border-neutral-200 p-3 dark:border-white/[0.08]">
             <x-slot:search>
-                <x-table.search placeholder="Search by CVE, GHSA, or package" loading-target="search"
+                <x-table.search placeholder="{{ __('Search by CVE, GHSA, or package') }}" loading-target="search"
                     wire:model.live.debounce.300ms="search" />
             </x-slot:search>
 
             <x-table.filter :active-count="count($statuses) + count($servers) + count($projects)" reset-action="resetFilters">
-                <span class="{{ $groupLabel }}">Status</span>
+                <span class="{{ $groupLabel }}">{{ __('Status') }}</span>
                 @foreach ($statusOptions as $option => $optionLabel)
                     @php
                         $selected = in_array($option, $statuses, true);
@@ -68,7 +68,7 @@
                     </button>
                 @endforeach
                 @if ($serverOptions !== [])
-                    <span class="{{ $groupLabel }}">Server</span>
+                    <span class="{{ $groupLabel }}">{{ __('Server') }}</span>
                     @foreach ($serverOptions as $uuid => $name)
                         @php
                             $selected = in_array($uuid, $servers, true);
@@ -89,7 +89,7 @@
                     @endforeach
                 @endif
                 @if ($projectOptions !== [])
-                    <span class="{{ $groupLabel }}">Project</span>
+                    <span class="{{ $groupLabel }}">{{ __('Project') }}</span>
                     @foreach ($projectOptions as $uuid => $name)
                         @php
                             $selected = in_array($uuid, $projects, true);
@@ -119,24 +119,24 @@
 
             @if ($items->isEmpty())
                 @if ($searching)
-                    <x-empty size="sm" title="No scanned image has this vulnerability or package."
-                        description="Check the ID, or search for the package name." />
+                    <x-empty size="sm" title="{{ __('No scanned image has this vulnerability or package.') }}"
+                        description="{{ __('Check the ID, or search for the package name.') }}" />
                 @elseif ($hasFilters)
-                    <x-empty size="sm" title="No matching resources" description="Try other filters, or reset them." />
+                    <x-empty size="sm" title="{{ __('No matching resources') }}" description="{{ __('Try other filters, or reset them.') }}" />
                 @elseif (! $hasResources)
-                    <x-empty size="sm" title="No resources yet" description="The resources of your team show here." />
+                    <x-empty size="sm" title="{{ __('No resources yet') }}" description="{{ __('The resources of your team show here.') }}" />
                 @elseif ($hidesNotChecked)
-                    <x-empty size="sm" title="No resource was scanned yet"
-                        description="Resources that were not scanned are hidden. Coolify scans an image when it deploys or starts it on a server that scans images." />
+                    <x-empty size="sm" title="{{ __('No resource was scanned yet') }}"
+                        description="{{ __('Resources that were not scanned are hidden. Coolify scans an image when it deploys or starts it on a server that scans images.') }}" />
                 @endif
             @else
                 <div class="data-table">
                     <div class="data-table-header image-scan-fleet-grid">
-                        <span>Resource</span>
-                        <span>{{ $searching ? 'Match' : 'Status' }}</span>
-                        <span class="image-scan-fleet-action">{{ $searching ? 'State' : 'Action' }}</span>
-                        <span class="image-scan-secondary">Server</span>
-                        <span class="image-scan-secondary image-scan-fleet-tertiary">Checked</span>
+                        <span>{{ __('Resource') }}</span>
+                        <span>{{ $searching ? __('Match') : __('Status') }}</span>
+                        <span class="image-scan-fleet-action">{{ $searching ? __('State') : __('Action') }}</span>
+                        <span class="image-scan-secondary">{{ __('Server') }}</span>
+                        <span class="image-scan-secondary image-scan-fleet-tertiary">{{ __('Checked') }}</span>
                     </div>
                     @foreach ($items as $entry)
                         @php
@@ -186,7 +186,7 @@
                                     <span class="min-w-0 truncate font-mono text-[11px] text-neutral-700 dark:text-fg"
                                         title="{{ $match['id'] }} {{ $match['package'] }} {{ $match['version'] }}">{{ $match['id'] }} · {{ $match['package'] }} {{ $match['version'] }}</span>
                                     @if ($match['more'] > 0)
-                                        <span class="{{ $muted }}">+{{ number_format($match['more']) }} more</span>
+                                        <span class="{{ $muted }}">+{{ number_format($match['more']) }} {{ __('more') }}</span>
                                     @endif
                                 </div>
                                 <span class="image-scan-fleet-action text-[12px] text-neutral-700 dark:text-fg">
@@ -241,7 +241,7 @@
 
         @if ($searchCapped)
             <div class="border-t border-neutral-200 px-4 py-2.5 text-[12px] text-neutral-500 dark:border-white/[0.08] dark:text-fg-faint">
-                Only the first {{ \App\Services\ImageScan\TeamVulnerabilities::MAX_DECODED_SCANS }} images with a match were searched. Filter by server or project to see the rest.
+                {{ __('Only the first') }} {{ \App\Services\ImageScan\TeamVulnerabilities::MAX_DECODED_SCANS }} {{ __('images with a match were searched. Filter by server or project to see the rest.') }}
             </div>
         @endif
         @if ($notScannedLine)

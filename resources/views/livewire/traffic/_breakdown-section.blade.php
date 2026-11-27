@@ -13,13 +13,13 @@
 --}}
 @php
     $rows = $rows ?? [];
-    $helper = $helper ?? 'Top '.strtolower($label).' by request count for the selected range.';
+    $helper = $helper ?? __('Top :label by request count for the selected range.', ['label' => strtolower($label)]);
     $maxRequests = max(1, (int) collect($rows)->max('requests'));
 @endphp
 <x-application.settings-section id="analytics-{{ $dimension }}-section" :title="$label" :helper="$helper" flush>
     @if (collect($rows)->isEmpty())
-        <x-empty size="sm" title="No data"
-            :description="'No '.strtolower($label).' data for the selected range.'" icon-name="network" />
+        <x-empty size="sm" title="{{ __('No data') }}"
+            :description="__('No :label data for the selected range.', ['label' => strtolower($label)])" icon-name="network" />
     @else
         {{-- Keyed so the lazy-load morph does not reuse the placeholder skeleton nodes. --}}
         <div wire:key="analytics-{{ $dimension }}-table" x-data="trafficTable()">
@@ -37,12 +37,12 @@
                     $isHidable = $dimension === 'useragent' && isContainerToolingUserAgent($value);
                     $host = ! $isOther && $dimension === 'referer' ? refererHost($value) : null;
                     $display = $isOther
-                        ? 'Other'
+                        ? __('Other')
                         : match ($dimension) {
                             'device' => deviceLabel($value),
-                            'referer' => $host ?? 'Direct / none',
-                            'status' => $value === '0' ? 'No response status (0)' : ($value !== '' ? $value : 'Unknown'),
-                            default => $value !== '' ? $value : 'Unknown',
+                            'referer' => $host ?? __('Direct / none'),
+                            'status' => $value === '0' ? __('No response status (0)') : ($value !== '' ? $value : __('Unknown')),
+                            default => $value !== '' ? $value : __('Unknown'),
                         };
                     $requests = (int) ($row['requests'] ?? 0);
                     $bytesOut = (int) ($row['bytesOut'] ?? 0);
@@ -64,7 +64,7 @@
                         <div class="h-full rounded-full bg-[var(--chart-status-3xx)]" style="width: {{ $width }}%;"></div>
                     </div>
                     <span class="w-16 shrink-0 text-right text-[12px] font-medium tabular-nums text-black dark:text-fg"
-                        title="{{ number_format($requests) }} requests">{{ compactNumber($requests) }}</span>
+                        title="{{ number_format($requests) }} {{ __('requests') }}">{{ compactNumber($requests) }}</span>
                     <span class="hidden w-16 shrink-0 text-right text-[11px] tabular-nums text-neutral-400 sm:inline dark:text-fg-faint">{{ formatBytes($bytesOut) }}</span>
                 </div>
             @endforeach
@@ -73,7 +73,7 @@
                 class="flex items-center border-t border-neutral-200 px-4 py-2 dark:border-white/[0.07]">
                 <button type="button" @click="toggleHidden()"
                     class="text-[11px] font-medium text-neutral-500 transition-colors hover:text-black dark:text-fg-faint dark:hover:text-fg"
-                    x-text="showHidden ? 'Hide container tooling' : `Show ${hiddenCount} container tooling ${hiddenCount === 1 ? 'agent' : 'agents'} (Docker, BuildKit, …)`"></button>
+                    x-text="showHidden ? '{{ __('Hide container tooling') }}' : `{{ __('common.show') }} ${hiddenCount} {{ __('container tooling') }} ${hiddenCount === 1 ? 'agent' : 'agents'} ({{ __('Docker, BuildKit, …)') }}`"></button>
             </div>
             @include('livewire.traffic._pager')
         </div>

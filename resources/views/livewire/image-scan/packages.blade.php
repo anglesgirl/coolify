@@ -7,14 +7,14 @@
 
 <div class="contents">
     @if ($scans->isNotEmpty())
-        <x-application.settings-section id="packages-section" title="Packages and SBOM" collapsible flush
-            helper="The software packages that Coolify found in the image, with their versions and licenses. The SBOM (software bill of materials) is the full list of these packages in a standard format (CycloneDX or SPDX). Download it for audits or for other security tools.">
+        <x-application.settings-section id="packages-section" title="{{ __('Packages and SBOM') }}" collapsible flush
+            helper="{{ __('The software packages that Coolify found in the image, with their versions and licenses. The SBOM (software bill of materials) is the full list of these packages in a standard format (CycloneDX or SPDX). Download it for audits or for other security tools.') }}">
             <x-slot:actions>
                 <x-table.dropdown role="menu" panel-class="min-w-56! p-1!">
                     <x-slot:trigger>
                         <button type="button" class="button normal-case!" aria-haspopup="menu" :aria-expanded="open">
                             <x-reicon name="download" class="size-3.5" />
-                            Download SBOM
+                            {{ __('Download SBOM') }}
                             <x-reicon name="chevron-down" class="size-3.5" />
                         </button>
                     </x-slot:trigger>
@@ -22,22 +22,22 @@
                         @if (count($downloads) > 1)
                             <span class="{{ $groupLabel }} block max-w-72 truncate normal-case tracking-normal" title="{{ $download['image'] }}">{{ $download['image'] }}</span>
                         @endif
-                        <a class="listbox-option" role="menuitem" href="{{ $download['cyclonedx'] }}" download @click="close()">CycloneDX 1.6 JSON</a>
-                        <a class="listbox-option" role="menuitem" href="{{ $download['spdx'] }}" download @click="close()">SPDX 2.3 JSON</a>
+                        <a class="listbox-option" role="menuitem" href="{{ $download['cyclonedx'] }}" download @click="close()">{{ __('CycloneDX 1.6 JSON') }}</a>
+                        <a class="listbox-option" role="menuitem" href="{{ $download['spdx'] }}" download @click="close()">{{ __('SPDX 2.3 JSON') }}</a>
                     @endforeach
                 </x-table.dropdown>
             </x-slot:actions>
 
             <x-table.toolbar class="border-b border-neutral-200 p-3 dark:border-white/[0.08]">
                 <x-slot:search>
-                    <x-table.search placeholder="Search packages" loading-target="search"
+                    <x-table.search placeholder="{{ __('Search packages') }}" loading-target="search"
                         wire:model.live.debounce.300ms="search" />
                 </x-slot:search>
                 <x-image-scan.image-select :options="$imageOptions" :selected="$images" action="showImage" />
                 @if (count($typeOptions) > 0)
                     <x-table.filter :active-count="count($types)" reset-action="resetFilters">
                         @if (count($typeOptions) > 0)
-                            <span class="{{ $groupLabel }}">Type</span>
+                            <span class="{{ $groupLabel }}">{{ __('backup.type') }}</span>
                             @foreach ($typeOptions as $option)
                                 @php $selected = in_array($option, $types, true); @endphp
                                 <button type="button" class="listbox-option" role="option"
@@ -61,25 +61,25 @@
 
             @if ($truncated)
                 <div class="border-b border-neutral-200 p-3 dark:border-white/[0.08]">
-                    <x-callout type="info" title="Too many packages">Only the first 10,000 are shown.</x-callout>
+                    <x-callout type="info" title="{{ __('Too many packages') }}">{{ __('Only the first 10,000 are shown.') }}</x-callout>
                 </div>
             @endif
 
             <div class="relative">
                 <x-table.loading target="search,toggleType,toggleImage,showImage,resetFilters,previousPage,nextPage,perPage" />
                 @if ($items->isEmpty())
-                    <x-empty size="sm" :title="$total === 0 ? 'No packages found.' : 'No matching packages'"
-                        :description="$total === 0 ? null : 'Try another search, or reset the filters.'" />
+                    <x-empty size="sm" :title="$total === 0 ? __('No packages found.') : __('No matching packages')"
+                        :description="$total === 0 ? null : __('Try another search, or reset the filters.')" />
                 @else
                     <div class="data-table">
                         <div @class(['data-table-header image-scan-sbom-grid', 'has-image' => $showsImage])>
-                            <span>Package</span>
-                            <span>Version</span>
-                            <span class="image-scan-secondary">Type</span>
+                            <span>{{ __('Package') }}</span>
+                            <span>{{ __('Version') }}</span>
+                            <span class="image-scan-secondary">{{ __('backup.type') }}</span>
                             @if ($showsImage)
-                                <span class="image-scan-secondary">Image</span>
+                                <span class="image-scan-secondary">{{ __('Image') }}</span>
                             @endif
-                            <span class="image-scan-secondary">License</span>
+                            <span class="image-scan-secondary">{{ __('License') }}</span>
                         </div>
                         @foreach ($items as $package)
                             <div wire:key="sbom-package-{{ $package['key'] }}"

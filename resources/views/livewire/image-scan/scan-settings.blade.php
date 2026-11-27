@@ -1,5 +1,5 @@
 @php
-    $onOff = [['value' => '0', 'label' => 'Off'], ['value' => '1', 'label' => 'On']];
+    $onOff = [['value' => '0', 'label' => __('Off')], ['value' => '1', 'label' => __('On')]];
     $isApplication = $scopeType === 'application';
     $ignoresOnly = in_array($scopeType, ['database', 'service'], true);
     $isResource = $isApplication || $ignoresOnly;
@@ -17,17 +17,17 @@
 
 <div class="flex flex-col gap-6">
     @if ($ignoresOnly)
-        <x-application.settings-section id="image-scan-ignores-section" title="Ignored findings" :helper="$ignoresHelper"
+        <x-application.settings-section id="image-scan-ignores-section" title="{{ __('Ignored findings') }}" :helper="$ignoresHelper"
             collapsible flush>
             @include('livewire.image-scan.partials.scan-ignores')
         </x-application.settings-section>
     @elseif ($isApplication)
-        <x-application.settings-section id="image-scan-settings-section" title="Settings" collapsible :open="! $appScanOn">
-            <x-application.settings-subsection title="Rules" :helper="$rulesHelper" first>
+        <x-application.settings-section id="image-scan-settings-section" title="{{ __('service.settings') }}" collapsible :open="! $appScanOn">
+            <x-application.settings-subsection title="{{ __('Rules') }}" :helper="$rulesHelper" first>
                 @include('livewire.image-scan.partials.scan-rules')
             </x-application.settings-subsection>
             @if ($showsIgnores)
-                <x-application.settings-subsection title="Ignored findings" :helper="$ignoresHelper">
+                <x-application.settings-subsection title="{{ __('Ignored findings') }}" :helper="$ignoresHelper">
                     <div class="overflow-hidden rounded-lg border border-neutral-200 dark:border-white/[0.08]">
                         @include('livewire.image-scan.partials.scan-ignores')
                     </div>
@@ -35,16 +35,16 @@
             @endif
         </x-application.settings-section>
     @elseif ($embedded)
-        <x-application.settings-subsection id="image-scan-rules-section" title="Rules" :helper="$rulesHelper" first>
+        <x-application.settings-subsection id="image-scan-rules-section" title="{{ __('Rules') }}" :helper="$rulesHelper" first>
             @include('livewire.image-scan.partials.scan-rules')
         </x-application.settings-subsection>
     @else
-        <x-application.settings-section id="image-scan-rules-section" title="Rules" :helper="$rulesHelper">
+        <x-application.settings-section id="image-scan-rules-section" title="{{ __('Rules') }}" :helper="$rulesHelper">
             @include('livewire.image-scan.partials.scan-rules')
         </x-application.settings-section>
 
         @if ($showsIgnores)
-            <x-application.settings-section id="image-scan-ignores-section" title="Ignored findings"
+            <x-application.settings-section id="image-scan-ignores-section" title="{{ __('Ignored findings') }}"
                 :helper="$ignoresHelper" flush>
                 @include('livewire.image-scan.partials.scan-ignores')
             </x-application.settings-section>

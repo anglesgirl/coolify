@@ -3,16 +3,16 @@
     the values reads them from $wire, because the browser fills the edit form without a request.
 --}}
 <div class="grid gap-4 lg:grid-cols-2">
-    <x-forms.input required id="{{ $form }}.description" label="Description"
-        placeholder="CI deployment token" />
-    <x-forms.listbox id="{{ $form }}.expiresInDays" label="Expires in" :options="$expiryOptions"
+    <x-forms.input required id="{{ $form }}.description" label="{{ __('input.description') }}"
+        placeholder="{{ __('CI deployment token') }}" />
+    <x-forms.listbox id="{{ $form }}.expiresInDays" label="{{ __('Expires in') }}" :options="$expiryOptions"
         :x-effect="$form === 'editForm' ? 'options[0].label = editingToken?.keepLabel ?? options[0].label' : null" />
 </div>
 
 <div class="mt-4 border-t border-neutral-200 pt-3 dark:border-white/[0.08]">
     <div class="mb-2 flex items-center gap-2">
-        <h4 class="text-[12px] font-semibold text-black dark:text-fg">Permissions</h4>
-        <x-helper helper="Only grant the abilities this token needs." />
+        <h4 class="text-[12px] font-semibold text-black dark:text-fg">{{ __('Permissions') }}</h4>
+        <x-helper helper="{{ __('Only grant the abilities this token needs.') }}" />
     </div>
     {{-- A fixed panel escapes the scrolling modal body, so it is not cut off. --}}
     <div class="relative" x-data="{
@@ -44,7 +44,7 @@
         @resize.window="permissionsOpen && positionPanel()" @scroll.window.capture="permissionsOpen && positionPanel()">
         <button type="button" x-ref="permissionsTrigger" class="listbox-trigger" @click="permissionsOpen = !permissionsOpen"
             aria-haspopup="listbox" :aria-expanded="permissionsOpen">
-            <span class="truncate" x-text="'Selected permissions: ' + summary"></span>
+            <span class="truncate" x-text="'{{ __('Selected permissions:') }}' + summary"></span>
             <x-reicon name="chevron-down" class="size-3.5 shrink-0 opacity-60" />
         </button>
 
@@ -52,42 +52,42 @@
             x-effect="if (permissionsOpen) $nextTick(() => positionPanel())"
             class="listbox-panel" style="position: fixed; z-index: 9999" :style="panelPosition" role="listbox">
             <div class="listbox-option p-0!">
-                <x-forms.checkbox id="permission-root" label="Root" fullWidth
+                <x-forms.checkbox id="permission-root" label="{{ __('Root') }}" fullWidth
                     wire:model.live="{{ $form }}.permissions" domValue="root"
-                    helper="Full access to every API operation."
+                    helper="{{ __('Full access to every API operation.') }}"
                     :disabled="!$canUseRootPermissions" />
             </div>
             <div class="listbox-option p-0!">
-                <x-forms.checkbox id="permission-write" label="Write" fullWidth
+                <x-forms.checkbox id="permission-write" label="{{ __('Write') }}" fullWidth
                     wire:model.live="{{ $form }}.permissions" domValue="write"
-                    helper="Create and update resources."
+                    helper="{{ __('Create and update resources.') }}"
                     :disabled="!$canUseWritePermissions"
                     x-bind:disabled="isRoot || {{ $canUseWritePermissions ? 'false' : 'true' }}" />
             </div>
             <div class="listbox-option p-0!">
-                <x-forms.checkbox id="permission-delete" label="Delete" fullWidth
+                <x-forms.checkbox id="permission-delete" label="{{ __('button.delete') }}" fullWidth
                     wire:model.live="{{ $form }}.permissions" domValue="delete"
-                    helper="Delete resources and their settings (every DELETE request)."
+                    helper="{{ __('Delete resources and their settings (every DELETE request).') }}"
                     :disabled="!$canUseDeletePermissions"
                     x-bind:disabled="isRoot || {{ $canUseDeletePermissions ? 'false' : 'true' }}" />
             </div>
             <div class="listbox-option p-0!">
-                <x-forms.checkbox id="permission-deploy" label="Deploy" fullWidth
+                <x-forms.checkbox id="permission-deploy" label="{{ __('destination.deploy') }}" fullWidth
                     wire:model.live="{{ $form }}.permissions" domValue="deploy"
-                    helper="Deploy, start, stop, and restart resources. With Write, also apply changes that run on servers immediately, such as scheduled tasks, proxy configuration, and imports."
+                    helper="{{ __('Deploy, start, stop, and restart resources. With Write, also apply changes that run on servers immediately, such as scheduled tasks, proxy configuration, and imports.') }}"
                     :disabled="!$canUseDeployPermissions"
                     x-bind:disabled="isRoot || {{ $canUseDeployPermissions ? 'false' : 'true' }}" />
             </div>
             <div class="listbox-option p-0!">
-                <x-forms.checkbox id="permission-read" label="Read" fullWidth
+                <x-forms.checkbox id="permission-read" label="{{ __('Read') }}" fullWidth
                     wire:model.live="{{ $form }}.permissions" domValue="read"
-                    helper="Read non-sensitive resource data."
+                    helper="{{ __('Read non-sensitive resource data.') }}"
                     x-bind:disabled="isRoot" />
             </div>
             <div class="listbox-option p-0!">
-                <x-forms.checkbox id="permission-read-sensitive" label="Read sensitive data"
+                <x-forms.checkbox id="permission-read-sensitive" label="{{ __('Read sensitive data') }}"
                     fullWidth wire:model.live="{{ $form }}.permissions" domValue="read:sensitive"
-                    helper="Include secrets, logs, passwords, and Compose content."
+                    helper="{{ __('Include secrets, logs, passwords, and Compose content.') }}"
                     :disabled="!$canUseSensitivePermissions"
                     x-bind:disabled="isRoot || {{ $canUseSensitivePermissions ? 'false' : 'true' }}" />
             </div>
@@ -125,18 +125,18 @@
     },
 }">
     <div class="mb-2 flex items-center gap-2">
-        <h4 class="text-[12px] font-semibold text-black dark:text-fg">Access</h4>
-        <x-helper helper="A limited token sees only the selected projects, environments, and resources, and cannot use team-level endpoints such as servers, keys, or notifications." />
+        <h4 class="text-[12px] font-semibold text-black dark:text-fg">{{ __('Access') }}</h4>
+        <x-helper helper="{{ __('A limited token sees only the selected projects, environments, and resources, and cannot use team-level endpoints such as servers, keys, or notifications.') }}" />
     </div>
     <div class="grid gap-4 lg:grid-cols-2">
-        <x-forms.listbox id="{{ $form }}.scopeMode" label="Resources" :options="[
-            ['value' => 'team', 'label' => 'All resources in the team', 'disabled' => !$canUseTeamScope],
-            ['value' => 'selected', 'label' => 'Selected projects, environments, or resources'],
+        <x-forms.listbox id="{{ $form }}.scopeMode" label="{{ __('Resources') }}" :options="[
+            ['value' => 'team', 'label' => __('All resources in the team'), 'disabled' => !$canUseTeamScope],
+            ['value' => 'selected', 'label' => __('Selected projects, environments, or resources')],
         ]" />
         <div class="min-w-0">
-            <x-forms.listbox id="{{ $form }}.selectedScopes" label="Selected" multiple searchable :portal="! $inModal" countLabel="resource"
+            <x-forms.listbox id="{{ $form }}.selectedScopes" label="{{ __('Selected') }}" multiple searchable :portal="! $inModal" countLabel="resource"
                 x-bind:disabled="!isSelectedMode"
-                placeholder="Choose projects, environments, or resources"
+                placeholder="{{ __('Choose projects, environments, or resources') }}"
                 emptyText="No projects or resources available."
                 :options="$this->scopeOptions" x-effect="coverScopes($data)" />
         </div>
@@ -149,8 +149,8 @@
                     x-text="scope.split(':')[0]"></span>
                 <span class="min-w-0 flex-1 truncate text-black dark:text-fg"
                     x-text="labels[scope] ?? scope"></span>
-                <button type="button" class="icon-button shrink-0" title="Remove"
-                    :aria-label="'Remove ' + (labels[scope] ?? scope)"
+                <button type="button" class="icon-button shrink-0" title="{{ __('Remove') }}"
+                    :aria-label="'{{ __('Remove') }}' + (labels[scope] ?? scope)"
                     @click="$wire.{{ $form }}.selectedScopes = $wire.{{ $form }}.selectedScopes.filter((value) => value !== scope)">
                     <x-reicon name="x" class="size-3.5" />
                 </button>

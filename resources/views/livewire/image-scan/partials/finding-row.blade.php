@@ -20,7 +20,7 @@
         <div class="flex min-w-0 items-center gap-1.5">
             @unless ($nested)
                 <button type="button" class="icon-button" x-on:click="open = !open" :aria-expanded="open ? 'true' : 'false'"
-                    aria-label="Show details of {{ $finding->id }}">
+                    aria-label="{{ __('Show details of') }} {{ $finding->id }}">
                     <x-reicon name="chevron-down" class="size-3.5 transition-transform duration-150"
                         ::class="open ? 'rotate-0' : '-rotate-90'" />
                 </button>
@@ -44,19 +44,19 @@
         <span class="image-scan-severity-cell flex min-w-0 flex-wrap items-center gap-1">
             <x-image-scan.severity-badge :severity="strtolower($finding->severity)" />
             @if ($finding->kev)
-                <span data-tooltip="Attackers are using this, according to CISA.">
-                    <x-status-badge type="error" label="Known exploited" />
+                <span data-tooltip="{{ __('Attackers are using this, according to CISA.') }}">
+                    <x-status-badge type="error" label="{{ __('Known exploited') }}" />
                 </span>
             @endif
         </span>
         <span class="flex justify-end">
             @if ($ignore !== null)
                 <span class="{{ $muted }}" data-tooltip="{{ $ignore->reason }}">
-                    Ignored{{ $ignore->expires_at ? ' until '.$ignore->expires_at->toFormattedDateString() : '' }}
+                    {{ __('Ignored') }}{{ $ignore->expires_at ? ' until '.$ignore->expires_at->toFormattedDateString() : '' }}
                 </span>
             @elseif ($canUpdate)
-                <button type="button" class="icon-button" data-tooltip="Ignore"
-                    aria-label="Ignore {{ $finding->id }}"
+                <button type="button" class="icon-button" data-tooltip="{{ __('Ignore') }}"
+                    aria-label="{{ __('Ignore') }} {{ $finding->id }}"
                     x-on:click="$dispatch('open-ignore-modal', {
                         target: {{ \Illuminate\Support\Js::from($finding->id) }},
                         kind: 'vulnerability',
@@ -75,14 +75,14 @@
             <p class="max-w-3xl">{{ $finding->summary }}</p>
         @endif
         @if ($likelihood !== null)
-            <p class="{{ $muted }}">Exploit likelihood: {{ $likelihood }}</p>
+            <p class="{{ $muted }}">{{ __('Exploit likelihood:') }} {{ $likelihood }}</p>
         @endif
         @if (filled($base))
-            <p class="{{ $muted }}">Comes from <span class="font-mono">{{ $base }}</span>.</p>
+            <p class="{{ $muted }}">{{ __('Comes from') }} <span class="font-mono">{{ $base }}</span>.</p>
         @endif
         @if ($aliases !== [])
             <p class="{{ $muted }}">
-                Also known as
+                {{ __('Also known as') }}
                 @foreach ($aliases as $alias)
                     @php $aliasUrl = \App\Services\ImageScan\ResourceScans::advisoryUrl($alias); @endphp
                     @if ($aliasUrl !== null)
@@ -94,7 +94,7 @@
             </p>
         @endif
         @if ($ignore !== null)
-            <p class="{{ $muted }}">Reason: {{ $ignore->reason }}</p>
+            <p class="{{ $muted }}">{{ __('Reason:') }} {{ $ignore->reason }}</p>
         @endif
     </div>
     @endif

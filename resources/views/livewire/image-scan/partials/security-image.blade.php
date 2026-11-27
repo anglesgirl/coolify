@@ -8,7 +8,7 @@
     $motion = 'transition-transform duration-[180ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none';
     $refLength = strlen($row['ref']);
     $startsWithRef = $refLength > 0 && str_starts_with($row['sentence'], $row['ref']);
-    $whyTitle = $row['status'] === 'no_fix' ? 'Not fixed yet' : 'Fixed by this update';
+    $whyTitle = $row['status'] === 'no_fix' ? __('Not fixed yet') : __('Fixed by this update');
     $filter = \Illuminate\Support\Js::from($row['filter'] ?? '');
     // Alpine expressions; the only value in them is the image ref, encoded by Js::from().
     $openFindings = new \Illuminate\Support\HtmlString(($row['filter'] !== null ? "\$wire.showImageFindings({$filter}); " : '')."\$dispatch('open-settings-section', { id: 'all-findings-section' })");
@@ -46,7 +46,7 @@
                     <p class="{{ $note }}">
                         {{ $versionNote['text'] }}
                         @if ($versionNote['link'] !== null)
-                            <a href="{{ $versionNote['link'] }}" class="{{ $link }}" {{ wireNavigate() }}>Registry logins</a>
+                            <a href="{{ $versionNote['link'] }}" class="{{ $link }}" {{ wireNavigate() }}>{{ __('Registry logins') }}</a>
                         @endif
                     </p>
                 @endforeach
@@ -57,12 +57,12 @@
     @if ($row['override'] !== null)
         {{-- A security update of a Compose app: Coolify replaces the image of the compose file from Git. --}}
         <p class="max-w-3xl text-[12px] leading-5 text-neutral-500 dark:text-fg-faint">
-            Coolify deploys <code class="font-mono">{{ $row['override']['to'] }}</code> instead of
-            <code class="font-mono">{{ $row['override']['from'] }}</code> from your compose file.
+            {{ __('Coolify deploys') }} <code class="font-mono">{{ $row['override']['to'] }}</code> {{ __('instead of') }}
+            <code class="font-mono">{{ $row['override']['from'] }}</code> {{ __('from your compose file.') }}
             @if ($canUpdate)
                 <button type="button" class="{{ $link }}"
                     wire:click="removeImageOverride({{ \Illuminate\Support\Js::from($row['override']['service']) }})"
-                    title="The next deploy uses the image of the compose file again.">Use the compose file</button>
+                    title="{{ __('The next deploy uses the image of the compose file again.') }}">{{ __('Use the compose file') }}</button>
             @endif
         </p>
     @endif
@@ -120,7 +120,7 @@
             @if ($row['whyMore'] > 0)
                 <div>
                     <button type="button" class="text-[12px] {{ $link }}" x-on:click="{{ $openFindings }}">
-                        {{ number_format($row['whyMore']) }} more {{ $row['whyMore'] === 1 ? 'problem' : 'problems' }} this update fixes <span aria-hidden="true">→</span>
+                        {{ __(':count more problems fixed in this update', ['count' => number_format($row['whyMore'])]) }} <span aria-hidden="true">→</span>
                     </button>
                 </div>
             @endif
@@ -129,7 +129,7 @@
 
     @if ($row['provenance'] !== null)
         <p class="max-w-3xl text-[12px] leading-5 text-neutral-500 dark:text-fg-faint">
-            <span class="font-medium text-neutral-700 dark:text-fg-dim">How Coolify knows:</span>
+            <span class="font-medium text-neutral-700 dark:text-fg-dim">{{ __('How Coolify knows:') }}</span>
             {{ $row['provenance'] }}
         </p>
     @endif
@@ -141,7 +141,7 @@
         <details class="group/others">
             <summary class="inline-flex cursor-pointer list-none items-center gap-1.5 rounded-md text-[12px] font-medium text-neutral-600 hover:text-neutral-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-coollabs dark:text-fg-dim dark:hover:text-fg dark:focus-visible:outline-brand [&::-webkit-details-marker]:hidden">
                 <x-reicon name="chevron-down" class="size-3.5 shrink-0 -rotate-90 group-open/others:rotate-0 {{ $motion }}" />
-                {{ number_format($otherCount) }} other {{ $otherCount === 1 ? 'fix' : 'fixes' }}
+                {{ __(':count other fixes', ['count' => number_format($otherCount)]) }}
             </summary>
             <div class="mt-2 flex flex-col divide-y divide-neutral-200 rounded-lg border border-neutral-200 dark:divide-white/[0.06] dark:border-white/[0.08]">
                 @foreach ($row['others'] as $other)
@@ -151,7 +151,7 @@
                 @endforeach
             </div>
             @if ($row['moreActions'] > 0)
-                <p class="mt-2 {{ $muted }} text-[12px]!">and {{ number_format($row['moreActions']) }} more</p>
+                <p class="mt-2 {{ $muted }} text-[12px]!">{{ __('and :count more', ['count' => number_format($row['moreActions'])]) }}</p>
             @endif
         </details>
     @endif

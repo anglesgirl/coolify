@@ -52,8 +52,8 @@
     $rowClass = 'group flex min-h-10 items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-neutral-50 dark:hover:bg-white/[0.03]';
 @endphp
 
-<x-application.settings-section id="analytics-country-section" title="Locations"
-    helper="Request volume by visitor country and city for the selected range." flush
+<x-application.settings-section id="analytics-country-section" title="{{ __('Locations') }}"
+    helper="{{ __('Request volume by visitor country and city for the selected range.') }}" flush
     x-data="{
         // Storage can be blocked (sandboxed iframe, privacy mode, full quota); the switch then works without saving.
         view: (() => { try { return localStorage.getItem('traffic-geo-view') === 'cities' ? 'cities' : 'countries'; } catch (e) { return 'countries'; } })(),
@@ -71,7 +71,7 @@
         @if ($hasData)
         <div wire:key="geo-view-{{ $globeId }}"
             class="inline-flex items-center gap-0.5 rounded-lg bg-neutral-100 p-1 dark:bg-white/[0.04]"
-            role="group" aria-label="Location detail">
+            role="group" aria-label="{{ __('Location detail') }}">
             @foreach (['countries' => 'Countries', 'cities' => 'Cities'] as $viewKey => $viewLabel)
                 <button type="button" @click="setView('{{ $viewKey }}')"
                     :aria-pressed="view === '{{ $viewKey }}' ? 'true' : 'false'"
@@ -84,7 +84,7 @@
 
     <div class="flex flex-col">
         @if (! $hasData)
-            <x-empty size="sm" title="No data" description="No country data for the selected range."
+            <x-empty size="sm" title="{{ __('No data') }}" description="{{ __('No country data for the selected range.') }}"
                 icon-name="network" />
         @else
             {{-- Keyed so the lazy-load morph inserts fresh nodes instead of reusing the
@@ -154,13 +154,13 @@
                                     <span class="w-5 shrink-0 text-center text-[14px] leading-none" aria-hidden="true">🌐</span>
                                 @endif
                                 <span class="min-w-0 flex-1 truncate text-[12px] text-black dark:text-fg">
-                                    {{ $isUnknown ? 'Unknown' : countryName($row['value']) }}
+                                    {{ $isUnknown ? __('Unknown') : countryName($row['value']) }}
                                 </span>
                                 <div class="hidden h-1 w-16 shrink-0 overflow-hidden rounded-full bg-neutral-100 sm:block dark:bg-white/[0.06]">
                                     <div class="h-full rounded-full bg-[var(--chart-status-3xx)]" style="width: {{ $width }}%;"></div>
                                 </div>
                                 <span class="w-12 shrink-0 text-right text-[12px] font-medium tabular-nums text-black dark:text-fg"
-                                    title="{{ number_format($row['requests']) }} requests">{{ compactNumber($row['requests']) }}</span>
+                                    title="{{ number_format($row['requests']) }} {{ __('requests') }}">{{ compactNumber($row['requests']) }}</span>
                                 <span class="hidden w-16 shrink-0 text-right text-[11px] tabular-nums text-neutral-400 sm:inline dark:text-fg-faint">{{ formatBytes($row['bytesOut']) }}</span>
                             </div>
                         @endforeach
@@ -194,11 +194,11 @@
                                     <div class="h-full rounded-full bg-[var(--chart-status-3xx)]" style="width: {{ $width }}%;"></div>
                                 </div>
                                 <span class="w-12 shrink-0 text-right text-[12px] font-medium tabular-nums text-black dark:text-fg"
-                                    title="{{ number_format($row['requests']) }} requests">{{ compactNumber($row['requests']) }}</span>
+                                    title="{{ number_format($row['requests']) }} {{ __('requests') }}">{{ compactNumber($row['requests']) }}</span>
                                 <span class="hidden w-16 shrink-0 text-right text-[11px] tabular-nums text-neutral-400 sm:inline dark:text-fg-faint">{{ formatBytes($row['bytesOut']) }}</span>
                             </div>
                         @empty
-                            <x-empty size="sm" title="No city data" description="No city data for the selected range."
+                            <x-empty size="sm" title="{{ __('No city data') }}" description="{{ __('No city data for the selected range.') }}"
                                 icon-name="network" />
                         @endforelse
                     </div>

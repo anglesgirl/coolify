@@ -43,40 +43,40 @@
             <p class="break-all font-mono text-[12px] text-neutral-600 dark:text-fg-dim" x-text="target"></p>
             <div class="flex-1 form-control">
                 <label for="image-scan-ignore-reason" class="mb-1.5 flex items-center gap-1 text-sm font-medium leading-4">
-                    Reason <x-highlighted text="*" />
+                    {{ __('Reason') }} <x-highlighted text="*" />
                 </label>
                 <textarea id="image-scan-ignore-reason" x-model="reason" rows="3" maxlength="500" required
-                    class="input scrollbar" placeholder="Why this does not affect the app"></textarea>
+                    class="input scrollbar" placeholder="{{ __('Why this does not affect the app') }}"></textarea>
             </div>
             <div class="grid gap-4 sm:grid-cols-2">
-                <x-forms.listbox id="image-scan-ignore-scope" label="Scope" :wire="false" x-model="scope" value="resource"
+                <x-forms.listbox id="image-scan-ignore-scope" label="{{ __('Scope') }}" :wire="false" x-model="scope" value="{{ __('resource') }}"
                     :options="array_values(array_filter([
-                        ['value' => 'resource', 'label' => 'This resource'],
-                        $canIgnoreForTeam ? ['value' => 'team', 'label' => 'All team resources'] : null,
+                        ['value' => __('resource'), 'label' => __('This resource')],
+                        $canIgnoreForTeam ? ['value' => 'team', 'label' => __('All team resources')] : null,
                     ]))" />
                 {{-- Ignores of problems that attackers are using or are likely to use always expire (spec 15.2). --}}
                 <template x-if="neverAllowed">
-                    <x-forms.listbox id="image-scan-ignore-expires" label="Expires" :wire="false" x-model="expires" value="90"
+                    <x-forms.listbox id="image-scan-ignore-expires" label="{{ __('Expires') }}" :wire="false" x-model="expires" value="90"
                         :options="[
-                            ['value' => '30', 'label' => '30 days'],
-                            ['value' => '90', 'label' => '90 days'],
-                            ['value' => 'never', 'label' => 'Never'],
+                            ['value' => '30', 'label' => __('metrics.interval_30days')],
+                            ['value' => '90', 'label' => __('90 days')],
+                            ['value' => 'never', 'label' => __('Never')],
                         ]" />
                 </template>
                 <template x-if="!neverAllowed">
-                    <x-forms.listbox id="image-scan-ignore-expires" label="Expires" :wire="false" x-model="expires" value="90"
-                        helper="Attackers are using or are likely to use this problem, so its ignore expires."
+                    <x-forms.listbox id="image-scan-ignore-expires" label="{{ __('Expires') }}" :wire="false" x-model="expires" value="90"
+                        helper="{{ __('Attackers are using or are likely to use this problem, so its ignore expires.') }}"
                         :options="[
-                            ['value' => '30', 'label' => '30 days'],
-                            ['value' => '90', 'label' => '90 days'],
+                            ['value' => '30', 'label' => __('metrics.interval_30days')],
+                            ['value' => '90', 'label' => __('90 days')],
                         ]" />
                 </template>
             </div>
         </form>
         <x-slot:footer>
-            <x-forms.button class="normal-case!" type="button" x-on:click="$dispatch('close-modal')">Cancel</x-forms.button>
+            <x-forms.button class="normal-case!" type="button" x-on:click="$dispatch('close-modal')">{{ __('common.cancel') }}</x-forms.button>
             <x-forms.button class="normal-case!" type="button" isHighlighted x-on:click="submit()"
-                x-bind:disabled="saving || reason.trim() === ''">Ignore</x-forms.button>
+                x-bind:disabled="saving || reason.trim() === ''">{{ __('Ignore') }}</x-forms.button>
         </x-slot:footer>
     </x-modal-input>
 </div>
