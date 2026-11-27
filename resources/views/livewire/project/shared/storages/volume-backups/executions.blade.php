@@ -7,18 +7,18 @@
     @endphp
 
     <div wire:poll.5000ms="$refresh">
-        <x-application.settings-section title="Executions"
-            description="Review generated archives, availability, and cleanup status." flush>
+        <x-application.settings-section :title="__('Executions')"
+            :description="__('Review generated archives, availability, and cleanup status.')" flush>
             <x-slot:actions>
-                <x-forms.button wire:click="cleanupFailed">Cleanup failed</x-forms.button>
-                <x-modal-confirmation title="Cleanup Deleted Backup Entries?" isErrorButton
+                <x-forms.button wire:click="cleanupFailed">{{ __('Cleanup failed') }}</x-forms.button>
+                <x-modal-confirmation :title="__('modal.cleanup_deleted_backup_entries')" isErrorButton
                     submitAction="cleanupDeleted()"
-                    :actions="['This permanently deletes backup execution entries whose local and S3 files have already been deleted.', 'This only removes database entries, not backup files.']"
+                    :actions="[__('This permanently deletes backup execution entries whose local and S3 files have already been deleted.'), __('This only removes database entries, not backup files.')]"
                     confirmationText="cleanup deleted backups"
-                    confirmationLabel="Please confirm by typing 'cleanup deleted backups' below"
-                    shortConfirmationLabel="Confirmation">
+                    :confirmationLabel="__("Please confirm by typing 'cleanup deleted backups' below")"
+                    :shortConfirmationLabel="__('Confirmation')">
                     <x-slot:trigger>
-                        <x-forms.button isError>Cleanup deleted</x-forms.button>
+                        <x-forms.button isError>{{ __('modal.cleanup_deleted') }}</x-forms.button>
                     </x-slot:trigger>
                 </x-modal-confirmation>
             </x-slot:actions>
@@ -27,20 +27,20 @@
                 <div class="data-table w-full overflow-x-auto">
                     <div
                         class="data-table-header volume-backup-executions-grid border-b border-neutral-200 bg-neutral-50 dark:border-white/[0.08] dark:bg-white/[0.05]">
-                        <span>Status</span>
-                        <span>Archive</span>
-                        <span>Time</span>
-                        <span>Size</span>
-                        <span>Availability</span>
-                        <span class="text-right">Actions</span>
+                        <span>{{ __('Status') }}</span>
+                        <span>{{ __('Archive') }}</span>
+                        <span>{{ __('Time') }}</span>
+                        <span>{{ __('backup.size') }}</span>
+                        <span>{{ __('Availability') }}</span>
+                        <span class="text-right">{{ __('Actions') }}</span>
                     </div>
 
                     @foreach ($executions as $execution)
                         @php
                             $finishedAt = $execution->finished_at ?? $execution->updated_at;
                             $statusLabel = match (true) {
-                                $execution->status === 'running' => 'In progress',
-                                $execution->status === 'success' && $execution->s3_uploaded === false => 'S3 warning',
+                                $execution->status === 'running' => __('In progress'),
+                                $execution->status === 'success' && $execution->s3_uploaded === false => __('S3 warning'),
                                 default => str($execution->status)->headline()->toString(),
                             };
                             $statusType = match ($execution->status) {
@@ -61,7 +61,7 @@
                             if ($hasLiveS3Copies) {
                                 $executionCheckboxes[] = [
                                     'id' => 'delete_backup_s3',
-                                    'label' => 'Delete the selected backup permanently from every S3 storage',
+                                    'label' => __('Delete the selected backup permanently from every S3 storage'),
                                 ];
                             }
                             if (empty($deleteActions)) {
@@ -69,11 +69,11 @@
                             }
                             $recoveryPending = $execution->status !== 'running' && $execution->hasPendingRecovery();
                             $recoveryErrorLabel = match ($execution->recovery_error) {
-                                's3_auth' => 'S3 credentials',
-                                's3_bucket' => 'S3 bucket missing',
-                                'server_unreachable' => 'server unreachable',
-                                'remote_command' => 'remote command failed',
-                                default => 'unknown error',
+                                's3_auth' => __('S3 credentials'),
+                                's3_bucket' => __('S3 bucket missing'),
+                                'server_unreachable' => __('server unreachable'),
+                                'remote_command' => __('remote command failed'),
+                                default => __('unknown error'),
                             };
                         @endphp
 
@@ -84,13 +84,13 @@
                             </span>
 
                             <span class="min-w-0">
-                                <x-forms.copy-input :text="$execution->filename ?? 'No archive name'" />
+                                <x-forms.copy-input :text="$execution->filename ?? __('No archive name')" />
                             </span>
 
                             <span class="text-[11px] text-neutral-500 dark:text-fg-faint"
                                 title="Started: {{ formatDateInServerTimezone($execution->created_at, $server) }}@if ($execution->status !== 'running')&#10;Ended: {{ formatDateInServerTimezone($finishedAt, $server) }}@endif">
                                 @if ($execution->status === 'running')
-                                    Running for {{ calculateDuration($execution->created_at, now()) }}
+                                    {{ __('Running for :now', ['now' => calculateDuration($execution->created_at, now())]) }}
                                 @else
                                     <span class="block text-black dark:text-fg">{{ formatDateInServerTimezone($finishedAt, $server) }}</span>
                                     {{ $finishedAt->diffForHumans() }} · {{ calculateDuration($execution->created_at, $finishedAt) }}
@@ -106,7 +106,7 @@
                                     :type="$execution->local_storage_deleted ? 'neutral' : 'success'" />
                                 @foreach ($s3Replicas as $replica)
                                     <x-status-badge wire:key="volume-backup-replica-{{ $replica->id }}"
-                                        :label="$replica->s3?->name ?? 'Removed S3 storage'"
+                                        :label="$replica->s3?->name ?? __('Removed S3 storage')"
                                         :status="$replica->s3_storage_deleted
                                             ? 'deleted'
                                             : match ($replica->s3_uploaded) {
@@ -133,7 +133,7 @@
                                         <x-status-badge :status="'Needs attention ('.$recoveryErrorLabel.')'" type="error" />
                                     @else
                                         <x-status-badge status="Recovery pending" type="warning"
-                                            :title="$execution->recovery_error ? 'Last attempt: '.$recoveryErrorLabel : null" />
+                                            :title="$execution->recovery_error ? __('Last attempt: ').$recoveryErrorLabel : null" />
                                     @endif
                                 @endif
                             </span>
@@ -142,24 +142,24 @@
                                 @if ($execution->status === 'success' && $execution->isDownloadable())
                                     <button type="button" class="icon-button shrink-0"
                                         x-on:click="download_volume_backup_file('{{ $execution->id }}')"
-                                        title="Download backup" aria-label="Download backup">
+                                        title="{{ __('Download backup') }}" aria-label="{{ __('Download backup') }}">
                                         <x-reicon name="upload" class="size-3.5 rotate-180" />
                                     </button>
                                 @endif
                                 @if ($recoveryPending && $execution->status !== 'running')
-                                    <x-table.row-actions label="Backup actions">
+                                    <x-table.row-actions :label="__('Backup actions')">
                                         <x-table.row-action wire:click="retryRecovery({{ $execution->id }})"
                                             wire:loading.attr="disabled"
-                                            wire:target="retryRecovery({{ $execution->id }})">Retry recovery</x-table.row-action>
+                                            wire:target="retryRecovery({{ $execution->id }})">{{ __('Retry recovery') }}</x-table.row-action>
                                         <x-slot:danger>
-                                            <x-modal-confirmation title="Confirm Backup Deletion?" buttonFullWidth
+                                            <x-modal-confirmation :title="__('Confirm Backup Deletion?')" buttonFullWidth
                                                 submitAction="deleteBackup({{ $execution->id }})"
                                                 :checkboxes="$executionCheckboxes" :actions="$deleteActions"
                                                 confirmationText="{{ $execution->filename }}"
-                                                confirmationLabel="Please confirm the execution of the actions by entering the Backup Filename below"
-                                                shortConfirmationLabel="Backup Filename">
+                                                :confirmationLabel="__('modal.delete_backup_confirmation')"
+                                                :shortConfirmationLabel="__('modal.backup_filename')">
                                                 <x-slot:trigger>
-                                                    <x-table.row-action>Delete</x-table.row-action>
+                                                    <x-table.row-action>{{ __('button.delete') }}</x-table.row-action>
                                                 </x-slot:trigger>
                                             </x-modal-confirmation>
                                         </x-slot:danger>
@@ -168,20 +168,20 @@
                                     <button type="button" class="icon-button shrink-0"
                                         wire:click="retryRecovery({{ $execution->id }})"
                                         wire:loading.attr="disabled" wire:target="retryRecovery({{ $execution->id }})"
-                                        title="Retry recovery" aria-label="Retry recovery">
+                                        title="{{ __('Retry recovery') }}" aria-label="{{ __('Retry recovery') }}">
                                         <x-reicon name="refresh" class="size-3.5" />
                                     </button>
                                 @elseif ($execution->status !== 'running')
-                                    <x-modal-confirmation title="Confirm Backup Deletion?" isErrorButton
+                                    <x-modal-confirmation :title="__('Confirm Backup Deletion?')" isErrorButton
                                         submitAction="deleteBackup({{ $execution->id }})"
                                         :checkboxes="$executionCheckboxes" :actions="$deleteActions"
                                         confirmationText="{{ $execution->filename }}"
-                                        confirmationLabel="Please confirm the execution of the actions by entering the Backup Filename below"
-                                        shortConfirmationLabel="Backup Filename">
+                                        :confirmationLabel="__('modal.delete_backup_confirmation')"
+                                        :shortConfirmationLabel="__('modal.backup_filename')">
                                         <x-slot:trigger>
                                             <button type="button"
                                                 class="icon-button shrink-0 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
-                                                title="Delete backup" aria-label="Delete backup">
+                                                title="{{ __('Delete Backup') }}" aria-label="{{ __('Delete Backup') }}">
                                                 <x-reicon name="trash" class="size-3.5" />
                                             </button>
                                         </x-slot:trigger>
@@ -205,8 +205,8 @@
                     </x-table-pagination>
                 </div>
             @else
-                <x-empty size="sm" title="No executions"
-                    description="Run the backup schedule to create its first execution."
+                <x-empty size="sm" :title="__('No executions')"
+                    :description="__('Run the backup schedule to create its first execution.')"
                     icon-name="storages" />
             @endif
         </x-application.settings-section>

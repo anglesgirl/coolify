@@ -9,18 +9,15 @@
         @endphp
         <x-popup-small :compact-after="5000" compact-storage-key="required-environment-variables:{{ $resource->uuid }}">
             <x-slot:title>
-                {{ $missingRequiredEnvironmentVariableCount === 1 ? 'Required environment variable missing' : 'Required environment variables missing' }}
+                {{ $missingRequiredEnvironmentVariableCount === 1 ? __('Required environment variable missing') : __('Required environment variables missing') }}
             </x-slot:title>
             <x-slot:icon>
                 <x-reicon name="alert-triangle" class="size-4" />
             </x-slot:icon>
             <x-slot:description>
                 <span>
-                    {{ implode(', ', $missingRequiredEnvironmentVariableNames) }} must be set before this service can be deployed.
-                    <a href="{{ $environmentVariablesUrl }}" {{ wireNavigate() }}
-                        class="ml-0.5 inline-flex items-center gap-0.5 font-semibold text-coollabs transition-colors hover:text-coollabs-100 dark:text-brand-light dark:hover:text-brand-light/80">
-                        Open environment variables
-                        <x-reicon name="arrow-right" class="size-2.5" />
+                    {{ implode(', ', $missingRequiredEnvironmentVariableNames) }} {{ __('must be set before this service can be deployed.') }} <a href="{{ $environmentVariablesUrl }}" {{ wireNavigate() }}
+                        class="ml-0.5 inline-flex items-center gap-0.5 font-semibold text-coollabs transition-colors hover:text-coollabs-100 dark:text-brand-light dark:hover:text-brand-light/80"> {{ __('Open environment variables') }} <x-reicon name="arrow-right" class="size-2.5" />
                     </a>
                 </span>
             </x-slot:description>
@@ -71,7 +68,7 @@
                                 <div class="flex items-center gap-1.5">
                                     <x-reicon name="alert-triangle"
                                         class="size-3.5 text-amber-600 dark:text-warning" />
-                                    <h3>Configuration changes</h3>
+                                    <h3>{{ __('Configuration changes') }}</h3>
                                 </div>
                                 <button type="button" @click="configurationDiffModalOpen = false"
                                     class="flex size-6 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-black/5 hover:text-neutral-800 dark:text-fg-faint dark:hover:bg-white/[0.06] dark:hover:text-fg">
@@ -87,15 +84,10 @@
                                             <p class="text-xs font-semibold text-neutral-900 dark:text-fg">
                                                 {{ data_get($configurationDiff, 'count') }}
                                                 {{ data_get($configurationDiff, 'count') === 1 ? 'change' : 'changes' }}
-                                                · {{ data_get($configurationDiff, 'requires_build') ? 'Deploy again to build and apply' : 'Restart to apply, no build is necessary' }}
+                                                · {{ data_get($configurationDiff, 'requires_build') ? __('Deploy again to build and apply') : __('Restart to apply, no build is necessary') }}
                                             </p>
                                             @if (data_get($configurationDiff, 'requires_build') && $buildReasons->isNotEmpty())
-                                                <p class="mt-0.5 text-[11px] text-neutral-600 dark:text-fg-dim">
-                                                    A rebuild is necessary because the changes marked
-                                                    <span class="font-semibold">Rebuild</span> change the image:
-                                                    {{ $buildReasons->take(3)->implode(', ') }}{{ $buildReasons->count() > 3 ? ' and ' . ($buildReasons->count() - 3) . ' more' : '' }}.
-                                                    Changes marked <span class="font-semibold">Restart</span> need only a new container.
-                                                </p>
+                                                <p class="mt-0.5 text-[11px] text-neutral-600 dark:text-fg-dim"> {{ __('A rebuild is necessary because the changes marked') }} <span class="font-semibold">{{ __('Rebuild') }}</span> {{ __('change the image:') }} {{ $buildReasons->take(3)->implode(', ') }}{{ $buildReasons->count() > 3 ? ' and ' . ($buildReasons->count() - 3) . ' more' : '' }}{{ __('. Changes marked') }} <span class="font-semibold">{{ __('database.restart') }}</span> {{ __('need only a new container.') }} </p>
                                             @endif
                                         </div>
                                     </div>

@@ -1,6 +1,6 @@
 <div>
     @if ($selectedTask)
-        <x-modal-input title="Edit scheduled task" :subtitle="$selectedTask->name" wireOpen="taskModalOpen" :wireIgnore="false" isLarge fixedHeight>
+        <x-modal-input :title="__('Edit scheduled task')" :subtitle="$selectedTask->name" wireOpen="taskModalOpen" :wireIgnore="false" isLarge fixedHeight>
             <x-slot:content><span></span></x-slot:content>
 
             <livewire:project.shared.scheduled-task.show :resource="$resource" :task="$selectedTask"
@@ -8,17 +8,15 @@
         </x-modal-input>
     @endif
 
-    <x-application.settings-section id="scheduled-tasks-section" title="Scheduled tasks"
-        helper="Run commands inside this resource automatically using a cron schedule." flush>
+    <x-application.settings-section id="scheduled-tasks-section" :title="__('menu.scheduled_tasks')"
+        :helper="__('Run commands inside this resource automatically using a cron schedule.')" flush>
         <x-slot:actions>
             @can('update', $resource)
-                <x-modal-input title="New scheduled task" :closeOutside="false">
+                <x-modal-input :title="__('scheduled_task.new_task')" :closeOutside="false">
                     <x-slot:content>
                         <button type="button"
                             class="button button-highlighted">
-                            <x-reicon name="plus" class="size-3.5" />
-                            Add task
-                        </button>
+                            <x-reicon name="plus" class="size-3.5" /> {{ __('Add task') }} </button>
                     </x-slot:content>
                     <livewire:project.shared.scheduled-task.add :type="$resource->type()" :id="$resource->id"
                         :containerNames="$containerNames" />
@@ -30,16 +28,16 @@
             @php
                 $status = data_get($task->latest_log, 'status');
                 $statusType = match ($status) {
-                    'success' => 'success',
+                    'success' => __('task_execution.status_success'),
                     'failed' => 'error',
                     'running' => 'warning',
                     default => 'neutral',
                 };
                 $statusLabel = match ($status) {
-                    'success' => 'Success',
-                    'failed' => 'Failed',
-                    'running' => 'Running',
-                    default => 'Not run yet',
+                    'success' => __('task_execution.status_success'),
+                    'failed' => __('task_execution.status_failed'),
+                    'running' => __('Running'),
+                    default => __('Not run yet'),
                 };
             @endphp
             <div wire:key="scheduled-task-{{ $task->uuid }}" wire:click="openTask('{{ $task->uuid }}')"
@@ -69,8 +67,8 @@
                 <x-status-badge :status="$statusLabel" :type="$statusType" />
             </div>
         @empty
-            <x-empty title="No scheduled tasks"
-                description="Create a task to run maintenance commands, scripts, or recurring jobs automatically."
+            <x-empty :title="__('No scheduled tasks')"
+                :description="__('Create a task to run maintenance commands, scripts, or recurring jobs automatically.')"
                 icon-name="browser-terminal" />
         @endforelse
     </x-application.settings-section>

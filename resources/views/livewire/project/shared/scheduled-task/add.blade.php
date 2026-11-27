@@ -1,39 +1,37 @@
 <form class="flex w-full flex-col gap-4" wire:submit="submit">
     <div class="grid gap-4 sm:grid-cols-2">
-        <x-forms.input placeholder="Database cleanup" id="name" label="Name" />
-        <x-forms.input placeholder="0 0 * * * or daily"
-            helper="Use every_minute, hourly, daily, weekly, monthly, yearly, or a cron expression. Runs in the server timezone ({{ $serverTimezone }}). Change it in the server settings."
-            id="frequency" label="Schedule" />
+        <x-forms.input :placeholder="__('Database cleanup')" id="name" :label="__('scheduled_task.name_label')" />
+        <x-forms.input :placeholder="__('0 0 * * * or daily')"
+            :helper="__('Use every_minute, hourly, daily, weekly, monthly, yearly, or a cron expression. Runs in the server timezone (:timezone). Change it in the server settings.', ['timezone' => $serverTimezone])"
+            id="frequency" :label="__('Schedule')" />
     </div>
 
-    <x-forms.input placeholder="php artisan schedule:run" id="command" label="Command" />
-    <x-forms.checkbox id="useShell" label="Run in a shell"
-        helper="Run the command with <span class='font-mono'>sh -c</span>, so you can use variables, pipes, and redirects. Turn it off for containers without a shell (distroless or scratch images): Coolify then splits the command into arguments and runs it directly." />
+    <x-forms.input :placeholder="__('php artisan schedule:run')" id="command" :label="__('scheduled_task.command_label')" />
+    <x-forms.checkbox id="useShell" :label="__('Run in a shell')"
+        :helper="__('Run the command with ') . '<span class=\'font-mono\'>sh -c</span>' . __(', so you can use variables, pipes, and redirects. Turn it off for containers without a shell (distroless or scratch images): Coolify then splits the command into arguments and runs it directly.')" />
 
     <div class="grid gap-4 sm:grid-cols-2">
         <x-forms.input type="number" placeholder="300" id="timeout"
-            helper="Maximum execution time from 60 to 36,000 seconds." label="Timeout (seconds)" />
+            :helper="__('Maximum execution time from 60 to 36,000 seconds.')" :label="__('scheduled_task.timeout_label')" />
         @if ($type === 'application' && $containerNames->count() > 1)
-            <x-forms.listbox id="container" label="Container"
+            <x-forms.listbox id="container" :label="__('execute.container_label')"
                 :options="$containerNames->map(fn ($containerName) => [
                     'value' => $containerName,
                     'label' => $containerName,
                 ])->values()->all()" />
         @elseif ($type === 'service')
-            <x-forms.listbox id="container" label="Container"
+            <x-forms.listbox id="container" :label="__('execute.container_label')"
                 :options="$containerNames->map(fn ($containerName) => [
                     'value' => $containerName,
                     'label' => $containerName,
                 ])->values()->all()" />
         @else
             <x-forms.input placeholder="php" id="container"
-                helper="Leave empty when the resource only has one container." label="Container" />
+                :helper="__('Leave empty when the resource only has one container.')" :label="__('execute.container_label')" />
         @endif
     </div>
 
     <div class="flex justify-end border-t border-neutral-200 pt-4 dark:border-white/[0.07]">
-        <x-forms.button @click="modalOpen=false" type="submit">
-            Add task
-        </x-forms.button>
+        <x-forms.button @click="modalOpen=false" type="submit"> {{ __('Add task') }} </x-forms.button>
     </div>
 </form>

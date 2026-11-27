@@ -14,15 +14,15 @@
         @php
             $executionStatus = data_get($execution, 'status');
             $statusType = match ($executionStatus) {
-                'success' => 'success',
+                'success' => __('task_execution.status_success'),
                 'failed' => 'error',
                 'running' => 'warning',
                 default => 'neutral',
             };
             $statusText = match ($executionStatus) {
-                'success' => 'Success',
-                'running' => 'Running',
-                'failed' => 'Failed',
+                'success' => __('task_execution.status_success'),
+                'running' => __('Running'),
+                'failed' => __('task_execution.status_failed'),
                 default => ucfirst($executionStatus),
             };
             $server = data_get($this->task, 'application.destination.server')
@@ -44,11 +44,8 @@
                         {{ formatDateInServerTimezone(data_get($execution, 'created_at', now()), $server) }}
                     </p>
                     <p class="mt-0.5 text-xs text-neutral-500 dark:text-fg-dim">
-                        @if ($executionStatus === 'running')
-                            In progress
-                        @else
-                            {{ calculateDuration(data_get($execution, 'created_at'), data_get($execution, 'finished_at')) }}
-                            · finished {{ \Carbon\Carbon::parse(data_get($execution, 'finished_at'))->diffForHumans() }}
+                        @if ($executionStatus === 'running') {{ __('In progress') }} @else
+                            {{ calculateDuration(data_get($execution, 'created_at'), data_get($execution, 'finished_at')) }} · {{ __('task_execution.finished_ago') }} {{ \Carbon\Carbon::parse(data_get($execution, 'finished_at'))->diffForHumans() }}
                         @endif
                     </p>
                 </div>
@@ -64,30 +61,24 @@
 @endforeach</pre>
                         <div class="mt-3 flex flex-wrap gap-2">
                             @if ($this->hasMoreLogs())
-                                <x-forms.button wire:click.prevent="loadMoreLogs">
-                                    Load more
-                                </x-forms.button>
-                                <x-forms.button wire:click.prevent="loadAllLogs">
-                                    Load all
-                                </x-forms.button>
+                                <x-forms.button wire:click.prevent="loadMoreLogs"> {{ __('Load more') }} </x-forms.button>
+                                <x-forms.button wire:click.prevent="loadAllLogs"> {{ __('task_execution.load_all') }} </x-forms.button>
                             @endif
                             @if (strlen($execution->message) > 0 && $this->canReadOutput())
-                                <x-forms.button wire:click.prevent="downloadLogs({{ data_get($execution, 'id') }})">
-                                    Download logs
-                                </x-forms.button>
+                                <x-forms.button wire:click.prevent="downloadLogs({{ data_get($execution, 'id') }})"> {{ __('Download logs') }} </x-forms.button>
                             @endif
                         </div>
                     @else
                         <p class="text-[13px] text-neutral-500 dark:text-fg-dim">
-                            {{ $executionStatus === 'running' ? 'Waiting for output…' : 'No output was recorded for this execution.' }}
+                            {{ $executionStatus === 'running' ? __('Waiting for output…') : __('task_execution.no_output') }}
                         </p>
                     @endif
                 </div>
             @endif
         </div>
     @empty
-        <x-empty size="sm" title="No executions yet"
-            description="Run this task now or wait for its next scheduled execution."
+        <x-empty size="sm" :title="__('backup.no_executions')"
+            :description="__('Run this task now or wait for its next scheduled execution.')"
             icon-name="browser-terminal" />
     @endforelse
 </div>

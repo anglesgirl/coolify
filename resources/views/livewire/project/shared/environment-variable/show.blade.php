@@ -34,11 +34,11 @@
                 <x-helper :helper="e($comment)" />
             @endif
             @if ($is_really_required)
-                <span class="table-badge table-badge-danger shrink-0">Required</span>
+                <span class="table-badge table-badge-danger shrink-0">{{ __('Required') }}</span>
             @endif
             @if ($composeInfo)
                 <span class="table-badge shrink-0"
-                    title="Used by Compose services: {{ implode(', ', $composeInfo['services']) }}">Used by Compose</span>
+                    title="Used by Compose services: {{ implode(', ', $composeInfo['services']) }}">{{ __('Used by Compose') }}</span>
             @endif
         </div>
         @if (! $isSharedVariable)
@@ -90,20 +90,20 @@
         <div class="flex items-center justify-end gap-0.5 justify-self-end">
             @if ($this->connectLink)
                 <a href="{{ $this->connectLink }}" class="icon-button shrink-0"
-                    title="Connect {{ $key }} to resources" aria-label="Connect {{ $key }} to resources">
+                    title="{{ __('Connect :key to resources', ['key' => $key]) }}" aria-label="{{ __('Connect :key to resources', ['key' => $key]) }}">
                     <x-reicon name="link" class="size-3.5" />
                 </a>
             @endif
             @if (! $isLocked && ! $isValueHidden)
-                <x-copy-button resolve="$wire.copyValue()" label="Copy value" />
+                <x-copy-button resolve="$wire.copyValue()" :label="__('Copy value')" />
             @endif
             {{-- Open modal immediately (Alpine); decrypt value in a follow-up Livewire request. --}}
-            <x-modal-input title="Edit environment variable" :closeOutside="false" :wireIgnore="false"
+            <x-modal-input :title="__('Edit environment variable')" :closeOutside="false" :wireIgnore="false"
                 wireOpen="editorOpen"
                 @environment-variable-updated.window="if ($event.detail.envId === {{ (int) $env->id }}) modalOpen = false">
                 <x-slot:content>
                     <button type="button" wire:click="loadValues" data-env-settings-trigger class="icon-button shrink-0"
-                        title="Edit environment variable" aria-label="Edit environment variable">
+                        title="{{ __('Edit environment variable') }}" aria-label="{{ __('Edit environment variable') }}">
                         <x-reicon name="settings" class="size-3.5" />
                     </button>
                 </x-slot:content>
@@ -111,39 +111,37 @@
                 <form wire:submit="submit" class="flex w-full flex-col gap-4"
                     x-data="{ isMultiline: $wire.entangle('is_multiline') }">
                     <div class="grid items-end gap-4 sm:grid-cols-2">
-                        <x-forms.input id="key" label="Name" :required="$is_redis_credential"
+                        <x-forms.input id="key" :label="__('scheduled_task.name_label')" :required="$is_redis_credential"
                             :disabled="!$canEditValue || $is_redis_credential || $composeInfo !== null" />
-                        <x-forms.input id="comment" label="Comment" placeholder="Optional note"
-                            helper="Add a note to document what this environment variable is used for." maxlength="256"
+                        <x-forms.input id="comment" :label="__('Comment')" :placeholder="__('Optional note')"
+                            :helper="__('Add a note to document what this environment variable is used for.')" maxlength="256"
                             :disabled="!$canUpdate" />
                     </div>
 
                     <div>
                         @if ($isValueHidden)
                             <div class="w-full">
-                                <label class="mb-1 flex items-center gap-1 text-sm font-medium">Value</label>
-                                <input disabled type="text" value="Hidden (only admins can view)"
+                                <label class="mb-1 flex items-center gap-1 text-sm font-medium">{{ __('env_var.value_label') }}</label>
+                                <input disabled type="text" value="{{ __('Hidden (only admins can view)') }}"
                                     class="input w-full italic !text-neutral-500 dark:!text-neutral-500" />
                             </div>
                         @elseif ($isLocked)
-                            <x-forms.input id="newLockedValue" type="password" label="Value" :copyable="false"
-                                placeholder="Hidden after locking. Enter a new value to replace it."
-                                helper="The locked value cannot be shown. Leave this empty to keep it."
+                            <x-forms.input id="newLockedValue" type="password" :label="__('env_var.value_label')" :copyable="false"
+                                :placeholder="__('Hidden after locking. Enter a new value to replace it.')"
+                                :helper="__('The locked value cannot be shown. Leave this empty to keep it.')"
                                 :disabled="!$canUpdate || $isDisabled" />
                         @else
                             {{-- Multiline: same shell while loading/loaded to avoid layout jump. --}}
                             <div x-show="isMultiline" x-cloak wire:key="env-show-value-multiline-{{ $env->id }}"
                                 class="w-full">
-                                <label class="mb-1 flex items-center gap-1 text-sm font-medium">
-                                    Value
-                                    @if ($is_redis_credential)
+                                <label class="mb-1 flex items-center gap-1 text-sm font-medium"> {{ __('env_var.value_label') }} @if ($is_redis_credential)
                                         <x-highlighted text="*" />
                                     @endif
                                 </label>
                                 @if (!$valuesLoaded)
                                     <div class="input flex min-h-24 w-full items-start py-2 text-neutral-500 dark:text-fg-dim"
                                         aria-busy="true">
-                                        <x-loading text="Loading value..." />
+                                        <x-loading :text="__('Loading value...')" />
                                     </div>
                                 @else
                                     <x-forms.textarea id="value" class="font-sans" :required="$is_redis_credential"
@@ -154,15 +152,13 @@
                             {{-- Single-line: keep one label + control shell so label/input gap never changes. --}}
                             <div x-show="!isMultiline" class="w-full"
                                 wire:key="env-show-value-single-{{ $env->id }}">
-                                <label class="mb-1 flex items-center gap-1 text-sm font-medium">
-                                    Value
-                                    @if ($is_redis_credential)
+                                <label class="mb-1 flex items-center gap-1 text-sm font-medium"> {{ __('env_var.value_label') }} @if ($is_redis_credential)
                                         <x-highlighted text="*" />
                                     @endif
                                 </label>
                                 <div class="relative">
                                     @if (!$valuesLoaded)
-                                        <x-forms.input loading loadingText="Loading value..."
+                                        <x-forms.input loading :loadingText="__('Loading value...')"
                                             defaultClass="input input-with-password-toggle" />
                                     @else
                                         <x-forms.env-var-input id="value" type="password"
@@ -181,16 +177,13 @@
                         {{-- Keep tip mounted during value load so layout does not jump when decrypt finishes. --}}
                         @if (!$isSharedVariable && !$isValueHidden && !$isLocked)
                             <div x-cloak x-show="!isMultiline" wire:key="env-show-value-tip-{{ $env->id }}"
-                                class="mt-1.5 text-xs text-neutral-500 dark:text-fg-faint">
-                                Tip: Type <span
-                                    class="font-mono text-coollabs dark:text-brand-light">{{ '{{' }}</span> to reference
-                                a shared environment variable
-                            </div>
+                                class="mt-1.5 text-xs text-neutral-500 dark:text-fg-faint"> {{ __('Tip: Type') }} <span
+                                    class="font-mono text-coollabs dark:text-brand-light">{{ '{{' }}</span> {{ __('to reference a shared environment variable') }} </div>
                         @endif
                     </div>
 
                     @if ($legacyEscapingChangesValue)
-                        <x-callout type="warning" title="Old escaping">
+                        <x-callout type="warning" :title="__('Old escaping')">
                             This variable was saved before Coolify passed exact values, so the container gets a
                             changed value (for example, with extra backslashes or quotes). To pass the exact value,
                             delete this variable and add it again, then restart. If a database already uses this
@@ -199,22 +192,16 @@
                     @endif
 
                     @if ($is_shared)
-                        <x-forms.input disabled type="password" id="real_value" label="Resolved value" />
+                        <x-forms.input disabled type="password" id="real_value" :label="__('Resolved value')" />
                     @endif
                     @if ($composeInfo)
-                        <x-callout type="info" title="Used by Docker Compose">
-                            Used by: {{ implode(', ', $composeInfo['services']) }}.
-                            @if ($composeInfo['default'] !== null)
-                                Compose default: <span class="font-mono">{{ $composeInfo['default'] }}</span>.
+                        <x-callout type="info" :title="__('Used by Docker Compose')"> {{ __('Used by:') }} {{ implode(', ', $composeInfo['services']) }}.
+                            @if ($composeInfo['default'] !== null) {{ __('Compose default:') }} <span class="font-mono">{{ $composeInfo['default'] }}</span>.
                             @endif
                             @if ($composeInfo['default'] !== null && !$composeInfo['required'] && $canEditValue && !$isLocked)
-                                <x-forms.button type="button" wire:click="useComposeDefault">
-                                    Use Compose default
-                                </x-forms.button>
+                                <x-forms.button type="button" wire:click="useComposeDefault"> {{ __('Use Compose default') }} </x-forms.button>
                             @endif
-                            @if ($composeInfo['required'])
-                                Compose requires this variable to have a value.
-                            @endif
+                            @if ($composeInfo['required']) {{ __('Compose requires this variable to have a value.') }} @endif
                         </x-callout>
                     @endif
 
@@ -222,14 +209,14 @@
                         <div
                             class="grid gap-4 border-t border-neutral-200 pt-4 dark:border-white/[0.07] sm:grid-cols-2">
                             @if ($showValueType)
-                                <x-forms.listbox id="is_multiline" label="Value type" :live="true" :options="[
-                                    ['value' => false, 'label' => 'Single line'],
-                                    ['value' => true, 'label' => 'Multiline'],
+                                <x-forms.listbox id="is_multiline" :label="__('Value type')" :live="true" :options="[
+                                    ['value' => false, 'label' => __('Single line')],
+                                    ['value' => true, 'label' => __('Multiline')],
                                 ]"
                                     :disabled="! $canUpdate" />
                             @endif
                             @if ($showInterpolation)
-                                <x-forms.listbox id="is_literal" label="Interpolation" :options="[
+                                <x-forms.listbox id="is_literal" :label="__('Interpolation')" :options="[
                                     ['value' => false, 'label' => 'Interpolate $VARIABLES'],
                                     ['value' => true, 'label' => 'Literal (keep $ characters as-is)'],
                                 ]"
@@ -237,18 +224,18 @@
                                     :disabled="! $canUpdate" />
                             @endif
                             @if ($showBuildtime)
-                                <x-forms.listbox id="is_buildtime" label="Build time" :options="[
-                                    ['value' => true, 'label' => 'Available during build (a change needs a rebuild)'],
-                                    ['value' => false, 'label' => 'Not available during build'],
+                                <x-forms.listbox id="is_buildtime" :label="__('Build time')" :options="[
+                                    ['value' => true, 'label' => __('Available during build (a change needs a rebuild)')],
+                                    ['value' => false, 'label' => __('Not available during build')],
                                 ]"
-                                    helper="Make this variable available during the Docker build process. Useful for build secrets and dependencies.<br><br>A change to a build-time variable needs a new build, because the variable can change the image. A restart cannot apply it. Select <b>Not available during build</b> when only the running application reads the variable. Then a restart applies a change."
+                                    :helper="__('Make this variable available during the Docker build process. Useful for build secrets and dependencies.<br><br>A change to a build-time variable needs a new build, because the variable can change the image. A restart cannot apply it. Select <b>Not available during build</b> when only the running application reads the variable. Then a restart applies a change.')"
                                     :disabled="! $canUpdate" />
                             @endif
                             @if ($showRuntime)
-                                <x-forms.listbox id="is_runtime" label="Runtime" :options="[
-                                    ['value' => true, 'label' => 'Available in the container'],
-                                    ['value' => false, 'label' => 'Not available in the container'],
-                                ]" helper="Make this variable available in the running container at runtime."
+                                <x-forms.listbox id="is_runtime" :label="__('Runtime')" :options="[
+                                    ['value' => true, 'label' => __('Available in the container')],
+                                    ['value' => false, 'label' => __('Not available in the container')],
+                                ]" :helper="__('env_var.runtime_helper')"
                                     :disabled="! $canUpdate" />
                             @endif
                         </div>
@@ -264,36 +251,32 @@
                             <div data-environment-variable-delete-action>
                                 @can('delete', $this->env)
                                     @if (!$isMagicVariable)
-                                        <x-modal-confirmation title="Confirm Environment Variable Deletion?" isErrorButton
-                                            buttonTitle="Delete" submitAction="delete"
-                                            :actions="['The selected environment variable will be permanently deleted.']"
+                                        <x-modal-confirmation :title="__('env_var.confirm_delete_title')" isErrorButton
+                                            :buttonTitle="__('button.delete')" submitAction="delete"
+                                            :actions="[__('env_var.delete_action')]"
                                             confirmationText="{{ $key }}"
-                                            confirmationLabel="Please confirm the execution of the actions by entering the Environment Variable Name below"
-                                            shortConfirmationLabel="Environment Variable Name" :confirmWithPassword="false"
-                                            step2ButtonText="Permanently Delete" />
+                                            :confirmationLabel="__('env_var.confirm_delete_label')"
+                                            :shortConfirmationLabel="__('env_var.variable_name')" :confirmWithPassword="false"
+                                            :step2ButtonText="__('button.permanently_delete')" />
                                     @endif
                                 @endcan
                             </div>
                             <div class="ml-auto flex flex-wrap gap-2" data-environment-variable-update-actions>
                                 @if ($this->connectLink)
-                                    <a href="{{ $this->connectLink }}" class="button" title="Add this variable to resources, and see which resources use it">
-                                        <x-reicon name="link" class="size-3.5" />
-                                        Connect to resources
-                                    </a>
+                                    <a href="{{ $this->connectLink }}" class="button" title="{{ __('Add this variable to resources, and see which resources use it') }}">
+                                        <x-reicon name="link" class="size-3.5" /> {{ __('Connect to resources') }} </a>
                                 @endif
                                 @if ($canUpdate && !$isLocked && !$isMagicVariable)
                                     <div wire:key="env-lock-action-{{ $env->id }}">
-                                        <x-modal-confirmation title="Lock Environment Variable?" buttonTitle="Lock"
+                                        <x-modal-confirmation :title="__('Lock Environment Variable?')" :buttonTitle="__('env_var.lock_button')"
                                             submitAction="lock"
-                                            :actions="['The value will be hidden. You cannot see or copy it again.', 'You can still replace the value with a new one, but you cannot unlock the variable.']"
-                                            :confirmWithText="false" :confirmWithPassword="false" step2ButtonText="Lock" />
+                                            :actions="[__('The value will be hidden. You cannot see or copy it again.'), __('You can still replace the value with a new one, but you cannot unlock the variable.')]"
+                                            :confirmWithText="false" :confirmWithPassword="false" :step2ButtonText="__('env_var.lock_button')" />
                                     </div>
                                 @endif
                                 @if ($canUpdate && !$isDisabled)
                                     <fieldset disabled wire:dirty.attr.remove="disabled">
-                                        <x-forms.button type="submit" isHighlighted wire:target="submit">
-                                            Update variable
-                                        </x-forms.button>
+                                        <x-forms.button type="submit" isHighlighted wire:target="submit"> {{ __('Update variable') }} </x-forms.button>
                                     </fieldset>
                                 @endif
                             </div>
