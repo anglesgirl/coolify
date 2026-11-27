@@ -27,7 +27,7 @@
 }" @avatar-updated.window="avatarUrl = $event.detail.url" @keydown.escape.window="closePanel()" @resize.window="open && fitPanel()"
     @click.outside="closePanel()">
     <button type="button" x-ref="userMenuButton" @click="open ? closePanel() : openPanel()"
-        title="{{ $userName }}" aria-label="Account menu for {{ $userName }}"
+        title="{{ $userName }}" aria-label="{{ __('Account menu for') }} {{ $userName }}"
         @if ($sidebar) :class="collapsed ? 'w-8 px-0' : 'w-full'" @endif
         @class([
             'button rounded-lg px-2 normal-case',
@@ -72,13 +72,13 @@
         <a href="{{ route('profile') }}" {{ wireNavigate() }} class="listbox-option">
             <span class="flex items-center gap-2">
                 <x-reicon name="profile" class="size-4 opacity-80" />
-                Profile
+                {{ __('navbar.profile') }}
             </span>
         </a>
         <a href="{{ route('profile.appearance') }}" {{ wireNavigate() }} class="listbox-option">
             <span class="flex items-center gap-2">
                 <x-reicon name="paintbrush" class="size-4 opacity-80" />
-                Appearance
+                {{ __('Appearance') }}
             </span>
         </a>
 
@@ -88,15 +88,15 @@
         <a href="https://coolify.io/docs" target="_blank" rel="noopener noreferrer" class="listbox-option">
             <span class="flex items-center gap-2">
                 <x-reicon name="documentation" class="size-4 opacity-80" />
-                Documentation
+                {{ __('menu.documentation') }}
             </span>
         </a>
-        <x-modal-input title="How can we help?">
+        <x-modal-input title="{{ __('navbar.help_title') }}">
             <x-slot:content>
                 <div class="listbox-option cursor-pointer" @click="closePanel()">
                     <span class="flex items-center gap-2">
                         <x-reicon name="feedback" class="size-4 opacity-80" />
-                        Feedback
+                        {{ __('navbar.feedback') }}
                     </span>
                 </div>
             </x-slot:content>
@@ -107,7 +107,7 @@
                 class="listbox-option">
                 <span class="flex items-center gap-2">
                     <x-reicon name="sponsor" class="size-4 text-pink-500" />
-                    Sponsor us
+                    {{ __('navbar.sponsor_us') }}
                 </span>
             </a>
         @endif
@@ -119,7 +119,7 @@
             <button type="submit" class="listbox-option w-full text-left text-error dark:text-error">
                 <span class="flex items-center gap-2">
                     <x-reicon name="logout" class="size-4 opacity-90" />
-                    Log out
+                    {{ __('Log out') }}
                 </span>
             </button>
         </form>

@@ -135,7 +135,7 @@
     @endif
 
     @if ($currentStorage)
-        <x-breadcrumb-switcher title="Storage" :label="$currentStorage->name" :uuid="$currentStorage->uuid" :items="$storages->map(fn ($storage) => [
+        <x-breadcrumb-switcher title="{{ __('Storage') }}" :label="$currentStorage->name" :uuid="$currentStorage->uuid" :items="$storages->map(fn ($storage) => [
             'label' => $storage->name,
             'uuid' => $storage->uuid,
             'href' => route('storage.show', ['storage_uuid' => $storage->uuid]),
@@ -146,7 +146,7 @@
                     x-data="{ usable: @js((bool) $currentStorage->is_usable) }"
                     @storage-status-changed.window="usable = $event.detail.isUsable">
                     <span class="size-1.5 rounded-full" :class="usable ? 'bg-[#3fb950]' : 'bg-red-500'"></span>
-                    <span x-text="usable ? 'Connected' : 'Not usable'"></span>
+                    <span x-text="usable ? '{{ __('Connected') }}' : '{{ __('Not usable') }}'"></span>
                 </span>
             </x-slot:meta>
         </x-breadcrumb-switcher>
@@ -158,7 +158,7 @@
                 ? filled($currentSource->installation_id)
                 : filled($currentSource->access_token);
         @endphp
-        <x-breadcrumb-switcher title="Sources" :label="$currentSource->name ?: 'Source'" :uuid="$currentSource->uuid" :items="$sources->map(fn ($source) => [
+        <x-breadcrumb-switcher title="{{ __('navbar.sources') }}" :label="$currentSource->name ?: __('application.git_source')" :uuid="$currentSource->uuid" :items="$sources->map(fn ($source) => [
             'label' => $source->name ?: class_basename($source),
             'uuid' => $source->uuid,
             'href' => match (true) {
@@ -175,14 +175,14 @@
                     'bg-[#3fb950]' => $sourceConnected,
                     'bg-warning' => ! $sourceConnected,
                 ])></span>
-                    {{ $sourceConnected ? 'Connected' : 'Setup incomplete' }}
+                    {{ $sourceConnected ? __('Connected') : __('Setup incomplete') }}
                 </span>
             </x-slot:meta>
         </x-breadcrumb-switcher>
     @endif
 
     @if ($currentDestination)
-        <x-breadcrumb-switcher title="Destinations" :label="$currentDestination->name" :uuid="$currentDestination->uuid" :items="$destinations->map(fn ($destination) => [
+        <x-breadcrumb-switcher title="{{ __('navbar.destinations') }}" :label="$currentDestination->name" :uuid="$currentDestination->uuid" :items="$destinations->map(fn ($destination) => [
             'label' => $destination->name,
             'uuid' => $destination->uuid,
             'href' => route('destination.show', ['destination_uuid' => $destination->uuid]),
@@ -195,14 +195,14 @@
                     'bg-[#3fb950]' => $currentDestination->getMorphClass() === 'App\\Models\\StandaloneDocker',
                     'bg-warning' => $currentDestination->getMorphClass() !== 'App\\Models\\StandaloneDocker',
                 ])></span>
-                    {{ $currentDestination->getMorphClass() === 'App\\Models\\StandaloneDocker' ? 'Docker' : 'Deprecated' }}
+                    {{ $currentDestination->getMorphClass() === 'App\\Models\\StandaloneDocker' ? __('Docker') : __('Deprecated') }}
                 </span>
             </x-slot:meta>
         </x-breadcrumb-switcher>
     @endif
 
     @if ($currentTag)
-        <x-breadcrumb-switcher title="Tags" :label="$currentTag->name" :items="collect([[
+        <x-breadcrumb-switcher title="{{ __('tags.title') }}" :label="$currentTag->name" :items="collect([[
             'label' => 'All tags',
             'href' => route('tags.show'),
             'active' => false,
@@ -218,12 +218,12 @@
         {{-- Project switcher --}}
         <div class="relative min-w-0 shrink" x-data="{ open: false }" @keydown.escape.window="open = false">
             <div class="flex h-8 min-w-0 items-center rounded-md opacity-70 transition-[background-color,opacity] hover:bg-neutral-100 hover:opacity-100 dark:hover:bg-white/[0.05]">
-                <a href="{{ route($projectDestinationRoute, ['project_uuid' => $currentProject->uuid]) }}" {{ wireNavigate() }} title="Go to project"
+                <a href="{{ route($projectDestinationRoute, ['project_uuid' => $currentProject->uuid]) }}" {{ wireNavigate() }} title="{{ __('Go to project') }}"
                     class="flex h-8 min-w-0 items-center pr-1 pl-2">
                     <span class="min-w-0 truncate font-semibold text-black dark:text-fg"
                         x-text="nameOf(@js($currentProject->uuid), @js($currentProject->name))">{{ $currentProject->name }}</span>
                 </a>
-                <button type="button" @click="open = !open" @click.outside="open = false" title="Switch project"
+                <button type="button" @click="open = !open" @click.outside="open = false" title="{{ __('Switch project') }}"
                     class="flex h-8 shrink-0 items-center px-0.5">
                     <svg class="size-4 shrink-0 text-neutral-400 dark:text-fg-faint" viewBox="0 0 24 24" fill="none">
                         <path d="M8 9l4-4 4 4M8 15l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
@@ -233,7 +233,7 @@
             <div x-show="open" x-cloak x-transition.opacity.duration.120ms
                 class="listbox-panel scrollbar left-0! z-[90]! max-h-80! min-w-56 max-w-72">
                 <div class="px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-neutral-400 dark:text-fg-faint">
-                    Projects
+                    {{ __('projects.heading') }}
                 </div>
                 @foreach ($projects as $p)
                     <a href="{{ route($projectDestinationRoute, ['project_uuid' => $p->uuid]) }}" {{ wireNavigate() }} @click="open = false"
@@ -250,11 +250,11 @@
         {{-- Environment switcher --}}
         <div class="relative min-w-0 shrink" x-data="{ open: false }" @keydown.escape.window="open = false">
             <div class="flex h-8 min-w-0 items-center rounded-md opacity-70 transition-[background-color,opacity] hover:bg-neutral-100 hover:opacity-100 dark:hover:bg-white/[0.05]">
-                <a href="{{ route('project.resource.index', ['project_uuid' => $currentProject->uuid, 'environment_uuid' => $currentEnvironment->uuid]) }}" {{ wireNavigate() }} title="Go to environment"
+                <a href="{{ route('project.resource.index', ['project_uuid' => $currentProject->uuid, 'environment_uuid' => $currentEnvironment->uuid]) }}" {{ wireNavigate() }} title="{{ __('Go to environment') }}"
                     class="flex h-8 min-w-0 items-center pr-1 pl-2">
                     <span class="min-w-0 truncate font-semibold text-black dark:text-fg">{{ $currentEnvironment->name }}</span>
                 </a>
-                <button type="button" @click="open = !open" @click.outside="open = false" title="Switch environment"
+                <button type="button" @click="open = !open" @click.outside="open = false" title="{{ __('Switch environment') }}"
                     class="flex h-8 shrink-0 items-center px-0.5">
                     <svg class="size-4 shrink-0 text-neutral-400 dark:text-fg-faint" viewBox="0 0 24 24" fill="none">
                         <path d="M8 9l4-4 4 4M8 15l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
@@ -264,7 +264,7 @@
             <div x-show="open" x-cloak x-transition.opacity.duration.120ms
                 class="listbox-panel scrollbar left-0! z-[90]! max-h-80! min-w-52 max-w-72">
                 <div class="px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-neutral-400 dark:text-fg-faint">
-                    Environments
+                    {{ __('Environments') }}
                 </div>
                 @foreach ($environments as $env)
                     <a href="{{ route('project.resource.index', ['project_uuid' => $currentProject->uuid, 'environment_uuid' => $env->uuid]) }}" {{ wireNavigate() }} @click="open = false"
@@ -277,7 +277,7 @@
     @endif
 
     @if ($currentResource)
-        <x-breadcrumb-switcher title="Resources" :label="$currentResource->name" :uuid="$currentResource->uuid" :items="$resourceItems">
+        <x-breadcrumb-switcher title="{{ __('Resources') }}" :label="$currentResource->name" :uuid="$currentResource->uuid" :items="$resourceItems">
             <x-slot:meta>
                 {{-- Below xl, the page heading shows the status. --}}
                 <div class="hidden xl:flex">

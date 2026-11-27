@@ -265,10 +265,10 @@
 
                     <!-- Step 2: Confirm deletion -->
                     <div x-show="step === 2">
-                        <x-callout type="danger" title="Warning" class="mb-4">
-                            {!! $warningMessage ?: 'This operation is permanent and cannot be undone. Please think again before proceeding!' !!}
+                        <x-callout type="danger" title="{{ __('Warning') }}" class="mb-4">
+                            {!! $warningMessage ?: __('This operation is permanent and cannot be undone. Please think again before proceeding!') !!}
                         </x-callout>
-                        <div class="mb-2 text-[12px] font-medium text-neutral-700 dark:text-fg-dim">The following actions will be performed:</div>
+                        <div class="mb-2 text-[12px] font-medium text-neutral-700 dark:text-fg-dim">{{ __('The following actions will be performed:') }}</div>
                         <ul class="mb-4 space-y-2">
                             @foreach ($actions as $action)
                                 <li class="flex items-start gap-2 text-[12px] leading-5 text-red-600 dark:text-red-400">
@@ -299,7 +299,7 @@
                         @if (!$disableTwoStepConfirmation)
                             @if ($confirmWithText)
                                 <div class="mb-4">
-                                    <h4 class="mb-1 text-[12px] font-semibold">Confirm actions</h4>
+                                    <h4 class="mb-1 text-[12px] font-semibold">{{ __('Confirm actions') }}</h4>
                                     <p class="mb-2 text-[12px] leading-5 text-neutral-500 dark:text-fg-dim">{{ $confirmationLabel }}</p>
                                     <div class="relative mb-2" x-data="{ decodedText: confirmationText }">
                                         <div class="relative">
@@ -321,11 +321,11 @@
                         <div class="mt-4 flex flex-wrap justify-end gap-2 border-t border-neutral-200 pt-4 dark:border-white/[0.08]">
                             @if (!empty($checkboxes))
                                 <x-forms.button @click="step--">
-                                    Back
+                                    {{ __('button.back') }}
                                 </x-forms.button>
                             @else
                                 <x-forms.button @click="modalOpen = false; resetModal()">
-                                    Cancel
+                                    {{ __('common.cancel') }}
                                 </x-forms.button>
                             @endif
                             <x-forms.button
@@ -363,8 +363,8 @@
                     <!-- Step 3: Password confirmation -->
                     @if (!$skipPasswordConfirmation)
                         <div x-show="step === 3 && confirmWithPassword">
-                            <x-callout type="danger" title="Final Confirmation" class="mb-4">
-                                Please enter your password to confirm this destructive action.
+                            <x-callout type="danger" title="{{ __('Final Confirmation') }}" class="mb-4">
+                                {{ __('Please enter your password to confirm this destructive action.') }}
                             </x-callout>
                             <div class="flex flex-col gap-2 mb-4">
                                 @php
@@ -372,7 +372,7 @@
                                 @endphp
                                 <label for="password-confirm-{{ $passwordConfirm }}"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Your Password
+                                    {{ __('Your Password') }}
                                 </label>
                                 {{-- Add the field when this step shows: password managers do not detect a hidden field that becomes visible. --}}
                                 <template x-if="step === 3">
@@ -381,7 +381,7 @@
                                             value="{{ auth()->user()->email }}" style="display: none;">
                                         <input type="password" id="password-confirm-{{ $passwordConfirm }}"
                                             x-model="password" x-init="$nextTick(() => $el.focus())"
-                                            class="w-full input" placeholder="Enter your password"
+                                            class="w-full input" placeholder="{{ __('Enter your password') }}"
                                             autocomplete="current-password">
                                     </form>
                                 </template>
@@ -394,7 +394,7 @@
 
                             <div class="mt-4 flex flex-wrap justify-end gap-2 border-t border-neutral-200 pt-4 dark:border-white/[0.08]">
                                 <x-forms.button @click="step--">
-                                    Back
+                                    {{ __('button.back') }}
                                 </x-forms.button>
                                 <x-forms.button :showLoadingIndicator="false"
                                     x-bind:disabled="!password || submitting" class="w-auto" isError

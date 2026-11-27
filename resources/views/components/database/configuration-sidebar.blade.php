@@ -8,23 +8,23 @@
     ];
 
     $configurationItems = collect([
-        ['label' => 'General', 'route' => 'project.database.configuration', 'icon' => 'settings'],
-        ['label' => 'Environment Variables', 'route' => 'project.database.environment-variables', 'icon' => 'variables'],
-        ['label' => 'Persistent Storage', 'route' => 'project.database.persistent-storage', 'icon' => 'storages'],
-        ['label' => 'Backups', 'route' => 'project.database.backup.index', 'icon' => 'database', 'visible' => $database->isBackupSolutionAvailable()],
-        ['label' => 'Servers', 'route' => 'project.database.servers', 'icon' => 'servers'],
-        ['label' => 'Runtime Logs', 'route' => 'project.database.logs', 'icon' => 'unordered-list', 'navigate' => false],
-        ['label' => 'Terminal', 'route' => 'project.database.command', 'icon' => 'browser-terminal', 'navigate' => false, 'visible' => auth()->user()?->can('canAccessTerminal')],
-        ['label' => 'Files', 'route' => 'project.database.files', 'icon' => 'folder', 'visible' => auth()->user()?->can('canAccessTerminal')],
-        ['label' => 'Webhooks', 'route' => 'project.database.webhooks', 'icon' => 'webhook'],
-        ['label' => 'Healthcheck', 'route' => 'project.database.healthcheck', 'icon' => 'feedback'],
-        ['label' => 'Resource Limits', 'route' => 'project.database.resource-limits', 'icon' => 'cpu'],
-        ['label' => 'Resource Operations', 'route' => 'project.database.resource-operations', 'icon' => 'server-update'],
-        ['label' => 'Metrics', 'route' => 'project.database.metrics', 'icon' => 'graph'],
-        ['label' => 'Security', 'route' => 'project.database.vulnerabilities', 'icon' => 'shield-alert',
+        ['label' => __('menu.general'), 'route' => 'project.database.configuration', 'icon' => 'settings'],
+        ['label' => __('menu.environment_variables'), 'route' => 'project.database.environment-variables', 'icon' => 'variables'],
+        ['label' => __('menu.persistent_storage'), 'route' => 'project.database.persistent-storage', 'icon' => 'storages'],
+        ['label' => __('menu.backups'), 'route' => 'project.database.backup.index', 'icon' => 'database', 'visible' => $database->isBackupSolutionAvailable()],
+        ['label' => __('menu.servers'), 'route' => 'project.database.servers', 'icon' => 'servers'],
+        ['label' => __('Runtime Logs'), 'route' => 'project.database.logs', 'icon' => 'unordered-list', 'navigate' => false],
+        ['label' => __('menu.terminal'), 'route' => 'project.database.command', 'icon' => 'browser-terminal', 'navigate' => false, 'visible' => auth()->user()?->can('canAccessTerminal')],
+        ['label' => __('storage.files'), 'route' => 'project.database.files', 'icon' => 'folder', 'visible' => auth()->user()?->can('canAccessTerminal')],
+        ['label' => __('webhooks.title'), 'route' => 'project.database.webhooks', 'icon' => 'webhook'],
+        ['label' => __('application.healthcheck'), 'route' => 'project.database.healthcheck', 'icon' => 'feedback'],
+        ['label' => __('resource_limits.title'), 'route' => 'project.database.resource-limits', 'icon' => 'cpu'],
+        ['label' => __('resource_ops.title'), 'route' => 'project.database.resource-operations', 'icon' => 'server-update'],
+        ['label' => __('metrics.title'), 'route' => 'project.database.metrics', 'icon' => 'graph'],
+        ['label' => __('Security'), 'route' => 'project.database.vulnerabilities', 'icon' => 'shield-alert',
             'security' => \App\Services\ImageScan\SecurityStatus::stored($database)->status->value],
-        ['label' => 'Tags', 'route' => 'project.database.tags', 'icon' => 'tags'],
-        ['label' => 'Danger Zone', 'route' => 'project.database.danger', 'icon' => 'danger'],
+        ['label' => __('tags.title'), 'route' => 'project.database.tags', 'icon' => 'tags'],
+        ['label' => __('menu.danger_zone'), 'route' => 'project.database.danger', 'icon' => 'danger'],
     ])->filter(fn (array $item): bool => $item['visible'] ?? true)
         ->map(fn (array $item): array => [
             ...$item,
@@ -50,11 +50,11 @@
         ->filter(fn ($items) => $items->isNotEmpty());
 
     $pageSections = array_values(array_filter([
-        ['id' => 'database-details-section', 'label' => 'Database details'],
-        $database->type() === 'standalone-sqlite' ? null : ['id' => 'access-section', 'label' => 'Access'],
-        ['id' => 'container-section', 'label' => 'Container'],
+        ['id' => 'database-details-section', 'label' => __('Database details')],
+        $database->type() === 'standalone-sqlite' ? null : ['id' => 'access-section', 'label' => __('Access')],
+        ['id' => 'container-section', 'label' => __('execute.container_label')],
         $database->type() === 'standalone-postgresql'
-            ? ['id' => 'initialization-scripts-section', 'label' => 'Initialization scripts']
+            ? ['id' => 'initialization-scripts-section', 'label' => __('database.initialization_scripts')]
             : null,
     ]));
 @endphp
@@ -74,7 +74,7 @@
 <aside class="application-settings-navigation in-main-nav min-w-0"
     data-settings-search-items="{{ json_encode(settingsSearchItems($groupedItems, $databaseRouteParameters, ['project.database.configuration' => $pageSections])) }}">
 @endif
-    <nav aria-label="Database settings"
+    <nav aria-label="{{ __('Database settings') }}"
         class="grid grid-cols-1 gap-0.5">
         @foreach ($groupedItems as $groupLabel => $groupItems)
             @unless ($loop->first)

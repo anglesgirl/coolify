@@ -42,8 +42,8 @@
 
     [$summaryLabel, $summaryType] = match (true) {
         $containerType === 'error' => [$containerLabel, 'error'],
-        str($containerStatus)->startsWith('degraded') => ['Degraded', 'warning'],
-        $healthType === 'error' => ['Degraded', 'error'],
+        str($containerStatus)->startsWith('degraded') => [__('Degraded'), 'warning'],
+        $healthType === 'error' => [__('Degraded'), 'error'],
         $containerType === 'warning' => [$containerLabel, 'warning'],
         $monitoringExcluded => ["{$containerLabel} (monitoring disabled)", 'warning'],
         $healthStatus === 'starting' => ["{$containerLabel} (healthcheck starting)", 'warning'],
@@ -99,23 +99,23 @@
                 <a href="{{ $healthcheckUrl }}" {{ wireNavigate() }} role="menuitem"
                     class="flex min-h-8 flex-1 items-center gap-2.5 px-2 py-1.5">
                     <span @class($healthDot)></span>
-                    <span class="flex-1">Healthcheck</span>
+                    <span class="flex-1">{{ __('application.healthcheck') }}</span>
                     <span>{{ $healthLabel }}</span>
                 </a>
                 @if ($healthLabel === 'Not configured')
                     <span class="inline-flex pr-2">
-                        <x-helper label="About unconfigured healthchecks" :helper="$healthHelper" />
+                        <x-helper label="{{ __('About unconfigured healthchecks') }}" :helper="$healthHelper" />
                     </span>
                 @endif
             </div>
         @else
             <div class="listbox-option cursor-default! gap-2.5!">
                 <span @class($healthDot)></span>
-                <span class="flex-1">Healthcheck</span>
+                <span class="flex-1">{{ __('application.healthcheck') }}</span>
                 <span class="inline-flex items-center gap-1.5">
                     {{ $healthLabel }}
                     @if ($healthLabel === 'Not configured')
-                        <x-helper label="About unconfigured healthchecks" :helper="$healthHelper" />
+                        <x-helper label="{{ __('About unconfigured healthchecks') }}" :helper="$healthHelper" />
                     @endif
                 </span>
             </div>

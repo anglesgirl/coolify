@@ -8,23 +8,23 @@
     ];
 
     $configurationItems = collect([
-        ['label' => 'General', 'route' => 'project.service.configuration', 'icon' => 'settings'],
-        ['label' => 'Domains', 'route' => 'project.service.domains', 'icon' => 'globe'],
-        ['label' => 'Environment Variables', 'route' => 'project.service.environment-variables', 'icon' => 'variables', 'hasWarning' => ! $service->isDeployable],
-        ['label' => 'Persistent Storage', 'route' => 'project.service.storages', 'icon' => 'storages'],
-        ['label' => 'Backups', 'route' => 'project.service.volume-backups.index', 'icon' => 'database'],
-        ['label' => 'Runtime Logs', 'route' => 'project.service.logs', 'icon' => 'unordered-list', 'navigate' => false],
-        ['label' => 'Terminal', 'route' => 'project.service.command', 'icon' => 'browser-terminal', 'navigate' => false, 'visible' => auth()->user()?->can('canAccessTerminal')],
-        ['label' => 'Files', 'route' => 'project.service.files', 'icon' => 'folder', 'visible' => auth()->user()?->can('canAccessTerminal')],
-        ['label' => 'Analytics', 'route' => 'project.service.analytics', 'icon' => 'analytics'],
-        ['label' => 'Scheduled Tasks', 'route' => 'project.service.scheduled-tasks.show', 'icon' => 'calendar'],
-        ['label' => 'Webhooks', 'route' => 'project.service.webhooks', 'icon' => 'webhook'],
-        ['label' => 'Resource Operations', 'route' => 'project.service.resource-operations', 'icon' => 'server-update'],
-        ['label' => 'Maintenance Mode', 'route' => 'project.service.maintenance', 'icon' => 'bandage'],
-        ['label' => 'Security', 'route' => 'project.service.vulnerabilities', 'icon' => 'shield-alert',
+        ['label' => __('menu.general'), 'route' => 'project.service.configuration', 'icon' => 'settings'],
+        ['label' => __('application.domains'), 'route' => 'project.service.domains', 'icon' => 'globe'],
+        ['label' => __('menu.environment_variables'), 'route' => 'project.service.environment-variables', 'icon' => 'variables', 'hasWarning' => ! $service->isDeployable],
+        ['label' => __('menu.persistent_storage'), 'route' => 'project.service.storages', 'icon' => 'storages'],
+        ['label' => __('menu.backups'), 'route' => 'project.service.volume-backups.index', 'icon' => 'database'],
+        ['label' => __('Runtime Logs'), 'route' => 'project.service.logs', 'icon' => 'unordered-list', 'navigate' => false],
+        ['label' => __('menu.terminal'), 'route' => 'project.service.command', 'icon' => 'browser-terminal', 'navigate' => false, 'visible' => auth()->user()?->can('canAccessTerminal')],
+        ['label' => __('storage.files'), 'route' => 'project.service.files', 'icon' => 'folder', 'visible' => auth()->user()?->can('canAccessTerminal')],
+        ['label' => __('Analytics'), 'route' => 'project.service.analytics', 'icon' => 'analytics'],
+        ['label' => __('menu.scheduled_tasks'), 'route' => 'project.service.scheduled-tasks.show', 'icon' => 'calendar'],
+        ['label' => __('webhooks.title'), 'route' => 'project.service.webhooks', 'icon' => 'webhook'],
+        ['label' => __('resource_ops.title'), 'route' => 'project.service.resource-operations', 'icon' => 'server-update'],
+        ['label' => __('Maintenance Mode'), 'route' => 'project.service.maintenance', 'icon' => 'bandage'],
+        ['label' => __('Security'), 'route' => 'project.service.vulnerabilities', 'icon' => 'shield-alert',
             'security' => \App\Services\ImageScan\SecurityStatus::stored($service)->status->value],
-        ['label' => 'Tags', 'route' => 'project.service.tags', 'icon' => 'tags'],
-        ['label' => 'Danger Zone', 'route' => 'project.service.danger', 'icon' => 'danger'],
+        ['label' => __('tags.title'), 'route' => 'project.service.tags', 'icon' => 'tags'],
+        ['label' => __('menu.danger_zone'), 'route' => 'project.service.danger', 'icon' => 'danger'],
     ])->filter(fn (array $item): bool => $item['visible'] ?? true)
         ->map(fn (array $item): array => [
             ...$item,
@@ -53,7 +53,7 @@
 
 <x-main-nav-menu back-label="Dashboard" :name="$service->name" :nav-only="$navOnly"
     data-settings-search-items="{{ json_encode(settingsSearchItems($groupedItems, $serviceRouteParameters)) }}">
-    <nav aria-label="Service settings"
+    <nav aria-label="{{ __('Service settings') }}"
         class="grid grid-cols-1 gap-0.5">
         @foreach ($groupedItems as $groupLabel => $groupItems)
             @unless ($loop->first)
@@ -70,7 +70,7 @@
                     @endif
                     <x-image-scan.security-dot :status="$menuItem['security'] ?? null" />
                     @if ($menuItem['hasWarning'] ?? false)
-                        <span class="ml-auto size-2 shrink-0 rounded-full bg-error" title="Required environment variables missing"></span>
+                        <span class="ml-auto size-2 shrink-0 rounded-full bg-error" title="{{ __('Required environment variables missing') }}"></span>
                     @endif
                 </a>
                 @if ($menuItem['active'] && $menuItem['route'] === 'project.service.storages' && $storageSections->isNotEmpty())

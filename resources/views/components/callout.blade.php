@@ -53,7 +53,7 @@
         @if ($dismissible && $onDismiss)
             <button type="button" @click.stop="{{ $onDismiss }}"
                 class="absolute top-1.5 right-1.5 flex size-7 items-center justify-center rounded-md transition-colors hover:bg-black/[0.05] dark:hover:bg-white/[0.06]"
-                aria-label="Dismiss">
+                aria-label="{{ __('Dismiss') }}">
                 <x-reicon name="x" class="size-3.5 {{ $style['iconClass'] }}" />
             </button>
         @endif
