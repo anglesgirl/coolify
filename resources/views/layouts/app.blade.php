@@ -48,13 +48,13 @@
                 <div class="app-topbar-brand flex items-center gap-2 h-full shrink-0 border-r border-black/[0.06] bg-neutral-50 dark:border-white/[0.04] dark:bg-app transition-[width] duration-200"
                     :class="collapsed ? 'w-(--sidebar-collapsed-w) justify-center px-0 border-b' : 'w-56 px-4'">
                     <div class="flex items-baseline gap-1.5 min-w-0">
-                        <a href="/" {{ wireNavigate() }} title="Coolify"
+                        <a href="/" {{ wireNavigate() }} title="{{ __('Coolify') }}"
                             class="flex shrink-0 items-center hover:opacity-80 transition-opacity">
-                            <img x-show="collapsed" x-cloak src="/coolify-logo.svg" alt="Coolify"
+                            <img x-show="collapsed" x-cloak src="/coolify-logo.svg" alt="{{ __('Coolify') }}"
                                 class="size-5" />
-                            <span x-show="!collapsed" class="text-[15px] font-semibold tracking-tight text-black dark:text-white">Coolify</span>
+                            <span x-show="!collapsed" class="text-[15px] font-semibold tracking-tight text-black dark:text-white">{{ __('Coolify') }}</span>
                         </a>
-                        <x-version x-show="!collapsed" title="v{{ config('constants.coolify.version') }}"
+                        <x-version x-show="!collapsed" title="{{ __('v') }}{{ config('constants.coolify.version') }}"
                             class="min-w-0 truncate !text-[10.5px] font-medium text-neutral-400 dark:text-fg-faint !opacity-100 hover:!opacity-100 dark:hover:text-fg hover:text-black" />
                     </div>
                     @if (isInstanceAdmin() && !isCloud())
@@ -96,7 +96,7 @@
                 {{-- Panel: slides in from the right (iOS drawer curve), exits faster --}}
                 <div class="fixed inset-y-0 right-0 flex" :class="!open && 'pointer-events-none'">
                     <div x-show="open" x-cloak x-trap.inert.noscroll="open"
-                        role="dialog" aria-modal="true" aria-label="Navigation menu"
+                        role="dialog" aria-modal="true" aria-label="{{ __('Navigation menu') }}"
                         x-transition:enter="transform transition ease-[cubic-bezier(0.32,0.72,0,1)] duration-300"
                         x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
                         x-transition:leave="transform transition ease-in duration-200"
@@ -105,13 +105,13 @@
                         <div data-mobile-sidebar-brand
                             class="flex h-12 shrink-0 items-center justify-between gap-1.5 border-b border-neutral-200 px-4 dark:border-white/[0.06]">
                             <div class="flex min-w-0 items-baseline gap-1.5">
-                                <a href="/" {{ wireNavigate() }} title="Coolify"
+                                <a href="/" {{ wireNavigate() }} title="{{ __('Coolify') }}"
                                     class="text-[15px] font-semibold tracking-tight text-black transition-opacity hover:opacity-80 dark:text-white">
-                                    Coolify
+                                    {{ __('Coolify') }}
                                 </a>
                                 <x-version class="!text-[10.5px] font-medium text-neutral-400 dark:text-fg-faint !opacity-100 hover:!opacity-100 hover:text-black dark:hover:text-fg" />
                             </div>
-                            <button type="button" x-on:click="open = false" aria-label="Close menu"
+                            <button type="button" x-on:click="open = false" aria-label="{{ __('Close menu') }}"
                                 class="-mr-1.5 flex size-8 shrink-0 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-black active:scale-95 dark:text-fg-dim dark:hover:bg-white/[0.06] dark:hover:text-fg">
                                 <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke-width="1.75"
                                     stroke="currentColor" aria-hidden="true">
@@ -140,7 +140,7 @@
                 <div class="flex min-w-0 flex-1 items-center gap-2.5">
                     <a href="/"
                         class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-neutral-100 transition-opacity hover:opacity-80 dark:bg-white/[0.06]">
-                        <img src="/coolify-logo.svg" alt="Coolify" class="w-[18px] h-[18px]" />
+                        <img src="/coolify-logo.svg" alt="{{ __('Coolify') }}" class="w-[18px] h-[18px]" />
                     </a>
                     <div class="min-w-0" x-data="{ collapsed: false }">
                         <livewire:switch-team />
@@ -160,7 +160,7 @@
                     <x-top-user-menu />
                     <button type="button" x-on:click="open = !open"
                         class="-mr-1 flex size-9 items-center justify-center rounded-md text-neutral-500 transition-transform duration-100 ease-out hover:bg-neutral-100 hover:text-black active:scale-90 dark:text-fg-dim dark:hover:bg-white/[0.06] dark:hover:text-fg">
-                        <span class="sr-only">Open sidebar</span>
+                        <span class="sr-only">{{ __('Open sidebar') }}</span>
                         <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <rect x="3" y="5" width="18" height="14" rx="4" stroke="currentColor" stroke-width="1.6" />
                             <path d="M16 9v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />

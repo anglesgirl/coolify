@@ -1,6 +1,6 @@
 <div class="application-settings-form w-full">
     <x-slot:title>
-        Tags | Coolify
+        {{ __('Tags | Coolify') }}
     </x-slot>
 
     <header @class([
@@ -8,25 +8,25 @@
         'lg:hidden' => isset($tag),
     ])>
         <div class="min-w-0">
-            <h1 class="truncate text-[24px]! leading-7! font-semibold! tracking-tight!">Tags</h1>
+            <h1 class="truncate text-[24px]! leading-7! font-semibold! tracking-tight!">{{ __('tags.title') }}</h1>
             <p class="mt-1 text-[13px] text-neutral-500 dark:text-fg-dim">
                 @if ($tags->isEmpty())
-                    Group applications and services for bulk deploys
+                    {{ __('Group applications and services for bulk deploys') }}
                 @elseif (isset($tag))
-                    Manage webhook deploys and resources for this tag
+                    {{ __('Manage webhook deploys and resources for this tag') }}
                 @else
-                    {{ $tags->count() }} {{ Str::plural('tag', $tags->count()) }} for bulk deploys and grouping
+                    {{ __(':count tags for bulk deploys and grouping', ['count' => $tags->count()]) }}
                 @endif
             </p>
         </div>
         @unless (isset($tag))
             <div class="flex shrink-0 items-center gap-2">
                 @can('create', App\Models\Tag::class)
-                    <x-modal-input title="New tag">
+                    <x-modal-input title="{{ __('New tag') }}">
                         <x-slot:content>
                             <button type="button" class="button button-highlighted whitespace-nowrap">
                                 <x-reicon name="plus" class="size-3.5" />
-                                New tag
+                                {{ __('New tag') }}
                             </button>
                         </x-slot:content>
                         @include('livewire.tags.partials.new-tag-form')
@@ -37,8 +37,8 @@
     </header>
 
     @if ($tags->isEmpty())
-        <x-empty title="No tags yet"
-            description="Create a tag, then connect it to resources to group related deployments."
+        <x-empty title="{{ __('No tags yet') }}"
+            description="{{ __('Create a tag, then connect it to resources to group related deployments.') }}"
             icon-name="tags" />
     @elseif (! isset($tag))
         <div x-data="tagsIndex()" class="w-full">
@@ -47,11 +47,11 @@
                     <x-reicon name="search"
                         class="pointer-events-none absolute top-1/2 left-2.5 z-10 size-3.5 -translate-y-1/2 text-neutral-400 dark:text-fg-faint" />
                     <input x-model.debounce.150ms="search" x-on:input="page = 1" type="search"
-                        placeholder="Search tags"
+                        placeholder="{{ __('Search tags') }}"
                         class="h-8! w-full rounded-lg! border-neutral-200! bg-white! py-0! pr-8! pl-8! text-[12px]! shadow-none! placeholder:text-neutral-400 focus:border-accent! focus:ring-0! dark:border-white/[0.08]! dark:bg-white/[0.035]! dark:text-fg! dark:placeholder:text-fg-faint">
                     <button x-cloak x-show="search" x-on:click="search = ''; page = 1" type="button"
                         class="absolute top-1/2 right-2 flex size-5 -translate-y-1/2 items-center justify-center rounded text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-black dark:text-fg-faint dark:hover:bg-white/[0.07] dark:hover:text-fg"
-                        aria-label="Clear search">
+                        aria-label="{{ __('Clear search') }}">
                         <span class="text-sm leading-none">×</span>
                     </button>
                 </div>
@@ -67,7 +67,7 @@
                                         stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
                                         stroke-linejoin="round" />
                                 </svg>
-                                Sort
+                                {{ __('Sort') }}
                                 </button>
                             </x-slot:trigger>
                                 <template x-for="option in sortOptions" :key="option.value">
@@ -96,7 +96,7 @@
                         <article
                             class="group relative flex min-h-28 flex-col rounded-xl border border-neutral-200 bg-white p-3 shadow-sm transition-all hover:-translate-y-px hover:border-neutral-300 hover:shadow-md dark:border-white/[0.08] dark:bg-white/[0.05] dark:hover:border-white/[0.14]">
                             <a :href="tag.href" {{ wireNavigate() }} class="absolute inset-0 rounded-xl"
-                                :aria-label="`Open ${tag.name}`"></a>
+                                :aria-label="`{{ __('Open') }} ${tag.name}`"></a>
 
                             <div class="flex items-start gap-3">
                                 <div
@@ -107,14 +107,14 @@
                                     <h2 class="truncate text-[13px]! leading-4! font-semibold! text-black dark:text-fg"
                                         x-text="tag.name"></h2>
                                     <p class="mt-0.5 truncate text-[11px] text-neutral-500 dark:text-fg-faint">
-                                        Team tag
+                                        {{ __('Team tag') }}
                                     </p>
                                 </div>
                             </div>
 
                             <div class="mt-auto flex items-center pt-4">
                                 <span class="text-[11px] text-neutral-500 dark:text-fg-dim"
-                                    x-text="`${tag.resourceCount} ${tag.resourceCount === 1 ? 'resource' : 'resources'}`"></span>
+                                    x-text="`${tag.resourceCount} ${tag.resourceCount === 1 ? '{{ __('resource') }}' : '{{ __('resources') }}'}`"></span>
                             </div>
                         </article>
                     </template>
@@ -128,18 +128,18 @@
                 class="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-white/[0.08] dark:bg-white/[0.05]">
                 <div
                     class="tags-table-grid border-b border-neutral-200 bg-neutral-50 px-4 py-2.5 text-[11px] font-medium text-neutral-500 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-fg-faint">
-                    <x-table.sort-header label="Tag" asc="name-asc" desc="name-desc" then="page = 1" />
-                    <x-table.sort-header label="Resources" asc="resources-asc" desc="resources-desc" first="desc" then="page = 1" />
-                    <x-table.sort-header label="Applications" asc="applications-asc" desc="applications-desc" first="desc"
+                    <x-table.sort-header label="{{ __('Tag') }}" asc="name-asc" desc="name-desc" then="page = 1" />
+                    <x-table.sort-header label="{{ __('Resources') }}" asc="resources-asc" desc="resources-desc" first="desc" then="page = 1" />
+                    <x-table.sort-header label="{{ __('project.applications') }}" asc="applications-asc" desc="applications-desc" first="desc"
                         then="page = 1" />
-                    <x-table.sort-header label="Services" asc="services-asc" desc="services-desc" first="desc" then="page = 1"
+                    <x-table.sort-header label="{{ __('service.services') }}" asc="services-asc" desc="services-desc" first="desc" then="page = 1"
                         class="tag-services" />
                 </div>
 
                 <template x-for="tag in paginatedTags" :key="tag.id">
                     <a :href="tag.href" {{ wireNavigate() }}
                         class="tags-table-grid group min-h-14 items-center border-b border-neutral-200 px-4 py-2.5 transition-colors last:border-b-0 hover:bg-neutral-50 hover:no-underline dark:border-white/[0.07] dark:hover:bg-white/[0.025]"
-                        :aria-label="`Open ${tag.name}`">
+                        :aria-label="`{{ __('Open') }} ${tag.name}`">
                         <div class="flex min-w-0 items-center gap-3">
                             <div
                                 class="flex size-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-white/[0.08] dark:bg-white/[0.035] dark:text-fg-dim">
@@ -163,9 +163,9 @@
             <div x-show="filteredTags.length === 0"
                 class="flex min-h-52 flex-col items-center justify-center rounded-xl border border-neutral-200 bg-white px-6 text-center dark:border-white/[0.08] dark:bg-white/[0.05]">
                 <x-reicon name="search" class="mb-3 size-6 text-neutral-300 dark:text-fg-faint" />
-                <p class="text-[13px] font-medium">No matching tags</p>
+                <p class="text-[13px] font-medium">{{ __('No matching tags') }}</p>
                 <p class="mt-1 text-[12px] text-neutral-500 dark:text-fg-dim">
-                    Try a different search.
+                    {{ __('Try a different search.') }}
                 </p>
             </div>
         </div>
@@ -182,15 +182,15 @@
                     tags: @js($tagsJs),
                     sortOptions: [{
                             value: 'name-asc',
-                            label: 'Name A–Z'
+                            label: '{{ __('Name A–Z') }}'
                         },
                         {
                             value: 'name-desc',
-                            label: 'Name Z–A'
+                            label: '{{ __('Name Z–A') }}'
                         },
                         {
                             value: 'resources-desc',
-                            label: 'Most resources'
+                            label: '{{ __('Most resources') }}'
                         },
                     ],
                     get filteredTags() {
@@ -256,7 +256,7 @@
             <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div
                     class="rounded-xl border border-neutral-200 bg-white p-3 dark:border-white/[0.08] dark:bg-white/[0.05]">
-                    <p class="text-[11px] font-medium text-neutral-500 dark:text-fg-faint">Resources</p>
+                    <p class="text-[11px] font-medium text-neutral-500 dark:text-fg-faint">{{ __('Resources') }}</p>
                     <p class="mt-1 text-[20px] font-semibold tracking-tight text-black dark:text-fg">
                         {{ $resourceCount }}
                     </p>
@@ -266,36 +266,36 @@
                 </div>
                 <div
                     class="rounded-xl border border-neutral-200 bg-white p-3 dark:border-white/[0.08] dark:bg-white/[0.05]">
-                    <p class="text-[11px] font-medium text-neutral-500 dark:text-fg-faint">Applications</p>
+                    <p class="text-[11px] font-medium text-neutral-500 dark:text-fg-faint">{{ __('project.applications') }}</p>
                     <p class="mt-1 text-[20px] font-semibold tracking-tight text-black dark:text-fg">
                         {{ $applications?->count() ?? 0 }}
                     </p>
                     <p class="mt-0.5 text-[11px] text-neutral-500 dark:text-fg-dim">
-                        Using this tag
+                        {{ __('Using this tag') }}
                     </p>
                 </div>
                 <div
                     class="rounded-xl border border-neutral-200 bg-white p-3 dark:border-white/[0.08] dark:bg-white/[0.05]">
-                    <p class="text-[11px] font-medium text-neutral-500 dark:text-fg-faint">Active deployments</p>
+                    <p class="text-[11px] font-medium text-neutral-500 dark:text-fg-faint">{{ __('Active deployments') }}</p>
                     <p class="mt-1 text-[20px] font-semibold tracking-tight text-black dark:text-fg">
                         {{ collect($deploymentsPerTagPerServer ?? [])->flatten(1)->count() }}
                     </p>
                     <p class="mt-0.5 text-[11px] text-neutral-500 dark:text-fg-dim">
-                        Queued or running
+                        {{ __('Queued or running') }}
                     </p>
                 </div>
             </div>
 
             <x-application.settings-section :title="$tag->name"
-                description="Use this webhook to deploy every resource with this tag.">
+                description="{{ __('Use this webhook to deploy every resource with this tag.') }}">
                 <x-slot:actions>
                     {{-- Two ways to connect: a list in a modal, or the canvas (wide screens only). --}}
-                    <x-modal-input title="Connect to resources" subtitle="Add this tag to resources, or remove it."
+                    <x-modal-input title="{{ __('Connect to resources') }}" subtitle="{{ __('Add this tag to resources, or remove it.') }}"
                         wireOpen="connectResourcesOpen" :wireIgnore="false" :contentClicks="false">
                         <x-slot:content>
                             <button type="button" class="button whitespace-nowrap" wire:click="openConnectResources">
                                 <x-reicon name="link" class="size-3.5" />
-                                Connect to resources
+                                {{ __('Connect to resources') }}
                             </button>
                         </x-slot:content>
                         @forelse ($connectableResources as $context => $resources)
@@ -318,46 +318,46 @@
                             </div>
                         @empty
                             <div wire:loading.remove wire:target="openConnectResources">
-                                <x-empty title="No resources yet" description="Create a resource in a project first." icon-name="tags" size="sm" />
+                                <x-empty title="{{ __('No resources yet') }}" description="{{ __('Create a resource in a project first.') }}" icon-name="tags" size="sm" />
                             </div>
                         @endforelse
                     </x-modal-input>
                     <a href="{{ app(App\Services\TagCanvas::class)->connectLink($tag) }}"
                         class="button hidden whitespace-nowrap md:inline-flex"
-                        title="Add this tag to resources on the canvas, and see which resources have it">
+                        title="{{ __('Add this tag to resources on the canvas, and see which resources have it') }}">
                         <x-reicon name="deploy-canvas" class="size-3.5" />
-                        Connect in canvas
+                        {{ __('Connect in canvas') }}
                     </a>
                     @can('delete', $tag)
-                        <x-modal-confirmation title="Delete this tag?" isErrorButton buttonTitle="Delete"
+                        <x-modal-confirmation title="{{ __('Delete this tag?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
                             submitAction="deleteTag" :actions="[
-                                'The tag will be removed from every resource.',
-                                'The deploy webhook of this tag will stop working.',
+                                __('The tag will be removed from every resource.'),
+                                __('The deploy webhook of this tag will stop working.'),
                             ]"
                             confirmationText="{{ $tag->name }}"
-                            confirmationLabel="Please confirm the execution of the actions by entering the Tag Name below"
-                            shortConfirmationLabel="Tag Name" :confirmWithPassword="false"
-                            step2ButtonText="Delete tag" />
+                            confirmationLabel="{{ __('Please confirm the execution of the actions by entering the Tag Name below') }}"
+                            shortConfirmationLabel="{{ __('Tag Name') }}" :confirmWithPassword="false"
+                            step2ButtonText="{{ __('Delete tag') }}" />
                     @endcan
-                    <x-modal-confirmation title="Redeploy all resources with this tag?"
-                        buttonTitle="Redeploy all" submitAction="redeployAll" :actions="[
-                            'All resources with this tag will be redeployed.',
-                            'During redeploy resources will be temporarily unavailable.',
+                    <x-modal-confirmation title="{{ __('Redeploy all resources with this tag?') }}"
+                        buttonTitle="{{ __('Redeploy all') }}" submitAction="redeployAll" :actions="[
+                            __('All resources with this tag will be redeployed.'),
+                            __('During redeploy resources will be temporarily unavailable.'),
                         ]"
                         confirmationText="{{ $tag->name }}"
-                        confirmationLabel="Please confirm the execution of the actions by entering the Tag Name below"
-                        shortConfirmationLabel="Tag Name" :confirmWithPassword="false"
-                        step2ButtonText="Redeploy All" />
+                        confirmationLabel="{{ __('Please confirm the execution of the actions by entering the Tag Name below') }}"
+                        shortConfirmationLabel="{{ __('Tag Name') }}" :confirmWithPassword="false"
+                        step2ButtonText="{{ __('Redeploy All') }}" />
                 </x-slot:actions>
 
-                <x-forms.input readonly label="Deploy webhook URL" id="webhook" />
+                <x-forms.input readonly label="{{ __('Deploy webhook URL') }}" id="webhook" />
             </x-application.settings-section>
 
-            <x-application.settings-section title="Resources"
-                description="{{ $resourceCount }} {{ Str::plural('resource', $resourceCount) }} use this tag.">
+            <x-application.settings-section title="{{ __('Resources') }}"
+                description="{{ $resourceCount }} {{ Str::plural(__('resource'), $resourceCount) }} {{ __('use this tag.') }}">
                 @if ($resourceCount === 0)
-                    <x-empty title="No resources use this tag"
-                        description="Connect this tag to resources to see them here."
+                    <x-empty title="{{ __('No resources use this tag') }}"
+                        description="{{ __('Connect this tag to resources to see them here.') }}"
                         icon-name="tags" size="sm" />
                 @else
                     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -380,7 +380,7 @@
                                     </div>
                                 </div>
                                 <p class="mt-auto truncate pt-3 text-[11px] text-neutral-500 dark:text-fg-dim">
-                                    {{ $application->description ?: 'Application' }}
+                                    {{ $application->description ?: __('project.application') }}
                                 </p>
                             </a>
                         @endforeach
@@ -404,7 +404,7 @@
                                     </div>
                                 </div>
                                 <p class="mt-auto truncate pt-3 text-[11px] text-neutral-500 dark:text-fg-dim">
-                                    {{ $service->description ?: 'Service' }}
+                                    {{ $service->description ?: __('common.service') }}
                                 </p>
                             </a>
                         @endforeach
@@ -412,8 +412,8 @@
                 @endif
             </x-application.settings-section>
 
-            <x-application.settings-section title="Active deployments"
-                description="Queued and running deployments for applications using this tag." flush>
+            <x-application.settings-section title="{{ __('Active deployments') }}"
+                description="{{ __('Queued and running deployments for applications using this tag.') }}" flush>
                 <x-slot:actions>
                     @if (count($deploymentsPerTagPerServer ?? []) > 0)
                         <x-loading />
@@ -424,18 +424,18 @@
                     wire:target="setDeploymentSort">
                     @if (count($deploymentsPerTagPerServer ?? []) === 0)
                         <div class="p-3">
-                            <x-empty title="No active deployments"
-                                description="Deployments will appear here while they are queued or running."
+                            <x-empty title="{{ __('No active deployments') }}"
+                                description="{{ __('Deployments will appear here while they are queued or running.') }}"
                                 icon-name="play-circle" size="sm" />
                         </div>
                     @else
                         <div
                             class="grid min-w-[620px] grid-cols-[minmax(0,1fr)_minmax(10rem,.55fr)_7rem] border-b border-neutral-200 bg-neutral-50 px-4 py-2.5 text-[11px] font-medium text-neutral-500 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-fg-faint">
-                            <x-table.sort-header label="Resource" asc="resource-asc" desc="resource-desc"
+                            <x-table.sort-header label="{{ __('Resource') }}" asc="resource-asc" desc="resource-desc"
                                 action="setDeploymentSort" :current="$deploymentSort" />
-                            <x-table.sort-header label="Server" asc="server-asc" desc="server-desc"
+                            <x-table.sort-header label="{{ __('Server') }}" asc="server-asc" desc="server-desc"
                                 action="setDeploymentSort" :current="$deploymentSort" />
-                            <x-table.sort-header label="Status" asc="status-asc" desc="status-desc"
+                            <x-table.sort-header label="{{ __('Status') }}" asc="status-asc" desc="status-desc"
                                 action="setDeploymentSort" :current="$deploymentSort" />
                         </div>
 

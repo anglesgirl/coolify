@@ -1,6 +1,6 @@
 <button type="button" wire:click="toggle" wire:loading.attr="disabled"
-    title="{{ $starred ? 'Remove from the dashboard' : 'Add to the dashboard' }}"
-    aria-label="{{ $starred ? 'Unstar' : 'Star' }}" aria-pressed="{{ $starred ? 'true' : 'false' }}"
+    title="{{ $starred ? __('Remove from the dashboard') : __('Add to the dashboard') }}"
+    aria-label="{{ $starred ? __('Unstar') : __('Star') }}" aria-pressed="{{ $starred ? 'true' : 'false' }}"
     @class([
         'flex size-7 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-neutral-100 dark:hover:bg-white/[0.05]',
         'text-warning' => $starred,

@@ -23,15 +23,15 @@ $serverListboxOptions = array_merge(
 ?>
 <div class="flex w-full min-w-0 flex-col gap-6">
     <x-slot:title>
-        Metrics | Coolify
+        {{ __('Metrics | Coolify') }}
     </x-slot>
 
     {{-- Header --}}
     <div class="flex flex-col gap-4">
         <div class="min-w-0">
-            <h1 class="min-w-0 text-[24px]! leading-7! font-semibold! tracking-tight!">Metrics</h1>
+            <h1 class="min-w-0 text-[24px]! leading-7! font-semibold! tracking-tight!">{{ __('metrics.title') }}</h1>
             <p class="mt-1 text-[13px] text-neutral-500 dark:text-fg-dim">
-                Resource usage across every server, reported by Sentinel.
+                {{ __('Resource usage across every server, reported by Sentinel.') }}
             </p>
         </div>
 
@@ -39,11 +39,11 @@ $serverListboxOptions = array_merge(
             <div class="flex flex-wrap items-center gap-2">
                 <div class="relative w-full transition-opacity sm:w-52"
                     wire:loading.class="pointer-events-none opacity-60" wire:target="serverUuid">
-                    <x-forms.listbox id="serverUuid" live :options="$serverListboxOptions" placeholder="All servers"
+                    <x-forms.listbox id="serverUuid" live :options="$serverListboxOptions" placeholder="{{ __('All servers') }}"
                         canGate="view" :canResource="$servers->first()" />
                     <div class="absolute inset-0 hidden items-center justify-center rounded-lg bg-white/70 dark:bg-base/70"
                         wire:loading.flex wire:target="serverUuid">
-                        <x-loading compact aria-label="Loading metrics" />
+                        <x-loading compact aria-label="{{ __('Loading metrics') }}" />
                     </div>
                 </div>
 
@@ -53,10 +53,10 @@ $serverListboxOptions = array_merge(
                         <x-forms.listbox id="range" onChange="setRange" :onChangeArgs="[]" :options="$rangeListboxOptions" />
                         <div class="absolute inset-0 hidden items-center justify-center rounded-lg bg-white/70 dark:bg-base/70"
                             wire:loading.flex wire:target="setRange">
-                            <x-loading compact aria-label="Loading metrics" />
+                            <x-loading compact aria-label="{{ __('Loading metrics') }}" />
                         </div>
                     </div>
-                    <x-live-toggle :active="$live" storageKey="metrics-live" :restoreLive="$range === '24h'" title="Turn live refresh on or off (updates every 60 seconds)" />
+                    <x-live-toggle :active="$live" storageKey="metrics-live" :restoreLive="$range === '24h'" title="{{ __('Turn live refresh on or off (updates every 60 seconds)') }}" />
                 </div>
             </div>
         @endif
@@ -67,31 +67,31 @@ $serverListboxOptions = array_merge(
     @endif
 
     @if ($servers->isEmpty())
-        <x-empty size="sm" title="No server metrics yet"
-            description="{{ empty($enableableServers) ? 'Enable metrics on a server to see fleet resource usage here.' : 'Enable metrics to collect CPU, memory, disk, and network history. This starts Sentinel; your applications keep running.' }}"
+        <x-empty size="sm" title="{{ __('No server metrics yet') }}"
+            description="{{ empty($enableableServers) ? __('Enable metrics on a server to see fleet resource usage here.') : __('Enable metrics to collect CPU, memory, disk, and network history. This starts Sentinel; your applications keep running.') }}"
             icon-name="graph">
             <x-slot:contents>
                 <div class="flex flex-wrap items-center justify-center gap-3">
                     @if (! empty($enableableServers))
                         <x-forms.button isHighlighted wire:click="enableMetrics">
                             {{ count($enableableServers) === 1
-                                ? 'Enable metrics on '.\Illuminate\Support\Str::limit($enableableServers[0], 24)
-                                : 'Enable metrics on '.count($enableableServers).' servers' }}
+                                ? __('Enable metrics on').\Illuminate\Support\Str::limit($enableableServers[0], 24)
+                                : __('Enable metrics on :count servers', ['count' => count($enableableServers)]) }}
                         </x-forms.button>
                     @endif
                     <a class="button" href="{{ route('server.index') }}" {{ wireNavigate() }}>
-                        View servers
+                        {{ __('View servers') }}
                     </a>
                 </div>
             </x-slot:contents>
         </x-empty>
     @else
         {{-- Overview KPIs --}}
-        <x-application.settings-section id="metrics-overview-section" title="Overview"
-            helper="{{ $scoped ? 'Current resource usage for the selected server.' : 'Current resource usage across the selected servers.' }}">
+        <x-application.settings-section id="metrics-overview-section" title="{{ __('Overview') }}"
+            helper="{{ $scoped ? __('Current resource usage for the selected server.') : __('Current resource usage across the selected servers.') }}">
             <div class="grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-neutral-200 sm:grid-cols-3 lg:grid-cols-6 dark:bg-white/[0.07]">
                 <div class="flex flex-col bg-[var(--coollabs-base)] px-4 py-3">
-                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">Servers online</span>
+                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">{{ __('Servers online') }}</span>
                     <span class="mt-1 text-xl font-semibold tabular-nums text-black dark:text-fg">{{ $kpis['serversOnline'] ?? 0 }}<span class="text-neutral-400 dark:text-fg-faint">/{{ $kpis['serversTotal'] ?? 0 }}</span></span>
                     @php
                         $sTotal = max(1, (int) ($kpis['serversTotal'] ?? 0));
@@ -111,19 +111,19 @@ $serverListboxOptions = array_merge(
                                 @if ($sOffline > 0)<div class="bg-red-500 dark:bg-red-400" style="width: {{ $sOffline / $sTotal * 100 }}%"></div>@endif
                             </div>
                             <div class="flex flex-wrap items-center gap-x-2 text-[10px] text-neutral-500 dark:text-fg-dim">
-                                <span>{{ $sHealthy }} healthy</span>
-                                @if ($sAttention > 0)<span class="text-orange-500 dark:text-warning">{{ $sAttention }} attention</span>@endif
-                                @if ($sNoMetrics > 0)<span title="Coolify can reach these servers, but Sentinel did not return current metrics.">{{ $sNoMetrics }} no metrics</span>@endif
-                                @if ($sOffline > 0)<span class="text-red-500 dark:text-red-400">{{ $sOffline }} offline</span>@endif
+                                <span>{{ $sHealthy }} {{ __('healthy') }}</span>
+                                @if ($sAttention > 0)<span class="text-orange-500 dark:text-warning">{{ $sAttention }} {{ __('attention') }}</span>@endif
+                                @if ($sNoMetrics > 0)<span title="{{ __('Coolify can reach these servers, but Sentinel did not return current metrics.') }}">{{ $sNoMetrics }} {{ __('no metrics') }}</span>@endif
+                                @if ($sOffline > 0)<span class="text-red-500 dark:text-red-400">{{ $sOffline }} {{ __('offline') }}</span>@endif
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col bg-[var(--coollabs-base)] px-4 py-3">
                     <span class="flex items-center text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">
-                        {{ $scoped ? 'CPU' : 'Fleet CPU' }}
+                        {{ $scoped ? __('CPU') : __('Fleet CPU') }}
                         @if ($kpis['cpuApproximate'] ?? false)
-                            <span class="ml-1.5 cursor-help text-neutral-400 dark:text-fg-faint" title="Averaged across servers; not core-weighted">~</span>
+                            <span class="ml-1.5 cursor-help text-neutral-400 dark:text-fg-faint" title="{{ __('Averaged across servers; not core-weighted') }}">~</span>
                         @endif
                     </span>
                     <span class="mt-1 text-xl font-semibold tabular-nums text-black dark:text-fg">{{ round($kpis['cpuAvg'] ?? 0) }}%</span>
@@ -141,7 +141,7 @@ $serverListboxOptions = array_merge(
                     </div>
                 </div>
                 <div class="flex flex-col bg-[var(--coollabs-base)] px-4 py-3">
-                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">{{ $scoped ? 'Memory' : 'Fleet memory' }}</span>
+                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">{{ $scoped ? __('Memory') : __('Fleet memory') }}</span>
                     <span class="mt-1 text-xl font-semibold tabular-nums text-black dark:text-fg">{{ round($kpis['memPercent'] ?? 0) }}%</span>
                     <div class="mt-auto pt-3">
                         @include('livewire.traffic._sparkline', [
@@ -157,7 +157,7 @@ $serverListboxOptions = array_merge(
                     </div>
                 </div>
                 <div class="flex flex-col bg-[var(--coollabs-base)] px-4 py-3">
-                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">{{ $scoped ? 'Disk' : 'Fleet disk' }}</span>
+                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">{{ $scoped ? __('Disk') : __('Fleet disk') }}</span>
                     <span class="mt-1 text-xl font-semibold tabular-nums text-black dark:text-fg">{{ round($kpis['diskPercent'] ?? 0) }}%</span>
                     <div class="mt-auto pt-3">
                         @include('livewire.traffic._sparkline', [
@@ -173,8 +173,8 @@ $serverListboxOptions = array_merge(
                     </div>
                 </div>
                 <div class="flex flex-col bg-[var(--coollabs-base)] px-4 py-3">
-                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">{{ $scoped ? 'Network' : 'Fleet network' }}</span>
-                    <span class="mt-1 text-xl font-semibold tabular-nums text-black dark:text-fg">{{ formatBytes(($kpis['netRx'] ?? 0) + ($kpis['netTx'] ?? 0)) }}/s</span>
+                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">{{ $scoped ? __('database.network') : __('Fleet network') }}</span>
+                    <span class="mt-1 text-xl font-semibold tabular-nums text-black dark:text-fg">{{ formatBytes(($kpis['netRx'] ?? 0) + ($kpis['netTx'] ?? 0)) }}{{ __('/s') }}</span>
                     <div class="mt-auto pt-3">
                         @include('livewire.traffic._sparkline', [
                             'id' => $chartId.'-spark-network',
@@ -189,7 +189,7 @@ $serverListboxOptions = array_merge(
                     </div>
                 </div>
                 <div class="col-span-2 flex flex-col bg-[var(--coollabs-base)] px-4 py-3 sm:col-span-1">
-                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">Containers</span>
+                    <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">{{ __('Containers') }}</span>
                     <span class="mt-1 text-xl font-semibold tabular-nums text-black dark:text-fg">{{ compactNumber($kpis['containers'] ?? 0) }}</span>
                     <div class="mt-auto pt-3">
                         <div class="flex h-9 flex-col justify-center">
@@ -204,7 +204,7 @@ $serverListboxOptions = array_merge(
                                     };
                                 @endphp
                                 <span class="truncate text-[13px] font-medium text-black dark:text-fg">{{ $hottest['name'] }}</span>
-                                <span class="text-[10px] text-neutral-500 dark:text-fg-dim">hottest, {{ $hottestValue }}</span>
+                                <span class="text-[10px] text-neutral-500 dark:text-fg-dim">{{ __('hottest,') }} {{ $hottestValue }}</span>
                             @endif
                         </div>
                     </div>
@@ -229,8 +229,8 @@ $serverListboxOptions = array_merge(
         </div>
 
         {{-- Servers table --}}
-        <x-application.settings-section id="metrics-servers-section" title="Servers" flush
-            helper="Per-server resource pressure. Select a column header to sort.">
+        <x-application.settings-section id="metrics-servers-section" title="{{ __('menu.servers') }}" flush
+            helper="{{ __('Per-server resource pressure. Select a column header to sort.') }}">
             <div class="data-table" x-data="trafficTable({ per: Number.MAX_SAFE_INTEGER, key: 'cpu' })">
                 <div class="data-table-header fleet-servers-table-grid border-b-0!">
                     @include('livewire.traffic._sort-header', ['column' => 'name', 'label' => 'Server', 'text' => true, 'class' => 'justify-self-start'])
@@ -261,9 +261,9 @@ $serverListboxOptions = array_merge(
                                 <a href="{{ route('server.metrics', ['server_uuid' => $row['uuid']]) }}"
                                     class="min-w-0 truncate text-[13px] font-medium text-black hover:underline dark:text-fg" {{ wireNavigate() }}>{{ $row['name'] }}</a>
                                 @if (! $row['online'])
-                                    <span class="table-badge table-badge-warning shrink-0">Offline</span>
+                                    <span class="table-badge table-badge-warning shrink-0">{{ __('Offline') }}</span>
                                 @elseif (! $row['reporting'])
-                                    <span class="table-badge shrink-0" title="Coolify can reach this server, but Sentinel did not return current metrics.">No metrics</span>
+                                    <span class="table-badge shrink-0" title="{{ __('Coolify can reach this server, but Sentinel did not return current metrics.') }}">{{ __('No metrics') }}</span>
                                 @endif
                             </div>
                             <div>@include('livewire.fleet._usage-cell', ['percent' => $row['cpu'], 'kind' => 'cpu'])</div>
@@ -279,12 +279,12 @@ $serverListboxOptions = array_merge(
         </x-application.settings-section>
 
         {{-- Hottest containers --}}
-        <x-application.settings-section id="metrics-containers-section" title="Hottest containers" flush
-            helper="{{ $scoped ? 'Busiest containers on this server, sortable by resource usage.' : 'Busiest containers across the fleet, sortable by resource usage.' }}">
+        <x-application.settings-section id="metrics-containers-section" title="{{ __('Hottest containers') }}" flush
+            helper="{{ $scoped ? __('Busiest containers on this server, sortable by resource usage.') : __('Busiest containers across the fleet, sortable by resource usage.') }}">
             @if (empty($topContainers))
                 <div class="p-4">
-                    <x-empty size="sm" title="No container metrics"
-                        description="Container metrics need a Sentinel build with the bulk endpoints." />
+                    <x-empty size="sm" title="{{ __('No container metrics') }}"
+                        description="{{ __('Container metrics need a Sentinel build with the bulk endpoints.') }}" />
                 </div>
             @else
                 @php
@@ -335,7 +335,7 @@ $serverListboxOptions = array_merge(
                                     @endphp
                                     <div class="flex items-center justify-end gap-2.5 self-center">
                                         <div class="hidden h-1.5 w-10 shrink-0 overflow-hidden rounded-full bg-neutral-100 xl:block dark:bg-white/[0.06]"
-                                            title="{{ $pct }}% of the busiest">
+                                            title="{{ $pct }}{{ __('% of the busiest') }}">
                                             <div class="h-full rounded-full bg-[var(--chart-status-3xx)] transition-[width] duration-700 ease-out" style="width: {{ $pct }}%"></div>
                                         </div>
                                         <span class="whitespace-nowrap text-right text-[13px] tabular-nums text-black dark:text-fg">{{ $display }}</span>

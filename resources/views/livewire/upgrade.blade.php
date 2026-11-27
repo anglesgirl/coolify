@@ -1,4 +1,4 @@
-<div @if ($isUpgradeAvailable) title="New version available" @else title="No upgrade available" @endif
+<div @if ($isUpgradeAvailable) title="{{ __('New version available') }}" @else title="{{ __('No upgrade available') }}" @endif
     x-init="$wire.checkUpdate" x-data="upgradeModal({
         currentVersion: @js($currentVersion),
         latestVersion: @js($latestVersion),
@@ -8,21 +8,21 @@
         <div :class="{ 'z-40': modalOpen }" class="relative w-auto h-auto">
             @if ($fullButton)
                 <x-forms.button type="button" @click="modalOpen=true" x-show="!showProgress" x-cloak isHighlighted>
-                    Upgrade now
+                    {{ __('Upgrade now') }}
                 </x-forms.button>
                 <x-forms.button type="button" @click="modalOpen=true" x-show="showProgress" x-cloak isHighlighted>
-                    Updating…
+                    {{ __('Updating…') }}
                 </x-forms.button>
             @else
-            <button type="button" title="Upgrade in progress" aria-label="Upgrade in progress"
+            <button type="button" title="{{ __('Upgrade in progress') }}" aria-label="{{ __('Upgrade in progress') }}"
                 @click="modalOpen=true" x-show="showProgress" x-cloak
                 class="inline-flex h-[18px] cursor-pointer items-center rounded-full bg-coollabs/10 px-1.5 text-[9.5px] font-semibold leading-none text-coollabs ring-1 ring-inset ring-coollabs/25 transition-colors hover:bg-coollabs/15 dark:bg-warning/15 dark:text-warning dark:ring-warning/25 dark:hover:bg-warning/20">
-                Updating
+                {{ __('Updating') }}
             </button>
-            <button type="button" title="Update available" aria-label="Update available"
+            <button type="button" title="{{ __('Update available') }}" aria-label="{{ __('Update available') }}"
                 @click="modalOpen=true" x-show="!showProgress" x-cloak
                 class="inline-flex h-[18px] cursor-pointer items-center rounded-full bg-coollabs/10 px-1.5 text-[9.5px] font-semibold leading-none text-coollabs ring-1 ring-inset ring-coollabs/25 transition-colors hover:bg-coollabs/15 dark:bg-warning/15 dark:text-warning dark:ring-warning/25 dark:hover:bg-warning/20">
-                Update available
+                {{ __('Update available') }}
             </button>
             @endif
             <template x-teleport="body">
@@ -47,7 +47,7 @@
                         <header class="flex-nowrap!">
                             <div class="min-w-0 flex-1">
                                 <h3 class="truncate"
-                                    x-text="upgradeComplete ? 'Upgrade complete' : (showProgress ? 'Upgrading…' : 'Upgrade available')">
+                                    x-text="upgradeComplete ? '{{ __('Upgrade complete') }}' : (showProgress ? '{{ __('Upgrading…') }}' : '{{ __('Upgrade available') }}')">
                                 </h3>
                                 <p class="mt-0.5 text-[12px] leading-4"
                                     style="color: var(--coollabs-subtle)">
@@ -56,18 +56,17 @@
                                 </p>
                                 <p class="mt-0.5 text-[12px] leading-4"
                                     style="color: var(--coollabs-subtle)">
-                                    {{ $updateChannel === 'custom' ? 'Custom image' : ucfirst($updateChannel) . ' channel' }}
+                                    {{ $updateChannel === 'custom' ? __('Custom image') : ucfirst($updateChannel) . ' ' . __('channel') }}
                                     <span class="mx-0.5">&middot;</span>
                                     <a href="{{ route('settings.updates') }}" {{ wireNavigate() }}
                                         @click="modalOpen=false"
-                                        class="font-medium text-coollabs underline decoration-coollabs/30 underline-offset-2 hover:decoration-coollabs dark:text-brand-light dark:decoration-brand-light/30 dark:hover:decoration-brand-light">Change
-                                        channel</a>
+                                        class="font-medium text-coollabs underline decoration-coollabs/30 underline-offset-2 hover:decoration-coollabs dark:text-brand-light dark:decoration-brand-light/30 dark:hover:decoration-brand-light">{{ __('Change channel') }}</a>
                                 </p>
                             </div>
                             <button type="button" x-show="!showProgress || upgradeError"
                                 @click="upgradeError ? closeErrorModal() : modalOpen=false"
                                 class="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-neutral-500 outline-0 transition-colors hover:bg-neutral-100 hover:text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent dark:text-fg-faint dark:hover:bg-white/[0.06] dark:hover:text-fg"
-                                aria-label="Close">
+                                aria-label="{{ __('common.close') }}">
                                 <x-reicon name="x" class="size-4" />
                             </button>
                         </header>
@@ -80,7 +79,7 @@
 
                                     <div class="flex items-center justify-center gap-1.5 text-[12px]"
                                         style="color: var(--coollabs-subtle)">
-                                        <span>Elapsed time</span>
+                                        <span>{{ __('Elapsed time') }}</span>
                                         <span class="font-mono text-neutral-700 dark:text-fg"
                                             x-text="formatElapsedTime()"></span>
                                     </div>
@@ -113,17 +112,17 @@
                                     <template x-if="upgradeComplete">
                                         <div class="flex flex-col items-center gap-3">
                                             <p class="text-[12px]" style="color: var(--coollabs-subtle)">
-                                                Reloading in
+                                                {{ __('Reloading in') }}
                                                 <span x-text="successCountdown"
                                                     class="font-semibold text-coollabs dark:text-brand-light"></span>
-                                                seconds…
+                                                {{ __('seconds…') }}
                                             </p>
                                             <p class="text-center text-[11px] leading-4"
                                                 style="color: var(--coollabs-subtle)">
-                                                If the page does not reload automatically, reload it manually.
+                                                {{ __('If the page does not reload automatically, reload it manually.') }}
                                             </p>
                                             <x-forms.button @click="reloadNow()" type="button" isHighlighted>
-                                                Reload now
+                                                {{ __('Reload now') }}
                                             </x-forms.button>
                                         </div>
                                     </template>
@@ -131,13 +130,13 @@
                                     <template x-if="upgradeError">
                                         <div class="flex flex-col gap-3">
                                             <p class="text-[12px] leading-5" style="color: var(--coollabs-subtle)">
-                                                Check the logs on the server at
-                                                <span class="font-mono text-neutral-700 dark:text-fg">/data/coolify/source/upgrade*</span>.
+                                                {{ __('Check the logs on the server at') }}
+                                                <span class="font-mono text-neutral-700 dark:text-fg">{{ __('/data/coolify/source/upgrade*') }}</span>.
                                             </p>
                                             <div
                                                 class="flex flex-wrap justify-end gap-2 border-t border-neutral-200 pt-4 dark:border-white/[0.08]">
                                                 <x-forms.button @click="closeErrorModal()" type="button">
-                                                    Close
+                                                    {{ __('common.close') }}
                                                 </x-forms.button>
                                             </div>
                                         </div>
@@ -148,28 +147,28 @@
                             {{-- Confirmation View --}}
                             <template x-if="!showProgress">
                                 <div class="flex flex-col gap-4">
-                                    <x-callout type="warning" title="Caution">
-                                        <p>Any deployments running during the update process will fail.</p>
+                                    <x-callout type="warning" title="{{ __('health_check.caution') }}">
+                                        <p>{{ __('Any deployments running during the update process will fail.') }}</p>
                                     </x-callout>
 
                                     <p class="text-[12px] leading-5" style="color: var(--coollabs-subtle)">
-                                        If something goes wrong, check the
+                                        {{ __('If something goes wrong, check the') }}
                                         <a class="font-medium text-coollabs underline decoration-coollabs/30 underline-offset-2 hover:decoration-coollabs dark:text-brand-light dark:decoration-brand-light/30 dark:hover:decoration-brand-light"
                                             href="https://coolify.io/docs/upgrade" target="_blank"
-                                            rel="noopener noreferrer">upgrade guide</a>
-                                        or the logs on the server at
-                                        <span class="font-mono text-neutral-700 dark:text-fg">/data/coolify/source/upgrade*</span>.
+                                            rel="noopener noreferrer">{{ __('upgrade guide') }}</a>
+                                        {{ __('or the logs on the server at') }}
+                                        <span class="font-mono text-neutral-700 dark:text-fg">{{ __('/data/coolify/source/upgrade*') }}</span>.
                                     </p>
 
                                     <div
                                         class="flex flex-wrap items-center justify-end gap-2 border-t border-neutral-200 pt-4 dark:border-white/[0.08]">
                                         <template x-if="devMode">
                                             <x-forms.button @click="simulateUpgrade" type="button">
-                                                Simulate
+                                                {{ __('Simulate') }}
                                             </x-forms.button>
                                         </template>
                                         <x-forms.button @click="confirmed" isHighlighted type="button">
-                                            Upgrade now
+                                            {{ __('Upgrade now') }}
                                         </x-forms.button>
                                     </div>
                                 </div>
@@ -180,7 +179,7 @@
             </template>
         </div>
     @elseif ($fullButton)
-        <p class="text-sm text-neutral-600 dark:text-fg-dim">Coolify is up to date.</p>
+        <p class="text-sm text-neutral-600 dark:text-fg-dim">{{ __('Coolify is up to date.') }}</p>
     @endif
 </div>
 

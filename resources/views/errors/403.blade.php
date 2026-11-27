@@ -5,7 +5,7 @@
         <x-toast />
         <x-error-page
             code="403"
-            title="You shall not pass!"
-            description="You don't have permission to access this page." />
+            title="{{ __('error.401.title') }}"
+            description="{{ __('error.401.body') }}" />
     </body>
 @endsection

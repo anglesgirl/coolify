@@ -62,7 +62,7 @@
                                 {{ $deployment->server_name ?: '-' }}
                                 @if ($deployment->pull_request_id)
                                     <span class="px-1 text-neutral-300 dark:text-fg-faint">·</span>
-                                    PR #{{ $deployment->pull_request_id }}
+                                    {{ __('PR #') }}{{ $deployment->pull_request_id }}
                                 @endif
                             </p>
                         </div>
@@ -71,7 +71,7 @@
             </div>
         </div>
         <button type="button" x-on:click="expanded = !expanded" title="{{ $deploymentLabel }}"
-            aria-label="Active deployments" :aria-expanded="expanded.toString()"
+            aria-label="{{ __('Active deployments') }}" :aria-expanded="expanded.toString()"
             :class="expanded && 'bg-neutral-100 dark:bg-white/[0.06]'"
             class="flex h-9 items-center gap-1.5 rounded-md px-2 text-[13px] font-medium text-coollabs transition-colors hover:bg-neutral-100 dark:text-brand-light dark:hover:bg-white/[0.06]">
             <svg class="size-3.5 shrink-0 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
