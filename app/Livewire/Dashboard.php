@@ -194,12 +194,12 @@ class Dashboard extends Component
         $sentinelNeedsAttention = $server->isSentinelEnabled() && $server->sentinelStatus() === 'out_of_sync';
 
         return match (true) {
-            $server->settings->force_disabled => ['Disabled', 'error'],
-            ! $server->settings->is_reachable && ! $server->settings->is_usable => ['Unavailable', 'error'],
-            ! $server->settings->is_reachable => ['Unreachable', 'error'],
-            ! $server->settings->is_usable => ['Not ready', 'warning'],
-            $proxyNeedsAttention || $sentinelNeedsAttention => ['Attention required', 'warning'],
-            default => ['Ready', 'success'],
+            $server->settings->force_disabled => [__('Disabled'), 'error'],
+            ! $server->settings->is_reachable && ! $server->settings->is_usable => [__('Unavailable'), 'error'],
+            ! $server->settings->is_reachable => [__('Unreachable'), 'error'],
+            ! $server->settings->is_usable => [__('Not ready'), 'warning'],
+            $proxyNeedsAttention || $sentinelNeedsAttention => [__('Attention required'), 'warning'],
+            default => [__('Ready'), 'success'],
         };
     }
 
@@ -258,8 +258,8 @@ class Dashboard extends Component
     public static function securityCalloutTitle(int $count): string
     {
         return $count === 1
-            ? '1 resource needs a security update now.'
-            : "{$count} resources need a security update now.";
+            ? __('1 resource needs a security update now.')
+            : __(':count resources need a security update now.', ['count' => $count]);
     }
 
     /**
