@@ -1,6 +1,6 @@
 <div>
     <x-slot:title>
-        {{ data_get_str($project, 'name')->limit(10) }} > New | Coolify
+        {{ data_get_str($project, 'name')->limit(10) }} > {{ __('New | Coolify') }}
     </x-slot>
     @if ($pendingType)
         <div wire:init="createResource" class="mx-auto flex max-w-md flex-col items-center pt-24 text-center">
@@ -9,8 +9,8 @@
             @else
                 <x-reicon name="database" class="mb-4 size-8 text-neutral-400 dark:text-fg-faint" />
             @endif
-            <h2 class="empty-state-title">Creating {{ $pendingName }}</h2>
-            <p class="empty-state-description text-[13px]">Setting up the resource. You will be redirected when it is ready.</p>
+            <h2 class="empty-state-title">{{ __('Creating') }} {{ $pendingName }}</h2>
+            <p class="empty-state-description text-[13px]">{{ __('Setting up the resource. You will be redirected when it is ready.') }}</p>
             <x-loading text="Creating..." class="mt-4" />
         </div>
     @elseif ($type === 'public')

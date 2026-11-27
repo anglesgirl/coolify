@@ -9,51 +9,51 @@
         $server = $database->destination?->server;
     @endphp
     @if ($selectedExecution)
-        <x-modal-input title="Backup execution" wireOpen="executionModalOpen" :wireIgnore="false" isLarge>
+        <x-modal-input title="{{ __('Backup execution') }}" wireOpen="executionModalOpen" :wireIgnore="false" isLarge>
             <x-slot:content><span></span></x-slot:content>
             <div class="flex flex-col gap-5">
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Schedule</p><p class="mt-1 text-sm font-medium">{{ $selectedExecution['schedule'] }}</p></div>
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Status</p><p class="mt-1 text-sm font-medium">{{ str($selectedExecution['status'])->headline() }}</p></div>
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Started</p><p class="mt-1 text-sm font-medium" title="{{ $selectedExecution['started_at']->diffForHumans() }}">{{ formatDateInServerTimezone($selectedExecution['started_at'], $server) }}</p></div>
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ $selectedExecution['status'] === 'running' ? 'Running for' : 'Ended' }}</p><p class="mt-1 text-sm font-medium">@if ($selectedExecution['status'] === 'running'){{ calculateDuration($selectedExecution['started_at'], now()) }}@else{{ formatDateInServerTimezone($selectedExecution['finished_at'], $server) }}<span class="block text-xs font-normal text-neutral-500 dark:text-fg-dim">Took {{ calculateDuration($selectedExecution['started_at'], $selectedExecution['finished_at']) }}</span>@endif</p></div>
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Size</p><p class="mt-1 text-sm font-medium">{{ $selectedExecution['size'] ? formatBytes($selectedExecution['size']) : '-' }}</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Schedule') }}</p><p class="mt-1 text-sm font-medium">{{ $selectedExecution['schedule'] }}</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Status') }}</p><p class="mt-1 text-sm font-medium">{{ str($selectedExecution['status'])->headline() }}</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Started') }}</p><p class="mt-1 text-sm font-medium" title="{{ $selectedExecution['started_at']->diffForHumans() }}">{{ formatDateInServerTimezone($selectedExecution['started_at'], $server) }}</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ $selectedExecution['status'] === 'running' ? __('backup.running_for') : __('Ended') }}</p><p class="mt-1 text-sm font-medium">@if ($selectedExecution['status'] === 'running'){{ calculateDuration($selectedExecution['started_at'], now()) }}@else{{ formatDateInServerTimezone($selectedExecution['finished_at'], $server) }}<span class="block text-xs font-normal text-neutral-500 dark:text-fg-dim">{{ __('Took') }} {{ calculateDuration($selectedExecution['started_at'], $selectedExecution['finished_at']) }}</span>@endif</p></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('backup.size') }}</p><p class="mt-1 text-sm font-medium">{{ $selectedExecution['size'] ? formatBytes($selectedExecution['size']) : '-' }}</p></div>
                 </div>
                 @if ($selectedExecution['filename'])
                     <div>
-                        <p class="text-xs text-neutral-500 dark:text-fg-dim">Backup path</p>
+                        <p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Backup path') }}</p>
                         <div class="mt-1 flex items-center gap-2 rounded-md bg-neutral-100 p-3 dark:bg-black/20">
                             <code class="min-w-0 flex-1 overflow-x-auto text-xs">{{ $selectedExecution['filename'] }}</code>
-                            <x-copy-button :value="$selectedExecution['filename']" label="Copy backup path" />
+                            <x-copy-button :value="$selectedExecution['filename']" label="{{ __('Copy backup path') }}" />
                         </div>
                     </div>
                 @endif
                 @if ($selectedExecution['message'])
-                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">Output</p><pre class="mt-1 max-h-80 overflow-auto rounded-md bg-neutral-100 p-3 font-mono text-xs whitespace-pre-wrap dark:bg-black/20">{{ $selectedExecution['message'] }}</pre></div>
+                    <div><p class="text-xs text-neutral-500 dark:text-fg-dim">{{ __('Output') }}</p><pre class="mt-1 max-h-80 overflow-auto rounded-md bg-neutral-100 p-3 font-mono text-xs whitespace-pre-wrap dark:bg-black/20">{{ $selectedExecution['message'] }}</pre></div>
                 @endif
             </div>
         </x-modal-input>
     @endif
 
-    <x-application.settings-section title="Executions"
-        helper="Review backup runs across every schedule of this database." flush>
+    <x-application.settings-section title="{{ __('Executions') }}"
+        helper="{{ __('Review backup runs across every schedule of this database.') }}" flush>
         @php
             $canDeleteExecutions = auth()->user()?->can('delete', $database) ?? false;
         @endphp
         @if ($executions->total() > 10 || ($canDeleteExecutions && $executions->isNotEmpty()))
             <x-slot:actions>
                 @if ($canDeleteExecutions && $executions->isNotEmpty())
-                    <x-forms.button wire:click="cleanupFailed">Clean failed backups</x-forms.button>
-                    <x-modal-confirmation title="Cleanup Deleted Backup Entries?" isErrorButton
+                    <x-forms.button wire:click="cleanupFailed">{{ __('Clean failed backups') }}</x-forms.button>
+                    <x-modal-confirmation title="{{ __('modal.cleanup_deleted_backup_entries') }}" isErrorButton
                         submitAction="cleanupDeleted()" :actions="[
-                            'Permanently delete execution records already removed from local storage.',
-                            'Actual backup files are not changed.',
+                            __('Permanently delete execution records already removed from local storage.'),
+                            __('Actual backup files are not changed.'),
                         ]"
-                        confirmationText="cleanup deleted backups"
-                        confirmationLabel="Type cleanup deleted backups to confirm."
-                        shortConfirmationLabel="Confirmation">
+                        confirmationText="{{ __('cleanup deleted backups') }}"
+                        confirmationLabel="{{ __('Type cleanup deleted backups to confirm.') }}"
+                        shortConfirmationLabel="{{ __('Confirmation') }}">
                         <x-slot:trigger>
-                            <x-forms.button isError>Clean deleted entries</x-forms.button>
+                            <x-forms.button isError>{{ __('Clean deleted entries') }}</x-forms.button>
                         </x-slot:trigger>
                     </x-modal-confirmation>
                 @endif
@@ -63,19 +63,19 @@
             </x-slot:actions>
         @endif
         @if ($executions->isEmpty())
-            <x-empty size="sm" title="No backup executions"
-                description="Execution history appears here after a backup schedule runs." icon-name="browser-terminal" />
+            <x-empty size="sm" title="{{ __('No backup executions') }}"
+                description="{{ __('Execution history appears here after a backup schedule runs.') }}" icon-name="browser-terminal" />
         @else
             <div class="data-table relative w-full overflow-x-auto">
-                <x-table.loading target="previousPage,nextPage,setPage,perPage,sortExecutions" text="Loading executions..." />
+                <x-table.loading target="previousPage,nextPage,setPage,perPage,sortExecutions" text="{{ __('Loading executions...') }}" />
                 <div class="flex min-w-[48rem] flex-col">
                     <div class="data-table-header database-backup-table-grid">
-                        <x-table.sort-header label="Schedule" asc="schedule_asc" desc="schedule_desc" action="sortExecutions" :current="$sortBy" />
-                        <x-table.sort-header label="Status" asc="status_asc" desc="status_desc" action="sortExecutions" :current="$sortBy" />
-                        <span>S3</span>
-                        <x-table.sort-header label="Time" asc="started_asc" desc="started_desc" first="desc" action="sortExecutions" :current="$sortBy" />
-                        <x-table.sort-header label="Size" asc="size_asc" desc="size_desc" first="desc" action="sortExecutions" :current="$sortBy" />
-                        <span class="text-right">Actions</span>
+                        <x-table.sort-header label="{{ __('Schedule') }}" asc="schedule_asc" desc="schedule_desc" action="sortExecutions" :current="$sortBy" />
+                        <x-table.sort-header label="{{ __('Status') }}" asc="status_asc" desc="status_desc" action="sortExecutions" :current="$sortBy" />
+                        <span>{{ __('S3') }}</span>
+                        <x-table.sort-header label="{{ __('Time') }}" asc="started_asc" desc="started_desc" first="desc" action="sortExecutions" :current="$sortBy" />
+                        <x-table.sort-header label="{{ __('backup.size') }}" asc="size_asc" desc="size_desc" first="desc" action="sortExecutions" :current="$sortBy" />
+                        <span class="text-right">{{ __('Actions') }}</span>
                     </div>
                     @foreach ($executions as $execution)
                         @php
@@ -97,7 +97,7 @@
                             </span>
                             <span>
                                 <span class="block text-[11px] text-neutral-500 dark:text-fg-faint" tabindex="0"
-                                    title="Started: {{ formatDateInServerTimezone($execution['started_at'], $server) }}@if ($execution['status'] !== 'running')&#10;Ended: {{ formatDateInServerTimezone($execution['finished_at'], $server) }}@endif">
+                                    title="{{ __('task_execution.started') }} {{ formatDateInServerTimezone($execution['started_at'], $server) }}@if ($execution['status'] !== 'running')&#10;{{ __('task_execution.ended') }} {{ formatDateInServerTimezone($execution['finished_at'], $server) }}@endif">
                                     @if ($execution['status'] === 'running')
                                         Running for {{ calculateDuration($execution['started_at'], now()) }}
                                     @else
@@ -111,29 +111,29 @@
                                 @can('manageBackups', $database)
                                     @if ($execution['download_url'] && $s3Downloads)
                                         <button type="button" wire:click.stop="downloadExecution('{{ $execution['uuid'] }}')"
-                                            class="icon-button shrink-0" title="Download backup" aria-label="Download backup">
+                                            class="icon-button shrink-0" title="{{ __('Download backup') }}" aria-label="{{ __('Download backup') }}">
                                             <x-reicon name="upload" class="size-3.5 rotate-180" />
                                         </button>
                                     @elseif ($execution['download_url'])
                                         <a href="{{ $execution['download_url'] }}" target="_blank" rel="noopener"
-                                            @click.stop class="icon-button shrink-0" title="Download backup"
-                                            aria-label="Download backup">
+                                            @click.stop class="icon-button shrink-0" title="{{ __('Download backup') }}"
+                                            aria-label="{{ __('Download backup') }}">
                                             <x-reicon name="upload" class="size-3.5 rotate-180" />
                                         </a>
                                     @endif
                                 @endcan
                                 @if ($canDeleteExecutions)
-                                    <x-modal-confirmation title="Confirm Backup Deletion?" isErrorButton
+                                    <x-modal-confirmation title="{{ __('Confirm Backup Deletion?') }}" isErrorButton
                                         submitAction="deleteExecution('{{ $execution['uuid'] }}')"
                                         :checkboxes="$execution['has_live_s3_copies'] ? [['id' => 'delete_backup_s3', 'label' => 'Delete the selected backup permanently from every S3 storage']] : []"
-                                        :actions="[$execution['local_storage_deleted'] || blank($execution['filename']) ? 'This backup execution record will be deleted.' : 'This backup will be permanently deleted from local storage.']"
+                                        :actions="[$execution['local_storage_deleted'] || blank($execution['filename']) ? __('This backup execution record will be deleted.') : __('This backup will be permanently deleted from local storage.')]"
                                         confirmationText="{{ $execution['filename'] ?: $execution['uuid'] }}"
-                                        confirmationLabel="Enter the backup filename to confirm."
-                                        shortConfirmationLabel="Backup Filename">
+                                        confirmationLabel="{{ __('Enter the backup filename to confirm.') }}"
+                                        shortConfirmationLabel="{{ __('modal.backup_filename') }}">
                                         <x-slot:trigger>
                                             <button type="button"
                                                 class="icon-button shrink-0 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
-                                                title="Delete backup" aria-label="Delete backup">
+                                                title="{{ __('Delete backup') }}" aria-label="{{ __('Delete backup') }}">
                                                 <x-reicon name="trash" class="size-3.5" />
                                             </button>
                                         </x-slot:trigger>

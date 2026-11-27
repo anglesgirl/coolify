@@ -1,5 +1,5 @@
-<x-modal-confirmation title="Confirm Environment Deletion?" buttonTitle="Delete" isErrorButton
-    submitAction="delete" :actions="['This will delete the selected environment.']"
-    confirmationLabel="Please confirm the execution of the actions by entering the Environment Name below"
-    shortConfirmationLabel="Environment Name" confirmationText="{{ $environmentName }}" :confirmWithPassword="false"
-    step2ButtonText="Permanently Delete" />
+<x-modal-confirmation title="{{ __('modal.confirm_environment_deletion') }}" buttonTitle="{{ __('button.delete') }}" isErrorButton
+    submitAction="delete" :actions="[__('This will delete the selected environment.')]"
+    confirmationLabel="{{ __('project.confirm_delete_environment_label') }}"
+    shortConfirmationLabel="{{ __('project.environment_name') }}" confirmationText="{{ $environmentName }}" :confirmWithPassword="false"
+    step2ButtonText="{{ __('button.permanently_delete') }}" />

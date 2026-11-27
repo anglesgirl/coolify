@@ -1,10 +1,10 @@
 <div>
-    <x-slot:title>{{ data_get_str($project, 'name')->limit(10) }} > Clone | Coolify</x-slot>
+    <x-slot:title>{{ data_get_str($project, 'name')->limit(10) }} > {{ __('Clone | Coolify') }}</x-slot>
     <div class="w-full max-w-none">
         <header class="mb-5">
             <h1 class="truncate text-[24px]! leading-7! font-semibold! tracking-tight!">{{ $environment->name }}</h1>
             <p class="mt-1 text-[13px] text-neutral-500 dark:text-fg-dim">
-                Clone this environment inside {{ $project->name }}
+                {{ __('Clone this environment inside') }} {{ $project->name }}
             </p>
         </header>
 
@@ -12,17 +12,17 @@
         <section class="application-settings-section">
             <div class="application-settings-section-header">
                 <div>
-                    <h2>Clone environment</h2>
-                    <p>Copy every resource from {{ $environment->name }} to a new project or environment.</p>
+                    <h2>{{ __('Clone environment') }}</h2>
+                    <p>{{ __('Copy every resource from') }} {{ $environment->name }} {{ __('to a new project or environment.') }}</p>
                 </div>
             </div>
             <div class="application-settings-section-body">
                 <div class="max-w-md">
-                    <x-forms.input required id="newName" label="New name" />
+                    <x-forms.input required id="newName" label="{{ __('New name') }}" />
                 </div>
                 <div class="mt-4 max-w-md">
-                    <x-forms.checkbox id="cloneVolumeData" live label="Clone volume data"
-                        helper="Copies the data of the persistent volumes to the clones. Running source resources are stopped while the data is copied and started again afterwards." />
+                    <x-forms.checkbox id="cloneVolumeData" live label="{{ __('Clone volume data') }}"
+                        helper="{{ __('Copies the data of the persistent volumes to the clones. Running source resources are stopped while the data is copied and started again afterwards.') }}" />
                 </div>
             </div>
         </section>
@@ -30,8 +30,8 @@
         <section class="application-settings-section">
             <div class="application-settings-section-header">
                 <div>
-                    <h2>Destination</h2>
-                    <p>Choose the server and Docker network that will receive the cloned resources.</p>
+                    <h2>{{ __('Destination') }}</h2>
+                    <p>{{ __('Choose the server and Docker network that will receive the cloned resources.') }}</p>
                 </div>
             </div>
             <div class="application-settings-section-body p-0!">
@@ -42,9 +42,9 @@
                 @endphp
                 <div class="data-table">
                     <div class="data-table-header clone-destinations-table-grid">
-                        <span><span class="sr-only">Selected</span></span>
-                        <span>Server</span>
-                        <span>Network</span>
+                        <span><span class="sr-only">{{ __('Selected') }}</span></span>
+                        <span>{{ __('Server') }}</span>
+                        <span>{{ __('database.network') }}</span>
                     </div>
                     @foreach ($servers->sortBy('id') as $server)
                         @foreach ($server->destinations() as $destination)
@@ -88,16 +88,16 @@
             @endphp
             <div class="application-settings-section-header">
                 <div>
-                    <h2>Resources</h2>
-                    <p>{{ $resourceCount }} {{ Str::plural('resource', $resourceCount) }} will be cloned.</p>
+                    <h2>{{ __('Resources') }}</h2>
+                    <p>{{ $resourceCount }} {{ Str::plural(__('resource'), $resourceCount) }} {{ __('will be cloned.') }}</p>
                 </div>
             </div>
             <div class="application-settings-section-body p-0!">
                 <div class="data-table">
                     <div class="data-table-header clone-resources-table-grid">
-                        <span>Name</span>
-                        <span>Type</span>
-                        <span>Description</span>
+                        <span>{{ __('scheduled_task.name_label') }}</span>
+                        <span>{{ __('backup.type') }}</span>
+                        <span>{{ __('input.description') }}</span>
                     </div>
                     @foreach ($environment->applications->sortBy('name') as $application)
                         <div
@@ -105,7 +105,7 @@
                             <div class="truncate text-[12px] font-semibold text-black dark:text-fg">
                                 {{ $application->name }}
                             </div>
-                            <div><x-status-badge status="Application" type="neutral" /></div>
+                            <div><x-status-badge status="{{ __('project.application') }}" type="neutral" /></div>
                             <div class="truncate text-[11px] text-neutral-600 dark:text-fg-dim">
                                 {{ $application->description ?: '-' }}
                             </div>
@@ -117,7 +117,7 @@
                             <div class="truncate text-[12px] font-semibold text-black dark:text-fg">
                                 {{ $database->name }}
                             </div>
-                            <div><x-status-badge status="Database" type="neutral" /></div>
+                            <div><x-status-badge status="{{ __('database.database') }}" type="neutral" /></div>
                             <div class="truncate text-[11px] text-neutral-600 dark:text-fg-dim">
                                 {{ $database->description ?: '-' }}
                             </div>
@@ -129,7 +129,7 @@
                             <div class="truncate text-[12px] font-semibold text-black dark:text-fg">
                                 {{ $service->name }}
                             </div>
-                            <div><x-status-badge status="Service" type="neutral" /></div>
+                            <div><x-status-badge status="{{ __('common.service') }}" type="neutral" /></div>
                             <div class="truncate text-[11px] text-neutral-600 dark:text-fg-dim">
                                 {{ $service->description ?: '-' }}
                             </div>
@@ -137,7 +137,7 @@
                     @endforeach
                     <div
                         class="flex min-h-11 items-center border-t border-neutral-200 px-4 text-[11px] text-neutral-500 dark:border-white/[0.08] dark:text-fg-faint">
-                        {{ $resourceCount }} {{ Str::plural('resource', $resourceCount) }}
+                        {{ $resourceCount }} {{ Str::plural(__('resource'), $resourceCount) }}
                     </div>
                 </div>
                 <div
@@ -145,13 +145,13 @@
                     @if ($cloneVolumeData)
                         @foreach (['environment' => 'Clone to environment', 'project' => 'Clone to project'] as $cloneType => $cloneLabel)
                             <div wire:key="clone-with-volume-data-{{ $cloneType }}">
-                                <x-modal-confirmation title="Clone with volume data?" submitAction="clone('{{ $cloneType }}')"
+                                <x-modal-confirmation title="{{ __('Clone with volume data?') }}" submitAction="clone('{{ $cloneType }}')"
                                     :ignoreWire="false" :confirmWithText="false" :confirmWithPassword="false"
                                     :step2ButtonText="$cloneLabel"
-                                    warningMessage="Running source resources are unavailable while their volume data is copied."
+                                    warningMessage="{{ __('Running source resources are unavailable while their volume data is copied.') }}"
                                     :actions="[
-                                        'Running source resources are stopped while their volume data is copied.',
-                                        'They are started again after the copy, also when the copy fails.',
+                                        __('Running source resources are stopped while their volume data is copied.'),
+                                        __('They are started again after the copy, also when the copy fails.'),
                                     ]">
                                     <x-slot:trigger>
                                         <x-forms.button isHighlighted :disabled="! filled($selectedDestination)">
@@ -164,11 +164,11 @@
                     @else
                         <x-forms.button isHighlighted wire:click="clone('environment')"
                             :disabled="! filled($selectedDestination)">
-                            Clone to environment
+                            {{ __('Clone to environment') }}
                         </x-forms.button>
                         <x-forms.button isHighlighted wire:click="clone('project')"
                             :disabled="! filled($selectedDestination)">
-                            Clone to project
+                            {{ __('Clone to project') }}
                         </x-forms.button>
                     @endif
                 </div>
