@@ -206,7 +206,9 @@
                                                 @can('delete', $github_app)
                                                     <x-modal-confirmation title="{{ __('Confirm GitHub App Deletion?') }}" isErrorButton
                                                         buttonTitle="{{ __('button.delete') }}" submitAction="delete"
-                                                        :actions="[__('The selected GitHub App will be permanently deleted.')]"
+                                                        :actions="[
+                                                            __('The selected GitHub App will be permanently deleted.'),
+                                                        ]"
                                                         confirmationText="{{ data_get($github_app, 'name') }}"
                                                         confirmationLabel="{{ __('Please confirm the execution of the actions by entering the GitHub App Name below') }}"
                                                         shortConfirmationLabel="{{ __('GitHub App Name') }}" :confirmWithPassword="false"
@@ -252,7 +254,9 @@
                 <div class="shrink-0">
                     <x-modal-confirmation title="{{ __('Confirm GitHub App Deletion?') }}" isErrorButton
                         buttonTitle="{{ __('button.delete') }}" submitAction="delete"
-                        :actions="[__('The selected GitHub App will be permanently deleted.')]"
+                        :actions="[
+                            __('The selected GitHub App will be permanently deleted.'),
+                        ]"
                         confirmationText="{{ data_get($github_app, 'name') }}"
                         confirmationLabel="{{ __('Please confirm the execution of the actions by entering the GitHub App Name below') }}"
                         shortConfirmationLabel="{{ __('GitHub App Name') }}" :confirmWithPassword="false"

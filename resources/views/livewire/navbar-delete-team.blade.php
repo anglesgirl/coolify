@@ -1,7 +1,9 @@
 <div class="w-full min-w-0">
     @if (auth()->user()->roleInTeam(currentTeam()->id) === 'owner')
     <x-modal-confirmation title="{{ __('teams.confirm_delete') }}" buttonFullWidth isErrorButton submitAction="delete"
-        :actions="[__('The current Team will be permanently deleted.')]" confirmationText="{{ $team }}"
+        :actions="[
+            __('The current Team will be permanently deleted.'),
+        ]" confirmationText="{{ $team }}"
         confirmationLabel="{{ __('teams.confirm_label') }}"
         shortConfirmationLabel="{{ __('teams.team_name') }}">
         <x-slot:trigger>

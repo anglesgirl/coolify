@@ -261,7 +261,9 @@
                             };
                         @endphp
                         <x-modal-confirmation :title="__('Change Git source?')"
-                            :actions="[__('Change Git source to :name', ['name' => $source->name])]" :buttonFullWidth="true"
+                            :actions="[
+                                __('Change Git source to :name', ['name' => $source->name]),
+                            ]" :buttonFullWidth="true"
                             submitAction="changeSource({{ $source->id }}, {{ $sourceMorph }})"
                             :confirmWithText="true" confirmationText="{{ __('application.change_git_source') }}"
                             confirmationLabel="{{ __('Enter the text below to confirm changing the Git source.') }}"

@@ -8,7 +8,10 @@
             <div class="flex items-center justify-between gap-2 border-t border-neutral-200 pt-4 dark:border-white/[0.08]">
                 @can('delete', $cloudInitScript)
                     <x-modal-confirmation title="{{ __('Confirm Script Deletion?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
-                        submitAction="delete" :actions="[__('This cloud-init script will be permanently deleted.')]"
+                        submitAction="delete"
+                        :actions="[
+                            __('This cloud-init script will be permanently deleted.'),
+                        ]"
                         confirmationText="{{ $cloudInitScript->name }}" :confirmWithPassword="false"
                         step2ButtonText="{{ __('Delete script') }}" />
                 @endcan

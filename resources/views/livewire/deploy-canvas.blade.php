@@ -22,7 +22,9 @@
         <x-modal-confirmation title="{{ __('Reset the canvas?') }}" submitAction="deploy-canvas-reset" dispatchAction
             :confirmWithText="false" :confirmWithPassword="false" step2ButtonText="{{ __('common.reset') }}"
             warningMessage="{{ __('Your steps and their settings are removed from the canvas. Resources that you already deployed stay in Coolify.') }}"
-            :actions="[__('Remove every step from the canvas.')]">
+            :actions="[
+                __('Remove every step from the canvas.'),
+            ]">
             <x-slot:trigger>
                 <button id="deploy-canvas-reset-trigger" type="button" class="hidden" aria-hidden="true"></button>
             </x-slot:trigger>

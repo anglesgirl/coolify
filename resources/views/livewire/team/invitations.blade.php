@@ -41,7 +41,9 @@
                                 <div class="flex justify-end">
                                     <x-modal-confirmation title="{{ __('Revoke invitation?') }}"
                                         submitAction="deleteInvitation({{ $invite->id }})"
-                                        :actions="[__('The invitation link for') . ' ' . $invite->email . ' ' . __('stops working.')]"
+                                        :actions="[
+                                            __('The invitation link for') . ' ' . $invite->email . ' ' . __('stops working.'),
+                                        ]"
                                         :confirmWithText="false" :confirmWithPassword="false"
                                         step2ButtonText="{{ __('Revoke invitation') }}">
                                         <x-slot:trigger>

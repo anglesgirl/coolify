@@ -278,7 +278,9 @@
                         @can('delete', $application)
                             <x-modal-confirmation :title="__('Delete preview deployment?')" :buttonTitle="__('button.delete')"
                                 isErrorButton submitAction="delete({{ data_get($preview, 'pull_request_id') }})"
-                                :actions="[__('All containers for this preview deployment will be stopped and permanently deleted.')]"
+                                :actions="[
+                                    __('All containers for this preview deployment will be stopped and permanently deleted.'),
+                                ]"
                                 confirmationText="{{ data_get($preview, 'fqdn') . __('application.publish_directory_placeholder_root') }}"
                                 :confirmationLabel="__('Enter the preview deployment name to confirm deletion')"
                                 :shortConfirmationLabel="__('Preview deployment name')" :confirmWithPassword="false">

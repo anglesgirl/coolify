@@ -52,7 +52,10 @@
                 <x-modal-confirmation title="{{ __('Confirm Private Key Deletion?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
                     @confirm-old-key-deletion.window="if ($event.detail.id === {{ $private_key->id }}) modalOpen = true"
                     submitAction="delete" :disabled="$isInUse" :disabledTooltip="$deleteDisabledReason"
-                    :actions="[__('This private key will be permanently deleted.'), __('Coolify does not remove its public key from servers. To remove it, rotate the key before you delete it.')]" confirmationText="{{ $private_key->name }}"
+                    :actions="[
+                        __('This private key will be permanently deleted.'),
+                        __('Coolify does not remove its public key from servers. To remove it, rotate the key before you delete it.'),
+                    ]" confirmationText="{{ $private_key->name }}"
                     :confirmWithPassword="false" step2ButtonText="{{ __('Delete private key') }}" />
             @endcan
             <div class="flex items-center gap-2">

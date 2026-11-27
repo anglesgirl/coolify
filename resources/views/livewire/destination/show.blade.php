@@ -37,7 +37,9 @@
                                     @if ($network !== 'coolify')
                                         <x-modal-confirmation title="{{ __('Confirm Destination Deletion?') }}"
                                             buttonTitle="{{ __('Delete destination') }}" isErrorButton submitAction="delete"
-                                            :actions="[__('This permanently deletes the destination and its Docker network.')]"
+                                            :actions="[
+                                                __('This permanently deletes the destination and its Docker network.'),
+                                            ]"
                                             confirmationText="{{ $destination->name }}"
                                             confirmationLabel="{{ __('Please confirm by entering the Destination Name below') }}"
                                             shortConfirmationLabel="{{ __('Destination Name') }}" :confirmWithPassword="false"

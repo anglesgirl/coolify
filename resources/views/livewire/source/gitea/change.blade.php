@@ -27,7 +27,10 @@
                 @endcan
                 @can('delete', $gitea_app)
                     <x-modal-confirmation title="{{ __('Confirm Gitea / Forgejo App Deletion?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
-                        submitAction="delete" :actions="[__('The selected Gitea / Forgejo App will be permanently deleted.')]"
+                        submitAction="delete"
+                        :actions="[
+                            __('The selected Gitea / Forgejo App will be permanently deleted.'),
+                        ]"
                         confirmationText="{{ data_get($gitea_app, 'name') }}"
                         confirmationLabel="{{ __('Please confirm by entering the Gitea / Forgejo App Name below') }}"
                         shortConfirmationLabel="{{ __('Gitea / Forgejo App Name') }}" :confirmWithPassword="false"
@@ -176,7 +179,10 @@
             @can('delete', $gitea_app)
                 <div class="shrink-0 sm:ml-auto">
                     <x-modal-confirmation title="{{ __('Confirm Gitea / Forgejo App Deletion?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
-                        submitAction="delete" :actions="[__('The selected Gitea / Forgejo App will be permanently deleted.')]"
+                        submitAction="delete"
+                        :actions="[
+                            __('The selected Gitea / Forgejo App will be permanently deleted.'),
+                        ]"
                         confirmationText="{{ data_get($gitea_app, 'name') }}"
                         confirmationLabel="{{ __('Please confirm by entering the Gitea / Forgejo App Name below') }}"
                         shortConfirmationLabel="{{ __('Gitea / Forgejo App Name') }}" :confirmWithPassword="false"

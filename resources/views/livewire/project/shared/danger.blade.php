@@ -20,7 +20,10 @@
                 <p> {{ __('Permanently remove every key from') }} <strong class="font-semibold text-black dark:text-fg">{{ $resourceName }}</strong>{{ __('. The database keeps running.') }} </p>
                 <x-slot:action>
                     <x-modal-confirmation :title="__('Flush all data?')" :buttonTitle="__('Flush all data')" isErrorButton
-                        submitAction="flush" :actions="[__('Permanently remove every key from every logical database.')]"
+                        submitAction="flush"
+                        :actions="[
+                            __('Permanently remove every key from every logical database.'),
+                        ]"
                         confirmationText="{{ $resourceName }}"
                         :confirmationLabel="__('Enter the database name to confirm flushing all data')"
                         :shortConfirmationLabel="__('database.database_name_short')" :disabled="auth()->user()->cannot('manage', $resource)"
@@ -40,7 +43,9 @@
                         <x-modal-confirmation :title="__('Delete :label?', ['label' => $resourceLabel])"
                             :buttonTitle="__('Delete :label', ['label' => $resourceLabel])"
                             isErrorButton submitAction="delete" :checkboxes="$checkboxes"
-                            :actions="[__('Permanently delete this resource and its selected Docker resources.')]"
+                            :actions="[
+                                __('Permanently delete this resource and its selected Docker resources.'),
+                            ]"
                             confirmationText="{{ $resourceName }}"
                             :confirmationLabel="__('Enter the resource name to confirm permanent deletion')"
                             :shortConfirmationLabel="__('danger.resource_name')" />

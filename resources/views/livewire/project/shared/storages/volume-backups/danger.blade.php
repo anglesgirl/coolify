@@ -8,7 +8,9 @@
             @if ($backup)
                 <x-modal-confirmation :title="__('Delete backup schedule?')" isErrorButton submitAction="delete"
                     :checkboxes="$deleteScheduleCheckboxes"
-                    :actions="[__('Delete the selected backup schedule.')]"
+                    :actions="[
+                        __('Delete the selected backup schedule.'),
+                    ]"
                     confirmationText="{{ $backup->targetName() }}"
                     :confirmationLabel="__('Enter the :type identifier to confirm.', ['type' => $backup->targetType()])"
                     :shortConfirmationLabel="__(':type identifier', ['type' => $backup->targetType()])">

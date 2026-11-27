@@ -30,7 +30,10 @@
                                         <div class="flex flex-col items-end gap-2 text-xs"><span class="text-red-600 dark:text-red-400">{{ __('Currently :current', ['current' => $conflict['current']]) }}</span>
                                             <x-modal-confirmation :title="__('Replace conflicting DNS record?')" isErrorButton :buttonTitle="__('Replace record')"
                                                 submitAction="replaceManagedDnsRecord({{ $proposal['hostname'] }}, {{ $proposal['zone_id'] }})"
-                                                :actions="[__('Replace :hostname value :current with :proposed', ['hostname' => $proposal['hostname'], 'current' => $conflict['current'], 'proposed' => $conflict['proposed']]), __('Coolify will manage the replaced record.')]"
+                                                :actions="[
+                                                    __('Replace :hostname value :current with :proposed', ['hostname' => $proposal['hostname'], 'current' => $conflict['current'], 'proposed' => $conflict['proposed']]),
+                                                    __('Coolify will manage the replaced record.'),
+                                                ]"
                                                 :confirmWithPassword="false" :confirmWithText="false" :step2ButtonText="__('Replace record')"
                                                 canGate="update" :canResource="$dnsAuthResource" />
                                         </div>

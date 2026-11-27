@@ -126,7 +126,10 @@
 
         <div class="flex items-center justify-between gap-2 border-t border-neutral-200 pt-4 dark:border-white/[0.08]">
             <x-modal-confirmation title="{{ __('Delete integration token?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
-                submitAction="delete" :actions="[__('This integration token will be permanently deleted.')]"
+                submitAction="delete"
+                :actions="[
+                    __('This integration token will be permanently deleted.'),
+                ]"
                 confirmationText="{{ $integrationToken->name }}" :confirmWithPassword="false"
                 step2ButtonText="{{ __('Delete token') }}" />
             <x-forms.button type="submit" wire:target="save" isHighlighted>

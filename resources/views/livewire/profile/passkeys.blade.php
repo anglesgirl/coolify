@@ -80,7 +80,9 @@
                             <div wire:key="passkey-delete-{{ $passkey->id }}-{{ md5($passkey->name) }}">
                                 <x-modal-confirmation title="{{ __('Delete passkey?') }}" buttonTitle="{{ __('button.delete') }}" isErrorButton
                                     submitAction="delete({{ $passkey->id }})"
-                                    :actions="[__('You cannot sign in with this passkey after it is deleted.')]"
+                                    :actions="[
+                                        __('You cannot sign in with this passkey after it is deleted.'),
+                                    ]"
                                     confirmationText="{{ $passkey->name }}"
                                     confirmationLabel="{{ __('Enter the passkey name to confirm') }}"
                                     shortConfirmationLabel="{{ __('Passkey name') }}" step3ButtonText="Delete passkey" />

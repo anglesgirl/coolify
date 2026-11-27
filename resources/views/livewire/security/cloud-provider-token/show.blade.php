@@ -11,7 +11,10 @@
                 <div class="flex items-center gap-2">
                     @can('delete', $cloudProviderToken)
                         <x-modal-confirmation title="{{ __('Confirm Token Deletion?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
-                            submitAction="delete" :actions="[__('This cloud provider token will be permanently deleted.')]"
+                            submitAction="delete"
+                            :actions="[
+                                __('This cloud provider token will be permanently deleted.'),
+                            ]"
                             confirmationText="{{ $cloudProviderToken->name }}" :confirmWithPassword="false"
                             step2ButtonText="{{ __('Delete token') }}" />
                     @endcan

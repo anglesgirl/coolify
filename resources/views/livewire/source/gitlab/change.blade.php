@@ -24,7 +24,10 @@
                 @endcan
                 @can('delete', $gitlab_app)
                     <x-modal-confirmation title="{{ __('Confirm GitLab App Deletion?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
-                        submitAction="delete" :actions="[__('The selected GitLab App will be permanently deleted.')]"
+                        submitAction="delete"
+                        :actions="[
+                            __('The selected GitLab App will be permanently deleted.'),
+                        ]"
                         confirmationText="{{ data_get($gitlab_app, 'name') }}"
                         confirmationLabel="{{ __('Please confirm by entering the GitLab App Name below') }}"
                         shortConfirmationLabel="{{ __('GitLab App Name') }}" :confirmWithPassword="false"
@@ -175,7 +178,10 @@
             @can('delete', $gitlab_app)
                 <div class="shrink-0 sm:ml-auto">
                     <x-modal-confirmation title="{{ __('Confirm GitLab App Deletion?') }}" isErrorButton buttonTitle="{{ __('button.delete') }}"
-                        submitAction="delete" :actions="[__('The selected GitLab App will be permanently deleted.')]"
+                        submitAction="delete"
+                        :actions="[
+                            __('The selected GitLab App will be permanently deleted.'),
+                        ]"
                         confirmationText="{{ data_get($gitlab_app, 'name') }}"
                         confirmationLabel="{{ __('Please confirm by entering the GitLab App Name below') }}"
                         shortConfirmationLabel="{{ __('GitLab App Name') }}" :confirmWithPassword="false"

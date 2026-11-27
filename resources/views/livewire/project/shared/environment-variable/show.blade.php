@@ -253,7 +253,9 @@
                                     @if (!$isMagicVariable)
                                         <x-modal-confirmation :title="__('env_var.confirm_delete_title')" isErrorButton
                                             :buttonTitle="__('button.delete')" submitAction="delete"
-                                            :actions="[__('env_var.delete_action')]"
+                                            :actions="[
+                                                __('env_var.delete_action'),
+                                            ]"
                                             confirmationText="{{ $key }}"
                                             :confirmationLabel="__('env_var.confirm_delete_label')"
                                             :shortConfirmationLabel="__('env_var.variable_name')" :confirmWithPassword="false"
@@ -270,7 +272,10 @@
                                     <div wire:key="env-lock-action-{{ $env->id }}">
                                         <x-modal-confirmation :title="__('Lock Environment Variable?')" :buttonTitle="__('env_var.lock_button')"
                                             submitAction="lock"
-                                            :actions="[__('The value will be hidden. You cannot see or copy it again.'), __('You can still replace the value with a new one, but you cannot unlock the variable.')]"
+                                            :actions="[
+                                                __('The value will be hidden. You cannot see or copy it again.'),
+                                                __('You can still replace the value with a new one, but you cannot unlock the variable.'),
+                                            ]"
                                             :confirmWithText="false" :confirmWithPassword="false" :step2ButtonText="__('env_var.lock_button')" />
                                     </div>
                                 @endif

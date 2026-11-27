@@ -12,7 +12,10 @@
                 <x-modal-confirmation :disabled="!auth()->user()->can('update', $resource)"
                     :authDisabled="!auth()->user()->can('update', $resource)"
                     :title="__('Enable healthcheck?')" :buttonTitle="__('application.enable')"
-                    submitAction="toggleHealthcheck" :actions="[__('health_check.enable_action')]"
+                    submitAction="toggleHealthcheck"
+                    :actions="[
+                        __('health_check.enable_action'),
+                    ]"
                     :warningMessage="__('If the healthcheck fails, your application will become inaccessible. Review the ') . '<a href=\'https://coolify.io/docs/knowledge-base/health-checks\' target=\'_blank\' class=\'underline text-white\'>' . __('Healthchecks guide') . '</a>' . __(' before continuing.')"
                     :step2ButtonText="__('health_check.enable_button')" :confirmWithText="false"
                     :confirmWithPassword="false" isHighlightedButton />

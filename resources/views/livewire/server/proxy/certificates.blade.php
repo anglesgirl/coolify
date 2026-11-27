@@ -181,7 +181,9 @@
                                                                     <x-modal-confirmation :title="__('Delete acme.json Backup?')"
                                                                         buttonFullWidth
                                                                         submitAction="deleteTraefikAcmeBackup('{{ $backup['name'] }}')"
-                                                                        :actions="[__('Delete the backup :name.', ['name' => $backup['name']])]"
+                                                                        :actions="[
+                                                                            __('Delete the backup :name.', ['name' => $backup['name']]),
+                                                                        ]"
                                                                         :step2ButtonText="__('Delete Backup')"
                                                                         :confirmWithPassword="false"
                                                                         :confirmWithText="false">

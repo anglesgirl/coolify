@@ -41,7 +41,9 @@
                     {{-- Keyed by the server name, so that the ignored modal shows the server in use after a switch. --}}
                     <x-modal-confirmation wire:key="delete-smtp-server-{{ md5($settings->smtpServerName()) }}"
                         title="{{ __('Delete SMTP server?') }}" submitAction="deleteSmtpServer"
-                        :actions="[__('The SMTP server') . $settings->smtpServerName() . __('is deleted. Coolify then uses the next server in the list.')]"
+                        :actions="[
+                            __('The SMTP server') . $settings->smtpServerName() . __('is deleted. Coolify then uses the next server in the list.'),
+                        ]"
                         :confirmWithText="false" :confirmWithPassword="false"
                         step2ButtonText="{{ __('Delete server') }}">
                         <x-slot:trigger>

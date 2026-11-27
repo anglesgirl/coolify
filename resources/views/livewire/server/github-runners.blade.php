@@ -49,7 +49,9 @@
                                     submitAction="toggleEnabled" :confirmWithText="false"
                                     :confirmWithPassword="false" :step2ButtonText="__('Enable runners')"
                                     :warningMessage="__('This server also runs your resources. We do not recommend GitHub Actions runners here: workflow jobs use the same CPU, memory, and disk, and a heavy job can slow down or stop your resources. Use a server with the Builds only role for runners when you can.')"
-                                    :actions="[__('Workflow jobs of the GitHub organization will run on this server next to your resources.')]">
+                                    :actions="[
+                                        __('Workflow jobs of the GitHub organization will run on this server next to your resources.'),
+                                    ]">
                                     <x-slot:trigger>
                                         <x-forms.button type="button" canGate="update" :canResource="$server" isHighlighted>
                                             {{ __('Enable runners') }}

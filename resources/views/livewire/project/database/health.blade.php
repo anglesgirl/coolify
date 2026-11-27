@@ -6,7 +6,10 @@
         <x-slot:actions>
             @if (!$healthCheckEnabled)
                 <x-modal-confirmation title="{{ __('Enable healthcheck?') }}" buttonTitle="{{ __('Enable healthcheck') }}"
-                    submitAction="toggleHealthcheck" :actions="[__('Enable healthcheck for this database.')]"
+                    submitAction="toggleHealthcheck"
+                    :actions="[
+                        __('Enable healthcheck for this database.'),
+                    ]"
                     warningMessage="{{ __('A failing probe marks the database unhealthy. Review the healthcheck guide before enabling it.') }}"
                     step2ButtonText="{{ __('Enable healthcheck') }}" :confirmWithText="false" :confirmWithPassword="false"
                     isHighlightedButton />

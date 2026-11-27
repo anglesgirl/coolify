@@ -81,7 +81,9 @@
                                 @can('delete', $serviceApplication)
                                     <x-modal-confirmation title="{{ __('Confirm Service Application Deletion?') }}" buttonTitle="{{ __('button.delete') }}"
                                         isErrorButton submitAction="deleteApplication"
-                                        :actions="[__('The selected service application container will be stopped and permanently deleted.')]"
+                                        :actions="[
+                                            __('The selected service application container will be stopped and permanently deleted.'),
+                                        ]"
                                         confirmationText="{{ Str::headline($serviceApplication->name) }}"
                                         confirmationLabel="{{ __('Please confirm the execution of the actions by entering the Service Application Name below') }}"
                                         shortConfirmationLabel="{{ __('Service Application Name') }}" />
@@ -91,7 +93,9 @@
                                 @can('update', $serviceApplication)
                                     <x-modal-confirmation title="{{ __('Convert to Database') }}"
                                         buttonTitle="{{ __('Convert to Database') }}" submitAction="convertToDatabase"
-                                        :actions="[__('The selected resource will be converted to a service database.')]"
+                                        :actions="[
+                                            __('The selected resource will be converted to a service database.'),
+                                        ]"
                                         confirmationText="{{ Str::headline($serviceApplication->name) }}"
                                         confirmationLabel="{{ __('Please confirm the execution of the actions by entering the Service Application Name below') }}"
                                         shortConfirmationLabel="{{ __('Service Application Name') }}" />
@@ -258,7 +262,9 @@
                             @can('update', $serviceDatabase)
                                 <x-modal-confirmation title="{{ __('Convert to Application') }}"
                                     buttonTitle="{{ __('Convert to Application') }}" submitAction="convertToApplication"
-                                    :actions="[__('The selected resource will be converted to an application.')]"
+                                    :actions="[
+                                        __('The selected resource will be converted to an application.'),
+                                    ]"
                                     confirmationText="{{ Str::headline($serviceDatabase->name) }}"
                                     confirmationLabel="{{ __('Please confirm the execution of the actions by entering the Service Database Name below') }}"
                                     shortConfirmationLabel="{{ __('Service Database Name') }}" />

@@ -235,14 +235,21 @@
     @if ($service->isDeployable)
         <div class="hidden" aria-hidden="true">
             <x-modal-confirmation title="{{ __('Confirm Service Restart?') }}" buttonTitle="{{ __('database.restart') }}"
-                submitAction="restartEvent" :dispatchAction="true" :actions="[__('This service will be restarted.')]"
+                submitAction="restartEvent" :dispatchAction="true"
+                :actions="[
+                    __('This service will be restarted.'),
+                ]"
                 :confirmWithText="false" :confirmWithPassword="false" step2ButtonText="{{ __('common.confirm') }}">
                 <x-slot:trigger>
                     <button id="service-restart-trigger" type="button">{{ __('database.restart') }}</button>
                 </x-slot:trigger>
             </x-modal-confirmation>
             <x-modal-confirmation title="{{ __('Confirm Service Stopping?') }}" buttonTitle="{{ __('destination.stop') }}"
-                submitAction="stop" :checkboxes="$checkboxes" :actions="[__('service.stop'), __('resource.non_persistent')]"
+                submitAction="stop" :checkboxes="$checkboxes"
+                :actions="[
+                    __('service.stop'),
+                    __('resource.non_persistent'),
+                ]"
                 :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="{{ __('common.continue') }}"
                 step2ButtonText="{{ __('common.confirm') }}">
                 <x-slot:trigger>
@@ -252,7 +259,10 @@
             @if ($selectedResource)
                 <x-modal-confirmation title="{{ __('Confirm Container Removal?') }}" buttonTitle="{{ __('Remove container') }}"
                     canGate="deploy" :canResource="$service" submitAction="removeSelectedResourceContainer"
-                    :actions="[__('The exited service resource container will be removed.'), __('resource.non_persistent')]"
+                    :actions="[
+                        __('The exited service resource container will be removed.'),
+                        __('resource.non_persistent'),
+                    ]"
                     :confirmWithText="false" :confirmWithPassword="false" step1ButtonText="{{ __('common.continue') }}"
                     step2ButtonText="{{ __('common.confirm') }}">
                     <x-slot:trigger>

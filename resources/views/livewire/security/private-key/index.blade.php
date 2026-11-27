@@ -10,7 +10,9 @@
             @can('create', App\Models\PrivateKey::class)
                 <x-modal-confirmation title="{{ __('private_keys.confirm_delete_unused') }}"
                     isErrorButton submitAction="cleanupUnusedKeys"
-                    :actions="[__('private_keys.delete_unused_warning')]"
+                    :actions="[
+                        __('private_keys.delete_unused_warning'),
+                    ]"
                     :confirmWithText="false" :confirmWithPassword="false">
                     <x-slot:trigger>
                         <button type="button"

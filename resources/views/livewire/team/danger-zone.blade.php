@@ -71,7 +71,9 @@
                                     $deletionBlockers === [])
                                 <x-modal-confirmation title="{{ __('teams.confirm_delete') }}" buttonTitle="{{ __('Delete team') }}"
                                     isErrorButton submitAction="delete"
-                                    :actions="[__('teams.delete_action_warning')]"
+                                    :actions="[
+                                        __('teams.delete_action_warning'),
+                                    ]"
                                     confirmationText="{{ currentTeam()->name }}"
                                     confirmationLabel="{{ __('Enter the team name to confirm permanent deletion') }}"
                                     shortConfirmationLabel="{{ __('Team name') }}" :confirmWithPassword="false"

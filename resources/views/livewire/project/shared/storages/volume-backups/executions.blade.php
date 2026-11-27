@@ -13,7 +13,10 @@
                 <x-forms.button wire:click="cleanupFailed">{{ __('Cleanup failed') }}</x-forms.button>
                 <x-modal-confirmation :title="__('modal.cleanup_deleted_backup_entries')" isErrorButton
                     submitAction="cleanupDeleted()"
-                    :actions="[__('This permanently deletes backup execution entries whose local and S3 files have already been deleted.'), __('This only removes database entries, not backup files.')]"
+                    :actions="[
+                        __('This permanently deletes backup execution entries whose local and S3 files have already been deleted.'),
+                        __('This only removes database entries, not backup files.'),
+                    ]"
                     confirmationText="cleanup deleted backups"
                     :confirmationLabel="__("Please confirm by typing 'cleanup deleted backups' below")"
                     :shortConfirmationLabel="__('Confirmation')">

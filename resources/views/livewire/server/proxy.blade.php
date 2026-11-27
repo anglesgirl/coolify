@@ -19,7 +19,9 @@
                                 @can('update', $server)
                                     <x-modal-confirmation :title="__('Confirm Proxy Switching?')"
                                         :buttonTitle="__('Switch proxy')" submitAction="changeProxy"
-                                        :actions="[__('Custom proxy configurations may be reset to their default settings.')]"]
+                                        :actions="[
+                                            __('Custom proxy configurations may be reset to their default settings.'),
+                                        ]"
                                         :warningMessage="__('Review the proxy switching guide before continuing.')"
                                         :step2ButtonText="__('Switch Proxy')" :confirmWithText="false"
                                         :confirmWithPassword="false" />

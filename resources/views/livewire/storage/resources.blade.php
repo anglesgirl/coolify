@@ -110,7 +110,9 @@
                                 <x-modal-confirmation title="{{ __('Remove this storage from the backup schedule?') }}"
                                     submitAction="disableS3({{ $backup->id }})" :confirmWithText="false"
                                     :confirmWithPassword="false" step2ButtonText="{{ __('Remove storage') }}"
-                                    :actions="[__('Backups from this schedule will no longer be uploaded to this storage. S3 backup turns off when no other storage remains.')]">
+                                    :actions="[
+                                        __('Backups from this schedule will no longer be uploaded to this storage. S3 backup turns off when no other storage remains.'),
+                                    ]">
                                     <x-slot:trigger>
                                         <button type="button"
                                             class="icon-button shrink-0 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
@@ -159,7 +161,9 @@
                             <x-modal-confirmation title="{{ __('Remove this storage from the backup schedule?') }}"
                                 submitAction="disableVolumeS3({{ $backup->id }})" :confirmWithText="false"
                                 :confirmWithPassword="false" step2ButtonText="{{ __('Remove storage') }}"
-                                :actions="[__('Backups from this schedule will no longer be uploaded to this storage. S3 backup turns off when no other storage remains.')]">
+                                :actions="[
+                                    __('Backups from this schedule will no longer be uploaded to this storage. S3 backup turns off when no other storage remains.'),
+                                ]">
                                 <x-slot:trigger>
                                     <button type="button"
                                         class="icon-button shrink-0 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"

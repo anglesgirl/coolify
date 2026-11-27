@@ -75,7 +75,9 @@
                     <x-slot:action>
                         <x-modal-confirmation :title="__('Delete scheduled task?')" isErrorButton :buttonTitle="__('Delete task')"
                             submitAction="delete({{ $task->id }})"
-                            :actions="[__('scheduled_task.delete_action')]"
+                            :actions="[
+                                __('scheduled_task.delete_action'),
+                            ]"
                             confirmationText="{{ $task->name }}"
                             :confirmationLabel="__('Enter the scheduled task name to confirm deletion')"
                             :shortConfirmationLabel="__('Task name')" :confirmWithPassword="false"

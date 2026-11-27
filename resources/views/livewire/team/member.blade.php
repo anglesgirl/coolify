@@ -55,7 +55,9 @@
             @if ($member->id !== Auth::id() && ! ($member->id === 0 && currentTeam()->id === 0))
                 @if (data_get($member, 'pivot.role') === 'owner' && ! Auth::user()->isOwner())
                     <x-modal-confirmation title="{{ __('Remove team member?') }}" submitAction="remove"
-                        :actions="[__('This user loses access to all resources of this team.')]"
+                        :actions="[
+                            __('This user loses access to all resources of this team.'),
+                        ]"
                         :confirmWithText="false" :confirmWithPassword="false"
                         step2ButtonText="{{ __('Remove member') }}">
                         <x-slot:trigger>
@@ -93,7 +95,9 @@
                         @endif
                         <x-slot:danger>
                             <x-modal-confirmation title="{{ __('Remove team member?') }}" buttonFullWidth submitAction="remove"
-                                :actions="[__('This user loses access to all resources of this team.')]"
+                                :actions="[
+                                    __('This user loses access to all resources of this team.'),
+                                ]"
                                 :confirmWithText="false" :confirmWithPassword="false"
                                 step2ButtonText="{{ __('Remove member') }}">
                                 <x-slot:trigger>
