@@ -28,12 +28,12 @@
                         <span>{{ $title }}</span>
                     </button>
                     @if (filled($description ?? $helper))
-                        <x-helper :helper="$description ?? $helper" :label="'More information about '.$title" />
+                        <x-helper :helper="$description ?? $helper" :label="__('More information about').$title" />
                     @endif
                 </h3>
             @elseif (filled($description ?? $helper))
                 <h3>
-                    <x-helper :helper="$description ?? $helper" :label="'More information about '.$title">
+                    <x-helper :helper="$description ?? $helper" :label="__('More information about').$title">
                         <x-slot:trigger>
                             <span class="underline underline-offset-4">{{ $title }}</span>
                         </x-slot:trigger>

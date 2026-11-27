@@ -41,11 +41,11 @@
     }" @click.outside="open = false" @keydown.escape.window="open = false"
         x-on:resize.window="if (open) updatePosition()" x-on:scroll.window="if (open) updatePosition()">
         <x-status-badge as="button" x-ref="trigger" x-on:click="toggle()" aria-haspopup="dialog"
-            x-bind:aria-expanded="open" :status="$isBlocked ? 'Blocked' : 'Not scanned'"
+            x-bind:aria-expanded="open" :status="$isBlocked ? __('Blocked') : __('Not scanned')"
             :type="$isBlocked ? 'error' : 'warning'" class="hover:bg-neutral-200 dark:hover:bg-white/[0.12]" />
 
         <div x-ref="panel" x-show="open" x-cloak x-transition.opacity :style="panelStyle" role="dialog"
-            aria-label="{{ $isBlocked ? 'Deploy blocked' : 'Image not scanned' }}"
+            aria-label="{{ $isBlocked ? __('Deploy blocked') : __('Image not scanned') }}"
             class="surface-popover z-[1100] w-[calc(100vw-2rem)] max-w-sm rounded-lg p-3 text-left">
             <div class="flex items-start gap-2.5">
                 <span @class([
@@ -63,25 +63,25 @@
                     <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] leading-4">
                         @if ($vulnerabilitiesUrl)
                             <a href="{{ $vulnerabilitiesUrl }}" {{ wireNavigate() }} class="{{ $linkClasses }}">
-                                Open Security
+                                {{ __('Open Security') }}
                                 <x-reicon name="arrow-right" class="size-2.5" />
                             </a>
                         @endif
                         @if ($deploymentUrl)
                             <a href="{{ $deploymentUrl }}" {{ wireNavigate() }} class="{{ $linkClasses }}">
-                                Open deployment
+                                {{ __('Open deployment') }}
                                 <x-reicon name="arrow-right" class="size-2.5" />
                             </a>
                         @endif
                         @if ($isBlocked && $showDeployAnyway && $canDeployAnyway)
                             <x-forms.button class="normal-case!" wire:click="deployAnyway">
-                                Deploy anyway
+                                {{ __('Deploy anyway') }}
                             </x-forms.button>
                         @endif
                     </div>
                     @if ($isBlocked && $showDeployAnyway && ! $canDeployAnyway)
                         <p class="mt-2 text-[11px] leading-4 text-neutral-600 dark:text-fg-dim">
-                            Ask someone with write access to deploy anyway.
+                            {{ __('Ask someone with write access to deploy anyway.') }}
                         </p>
                     @endif
                 </div>

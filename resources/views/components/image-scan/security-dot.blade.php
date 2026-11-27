@@ -5,8 +5,8 @@
 
 @php
     $dot = match ($status) {
-        'update_now' => ['class' => 'bg-error', 'label' => 'Security: update now'],
-        'update_available' => ['class' => 'bg-warning', 'label' => 'Security: security update'],
+        'update_now' => ['class' => 'bg-error', 'label' => __('Security: update now')],
+        'update_available' => ['class' => 'bg-warning', 'label' => __('Security: security update')],
         default => null,
     };
 @endphp

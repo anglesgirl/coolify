@@ -10,7 +10,7 @@
     @for ($i = 0; $i < (int) $count; $i++)
         <div class="flex flex-col bg-[var(--coollabs-base)] px-4 py-3">
             <span class="text-[11px] font-medium tracking-wide text-neutral-500 uppercase dark:text-fg-dim">
-                {{ $labels[$i] ?? 'Metric' }}
+                {{ $labels[$i] ?? __('Metric') }}
             </span>
             <x-skeleton class="mt-2 h-6 w-20" />
             <div class="mt-auto pt-3">

@@ -41,7 +41,7 @@
         $call = $action.'('.\Illuminate\Support\Js::from($nextValue).')';
     @endphp
     <button type="button" wire:click="{{ $call }}" wire:loading.attr="aria-busy" wire:target="{{ $call }}"
-        aria-label="{{ $ariaBase }}{{ $direction ? ', sorted '.($direction === 'asc' ? 'ascending' : 'descending') : '' }}"
+        aria-label="{{ $ariaBase }}{{ $direction ? __(', sorted').($direction === 'asc' ? __('ascending') : __('descending')) : '' }}"
         {{ $attributes->class(['table-sort-header group', 'is-sorted' => $direction]) }}>
         <span class="truncate">{{ $label }}</span>
         <svg @class(['table-sort-header-icon', 'rotate-180' => $direction === 'desc', 'is-visible' => $direction]) viewBox="0 0 24 24"
@@ -58,7 +58,7 @@
 @else
     <button type="button"
         x-on:click="{{ $model }} = ({{ $model }} === @js($firstValue) ? @js($otherValue) : @js($firstValue)){{ $then ? '; '.$then : '' }}"
-        x-bind:aria-label="@js($ariaBase) + ({{ $model }} === @js($asc) ? ', sorted ascending' : ({{ $model }} === @js($desc) ? ', sorted descending' : ''))"
+        x-bind:aria-label="@js($ariaBase) + ({{ $model }} === @js($asc) ? '{{ __(', sorted ascending') }}' : ({{ $model }} === @js($desc) ? '{{ __(', sorted descending') }}' : ''))"
         x-bind:class="{ 'is-sorted': [@js($asc), @js($desc)].includes({{ $model }}) }"
         {{ $attributes->class(['table-sort-header group']) }}>
         <span class="truncate">{{ $label }}</span>

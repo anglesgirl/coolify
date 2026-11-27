@@ -25,9 +25,9 @@
     };
 
     [$summaryLabel, $summaryType] = match (true) {
-        ! $serverReady => ['Unavailable', 'error'],
-        $proxyNeedsAttention || $sentinelNeedsAttention => ['Attention required', 'warning'],
-        default => ['Ready', 'success'],
+        ! $serverReady => [__('Unavailable'), 'error'],
+        $proxyNeedsAttention || $sentinelNeedsAttention => [__('Attention required'), 'warning'],
+        default => [__('Ready'), 'success'],
     };
 @endphp
 
@@ -50,10 +50,10 @@
     <div x-cloak x-show="open" x-transition.origin.top.left
         class="listbox-panel top-8! right-auto! left-0! z-[90]! w-64! min-w-64!" role="menu">
         <div class="flex items-center gap-1 px-3 py-2 text-[11px] font-medium text-neutral-400 dark:text-fg-faint">
-            <span>System status</span>
+            <span>{{ __('System status') }}</span>
             @if ($server->proxySet() && auth()->user()?->can('manageProxy', $server))
                 <button type="button" wire:click="checkProxyStatus" wire:loading.attr="disabled"
-                    wire:target="checkProxyStatus" aria-label="Refresh status" title="Refresh status"
+                    wire:target="checkProxyStatus" aria-label="{{ __('Refresh status') }}" title="{{ __('Refresh status') }}"
                     class="inline-flex size-5 items-center justify-center rounded text-neutral-400 hover:bg-neutral-200 hover:text-neutral-700 disabled:cursor-wait dark:text-fg-faint dark:hover:bg-white/10 dark:hover:text-fg">
                     <x-reicon name="refresh" class="size-3" wire:loading.class="animate-spin" wire:target="checkProxyStatus" />
                 </button>
@@ -66,8 +66,8 @@
                 'bg-success' => $serverReady,
                 'bg-error' => ! $serverReady,
             ])></span>
-            <span class="flex-1">Server</span>
-            <span>{{ $serverReady ? 'Ready' : 'Unavailable' }}</span>
+            <span class="flex-1">{{ __('Server') }}</span>
+            <span>{{ $serverReady ? __('Ready') : __('Unavailable') }}</span>
         </a>
         @if ($server->proxySet())
             <a href="{{ route('server.proxy', ['server_uuid' => $server->uuid]) }}" {{ wireNavigate() }}
@@ -78,7 +78,7 @@
                     'bg-warning' => $proxyNeedsAttention && ($proxyUpdateAvailable || in_array($proxyStatus, ['starting', 'restarting', 'stopping'], true)),
                     'bg-error' => $proxyNeedsAttention && ! $proxyUpdateAvailable && ! in_array($proxyStatus, ['starting', 'restarting', 'stopping'], true),
                 ])></span>
-                <span class="flex-1">Proxy</span>
+                <span class="flex-1">{{ __('database.proxy') }}</span>
                 <span>{{ $proxyStatusLabel }}</span>
             </a>
         @endif
@@ -91,7 +91,7 @@
                     'bg-neutral-400 dark:bg-fg-faint' => $sentinelStatus === 'waiting',
                     'bg-warning' => $sentinelStatus === 'out_of_sync',
                 ])></span>
-                <span class="flex-1">Sentinel</span>
+                <span class="flex-1">{{ __('Sentinel') }}</span>
                 <span>{{ $sentinelStatusLabel }}</span>
             </a>
         @endif

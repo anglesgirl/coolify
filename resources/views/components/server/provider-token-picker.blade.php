@@ -5,18 +5,18 @@
     'tokens',
 ])
 
-<x-application.settings-section title="{{ $providerLabel }} account"
-    description="Choose the cloud credential Coolify should use for this server." flush>
+<x-application.settings-section title="{{ $providerLabel }} {{ __('account') }}"
+    description="{{ __('Choose the cloud credential Coolify should use for this server.') }}" flush>
     @if ($tokens->isEmpty())
-        <x-empty title="No {{ $providerLabel }} tokens"
-            description="Add an API token to continue provisioning." icon-name="keys" size="sm">
+        <x-empty title="{{ __('No') }} {{ $providerLabel }} {{ __('tokens') }}"
+            description="{{ __('Add an API token to continue provisioning.') }}" icon-name="keys" size="sm">
             <x-slot:actions>
-                <x-modal-input title="Add {{ $providerLabel }} Token">
+                <x-modal-input title="{{ __('button.add') }} {{ $providerLabel }} {{ __('Token') }}">
                     <x-slot:content>
                         <button type="button"
                             class="button button-highlighted">
                             <x-reicon name="plus" class="size-3.5" />
-                            Add token
+                            {{ __('Add token') }}
                         </button>
                     </x-slot:content>
                     <livewire:security.cloud-provider-token-form :modal_mode="true" :provider="$provider"
@@ -41,7 +41,7 @@
                                 {{ $token->name ?? $providerLabel . ' token' }}
                             </h3>
                             <p class="mt-1 line-clamp-2 text-[11px] leading-4 text-neutral-500 dark:text-fg-faint">
-                                {{ $token->description ?: 'Use this token to provision the server.' }}
+                                {{ $token->description ?: __('Use this token to provision the server.') }}
                             </p>
                         </div>
                     </div>

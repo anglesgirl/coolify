@@ -17,7 +17,7 @@
             <button type="button" aria-haspopup="listbox" :aria-expanded="open"
                 @class(['button max-w-64 min-w-0 normal-case!', 'button-highlighted' => $current !== null])>
                 <x-reicon name="layers" class="size-3.5 shrink-0" />
-                <span class="truncate" title="{{ $current ?? 'All images' }}">{{ $current ?? 'All images' }}</span>
+                <span class="truncate" title="{{ $current ?? __('All images') }}">{{ $current ?? __('All images') }}</span>
                 <x-reicon name="chevron-down" class="size-3.5 shrink-0" />
             </button>
         </x-slot:trigger>
