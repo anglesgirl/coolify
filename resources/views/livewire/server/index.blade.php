@@ -1,16 +1,16 @@
 <div class="application-settings-form w-full">
     <x-slot:title>
-        Servers | Coolify
+        {{ __('servers.title') }}
     </x-slot>
 
     <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 class="min-w-0 text-[24px]! leading-7! font-semibold! tracking-tight!">Servers</h1>
+        <h1 class="min-w-0 text-[24px]! leading-7! font-semibold! tracking-tight!">{{ __('servers.heading') }}</h1>
         <div class="flex flex-wrap items-center gap-2">
             @can('createAnyResource')
                 <a href="{{ route('server.create') }}" {{ wireNavigate() }}
                     class="button w-fit shrink-0 whitespace-nowrap button-highlighted">
                     <x-reicon name="plus" class="size-3.5" />
-                    New server
+                    {{ __('modal.new_server') }}
                 </a>
             @endcan
         </div>
@@ -28,11 +28,11 @@
             $sentinelNeedsAttention = $isReady && $server->isSentinelEnabled() && $server->sentinelStatus() === 'out_of_sync';
 
             $status = match (true) {
-                $isTransferredAway => 'Transferred away',
-                $server->settings->force_disabled => 'Disabled',
-                $proxyNeedsAttention || $sentinelNeedsAttention => 'Attention required',
-                $isReady => 'Ready',
-                default => 'Validation required',
+                $isTransferredAway => __('Transferred away'),
+                $server->settings->force_disabled => __('Disabled'),
+                $proxyNeedsAttention || $sentinelNeedsAttention => __('Attention required'),
+                $isReady => __('Ready'),
+                default => __('Validation required'),
             };
 
             $statusType = match (true) {
@@ -46,13 +46,13 @@
             $patchBadges = [];
             if ($patchStatus !== null) {
                 $patchBadges[] = match (true) {
-                    $patchStatus['error'] !== null => ['label' => 'Patch check failed', 'type' => 'error'],
-                    $patchStatus['security'] > 0 => ['label' => $patchStatus['security'].' security '.str('update')->plural($patchStatus['security']), 'type' => 'error'],
-                    $patchStatus['updates'] > 0 => ['label' => $patchStatus['updates'].' '.str('update')->plural($patchStatus['updates']), 'type' => 'warning'],
-                    default => ['label' => 'Up to date', 'type' => 'success'],
+                    $patchStatus['error'] !== null => ['label' => __('Patch check failed'), 'type' => 'error'],
+                    $patchStatus['security'] > 0 => ['label' => $patchStatus['security'].' '.($patchStatus['security'] === 1 ? __('security update') : __('security updates')), 'type' => 'error'],
+                    $patchStatus['updates'] > 0 => ['label' => $patchStatus['updates'].' '.($patchStatus['updates'] === 1 ? __('update') : __('updates')), 'type' => 'warning'],
+                    default => ['label' => __('Up to date'), 'type' => 'success'],
                 };
                 if ($patchStatus['error'] === null && $patchStatus['reboot_required']) {
-                    $patchBadges[] = ['label' => 'Reboot required', 'type' => 'warning'];
+                    $patchBadges[] = ['label' => __('Reboot required'), 'type' => 'warning'];
                 }
             }
 
@@ -72,7 +72,7 @@
                     'rebootRequired' => $patchStatus['error'] === null && $patchStatus['reboot_required'],
                 ],
                 'patchBadges' => $patchBadges,
-                'patchCheckedAt' => $patchStatus === null ? null : 'Patches checked '.$patchStatus['checked_at']->diffForHumans(),
+                'patchCheckedAt' => $patchStatus === null ? null : __('Patches checked :time', ['time' => $patchStatus['checked_at']->diffForHumans()]),
             ];
         })->values();
 
@@ -101,19 +101,19 @@
         }
     }">
         @if ($servers->isEmpty())
-            <x-empty title="No servers yet"
-                description="Add a server to deploy applications, databases, and services."
+            <x-empty :title="__('No servers yet')"
+                :description="__('Add a server to deploy applications, databases, and services.')"
                 icon-name="servers" />
         @else
             <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div class="relative w-full sm:max-w-sm">
                     <x-reicon name="search"
                         class="pointer-events-none absolute top-1/2 left-2.5 z-10 size-3.5 -translate-y-1/2 text-neutral-400 dark:text-fg-faint" />
-                    <input x-model.debounce.150ms="search" type="search" placeholder="Search servers"
+                    <input x-model.debounce.150ms="search" type="search" placeholder="{{ __('Search servers') }}"
                         class="h-8! w-full rounded-lg! border-neutral-200! bg-white! py-0! pr-8! pl-8! text-[12px]! shadow-none! placeholder:text-neutral-400 focus:border-accent! focus:ring-0! dark:border-white/[0.08]! dark:bg-white/[0.035]! dark:text-fg! dark:placeholder:text-fg-faint">
                     <button x-cloak x-show="search" x-on:click="search = ''" type="button"
                         class="absolute top-1/2 right-2 flex size-5 -translate-y-1/2 items-center justify-center rounded text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-black dark:text-fg-faint dark:hover:bg-white/[0.07] dark:hover:text-fg"
-                        aria-label="Clear search">
+                        aria-label="{{ __('Clear search') }}">
                         <x-reicon name="x" class="size-3" />
                     </button>
                 </div>
@@ -156,7 +156,7 @@
                             </div>
                             @if ($serverRow['statusType'] !== 'success')
                                 <span data-tooltip="{{ $serverRow['status'] }}"
-                                    aria-label="Server status: {{ $serverRow['status'] }}"
+                                    aria-label="{{ __('Server status: :status', ['status' => $serverRow['status']]) }}"
                                     @class([
                                         'ml-auto flex size-6 shrink-0 items-center justify-center rounded-md',
                                         'text-orange-500 dark:text-warning' => $serverRow['statusType'] === 'warning',
@@ -172,7 +172,7 @@
                         @endphp
                         @if ($cardPatchBadges !== [])
                             <div class="relative z-10 mt-auto flex cursor-pointer flex-wrap gap-1.5 pt-3"
-                                role="link" tabindex="0" aria-label="Open patches"
+                                role="link" tabindex="0" aria-label="{{ __('Open patches') }}"
                                 @click.prevent.stop="openPatches(@js($serverRow['patchesHref']))"
                                 @keydown.enter.prevent.stop="openPatches(@js($serverRow['patchesHref']))"
                                 data-tooltip="{{ $serverRow['patchCheckedAt'] }}">
@@ -191,12 +191,12 @@
                     'grid min-w-[480px] grid-cols-[minmax(0,1fr)_9.5rem] border-b border-neutral-200 bg-neutral-50 px-4 py-2.5 text-[11px] font-medium text-neutral-500 md:min-w-[560px] md:grid-cols-[minmax(0,1fr)_6rem_9.5rem] dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-fg-faint',
                     'lg:min-w-[760px] lg:grid-cols-[minmax(0,1fr)_6rem_12rem_9.5rem]' => $showPatches,
                 ])>
-                    <div>Server</div>
-                    <div class="hidden md:block">Resources</div>
+                    <div>{{ __('Server') }}</div>
+                    <div class="hidden md:block">{{ __('Resources') }}</div>
                     @if ($showPatches)
-                        <div class="hidden lg:block">Patches</div>
+                        <div class="hidden lg:block">{{ __('Patches') }}</div>
                     @endif
-                    <div>Status</div>
+                    <div>{{ __('Status') }}</div>
                 </div>
                 <template x-for="server in filteredServers" :key="server.uuid">
                     <a :href="server.href" {{ wireNavigate() }}
@@ -230,7 +230,7 @@
                         </div>
                         @if ($showPatches)
                             <div class="hidden cursor-pointer flex-wrap gap-1 lg:flex" :data-tooltip="server.patchCheckedAt"
-                                role="link" tabindex="0" aria-label="Open patches"
+                                role="link" tabindex="0" aria-label="{{ __('Open patches') }}"
                                 @click.prevent.stop="openPatches(server.patchesHref)"
                                 @keydown.enter.prevent.stop="openPatches(server.patchesHref)">
                                 <template x-for="badge in server.patchBadges" :key="badge.label">
@@ -258,8 +258,8 @@
             <div x-show="filteredServers.length === 0"
                 class="flex min-h-52 flex-col items-center justify-center rounded-xl border border-neutral-200 bg-white px-6 text-center dark:border-white/[0.08] dark:bg-white/[0.05]">
                 <x-reicon name="search" class="mb-3 size-6 text-neutral-300 dark:text-fg-faint" />
-                <p class="text-[13px] font-medium">No matching servers</p>
-                <p class="mt-1 text-[12px] text-neutral-500 dark:text-fg-dim">Try a different search.</p>
+                <p class="text-[13px] font-medium">{{ __('No matching servers') }}</p>
+                <p class="mt-1 text-[12px] text-neutral-500 dark:text-fg-dim">{{ __('Try a different search.') }}</p>
             </div>
         @endif
 
