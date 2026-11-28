@@ -1386,6 +1386,8 @@
     "Validate the SSH connection before using this server.": "使用此服务器前，请先验证 SSH 连接。",
     "Previous validation output": "上次验证输出",
     "The latest output produced while checking this server.": "检查此服务器时产生的最新输出。",
+    "Use code editor": "使用代码编辑器",
+    "Use plain text editor": "使用纯文本编辑器",
     "Use this server for deployments and builds?": "将此服务器用于部署和构建？",
     "Enable deployments and builds": "启用部署和构建",
     "Builds can use a large amount of CPU and memory. During a build, deployed resources on this server can become slow or unreachable.": "构建会占用大量 CPU 和内存。构建期间，此服务器上已部署的资源可能会变慢或无法访问。",

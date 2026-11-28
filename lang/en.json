@@ -1386,6 +1386,8 @@
     "Validate the SSH connection before using this server.": "Validate the SSH connection before using this server.",
     "Previous validation output": "Previous validation output",
     "The latest output produced while checking this server.": "The latest output produced while checking this server.",
+    "Use code editor": "Use code editor",
+    "Use plain text editor": "Use plain text editor",
     "Use this server for deployments and builds?": "Use this server for deployments and builds?",
     "Enable deployments and builds": "Enable deployments and builds",
     "Builds can use a large amount of CPU and memory. During a build, deployed resources on this server can become slow or unreachable.": "Builds can use a large amount of CPU and memory. During a build, deployed resources on this server can become slow or unreachable.",
