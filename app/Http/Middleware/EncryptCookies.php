@@ -13,6 +13,10 @@ class EncryptCookies extends Middleware
      */
     protected $except = [
         'locale',
+        // Set client-side by the plain text / code editor toggle (see
+        // components/forms/textarea.blade.php). Unencrypted cookies cannot
+        // be decrypted, so request()->cookie() would always return null.
+        'coolify_plain_editor',
     ];
 
     /**
