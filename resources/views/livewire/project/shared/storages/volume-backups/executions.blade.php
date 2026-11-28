@@ -18,7 +18,7 @@
                         __('This only removes database entries, not backup files.'),
                     ]"
                     confirmationText="cleanup deleted backups"
-                    :confirmationLabel="__("Please confirm by typing 'cleanup deleted backups' below")"
+                    :confirmationLabel="__('Please confirm by typing \'cleanup deleted backups\' below')"
                     :shortConfirmationLabel="__('Confirmation')">
                     <x-slot:trigger>
                         <x-forms.button isError>{{ __('modal.cleanup_deleted') }}</x-forms.button>

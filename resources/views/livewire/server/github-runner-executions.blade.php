@@ -53,6 +53,6 @@
         </div>
     @empty
         <x-empty size="sm" :title="__('No runners yet')"
-            :description="__("Workflow jobs that ask for this server's labels appear here.")" icon-name="servers" />
+            :description="__('Workflow jobs that ask for this server\'s labels appear here.')" icon-name="servers" />
     @endforelse
 </div>

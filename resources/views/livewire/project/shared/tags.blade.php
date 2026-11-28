@@ -34,7 +34,7 @@
             </div>
         @empty
             <x-empty size="sm" :title="__('No tags assigned')"
-                :description="__("Add a tag above or select one from your team's available tags.")"
+                :description="__('Add a tag above or select one from your team\'s available tags.')"
                 icon-name="tags" />
         @endforelse
     </x-application.settings-section>

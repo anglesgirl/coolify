@@ -49,7 +49,7 @@
                 placeholder="{{ __('My WordPress site') }}" />
             <x-forms.input canGate="update" :canResource="$service" id="description" label="{{ __('input.description') }}" />
         </div>
-        <x-application.settings-subsection id="service-network-section" title="{{ __('database.network') }}" :helper="__("Control whether this Compose stack joins Coolify's predefined network.")">
+        <x-application.settings-subsection id="service-network-section" title="{{ __('database.network') }}" :helper="__('Control whether this Compose stack joins Coolify\'s predefined network.')">
             <x-forms.listbox canGate="update" :canResource="$service" id="connectToDockerNetwork" label="{{ __('Predefined network') }}" live onChange="instantSave"
                 :disabled="! auth()->user()->can('update', $service)" :options="[
                     ['value' => false, 'label' => __('Use the stack network only')],

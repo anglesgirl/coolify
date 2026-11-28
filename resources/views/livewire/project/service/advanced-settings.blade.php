@@ -34,7 +34,7 @@
             canGate="update" :canResource="$serviceApplication" />
         @if ($showCertificateResolver)
             <x-forms.listbox id="certificateResolverMode" label="{{ __('Certificate resolver') }}" live
-                :helper="__("Sets the Traefik certificate resolver for this service's HTTPS routes. Choose None for domains that use certificates from Traefik's dynamic configuration (for example Cloudflare Origin CA certificates). Restart or redeploy the service to apply the change.")"
+                :helper="__('Sets the Traefik certificate resolver for this service\'s HTTPS routes. Choose None for domains that use certificates from Traefik\'s dynamic configuration (for example Cloudflare Origin CA certificates). Restart or redeploy the service to apply the change.')"
                 canGate="update" :canResource="$serviceApplication" :options="[
                     ['value' => 'server', 'label' => __('Server setting (:resolver)', ['resolver' => $serverCertificateResolver])],
                     ['value' => 'none', 'label' => __('None (use your own certificates)')],

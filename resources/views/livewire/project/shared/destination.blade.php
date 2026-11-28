@@ -7,7 +7,7 @@
 
         <div class="flex flex-col gap-6">
             <x-application.settings-section id="primary-server-section" :title="__('destination.primary_server')"
-                :helper="__("The default server and network used for this application's deployments.")">
+                :helper="__('The default server and network used for this application\'s deployments.')">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex min-w-0 items-center gap-3">
                         <div

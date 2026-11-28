@@ -12,14 +12,14 @@
         <div class="application-settings-form flex w-full flex-col gap-6">
             @if ($this->isLocalhost)
                 <x-application.settings-section id="server-transfer-section" :title="__('Transfer server')"
-                    :helper="__("Move this server’s control-plane config to another Coolify instance (same physical host).")">
+                    :helper="__('Move this server’s control-plane config to another Coolify instance (same physical host).')">
                     <x-callout type="warning" :title="__('Localhost cannot be transferred')">
                         {{ __('The Coolify host (localhost) cannot be transferred between instances.') }}
                     </x-callout>
                 </x-application.settings-section>
             @else
                 <x-application.settings-section id="server-transfer-section" :title="__('Transfer server')"
-                    :helper="__("Move this server’s control-plane config to another Coolify instance (same physical host).")">
+                    :helper="__('Move this server’s control-plane config to another Coolify instance (same physical host).')">
                     <x-slot:actions>
                         @php
                             $exportTooltip = $exportId ? __('Export ID: :id', ['id' => $exportId]) : null;

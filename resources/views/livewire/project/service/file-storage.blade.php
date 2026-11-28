@@ -128,7 +128,7 @@
                         @endif
                         <x-forms.textarea
                             label="{{ $fileStorage->is_based_on_git ? __('Content (refreshed after a successful deployment)') : __('Content') }}"
-                            :helper="__("The content shown may be outdated. Click 'Load from server' to fetch the latest version.")"
+                            :helper="__('The content shown may be outdated. Click \'Load from server\' to fetch the latest version.')"
                             rows="20" id="content" :useMonacoEditor="$isYamlFile" monacoEditorLanguage="yaml"
                             readonly="{{ $fileStorage->is_based_on_git || $fileStorage->is_binary || $fileStorage->is_too_large }}"></x-forms.textarea>
                     @else
@@ -155,7 +155,7 @@
                     @can('update', $resource)
                         <x-forms.textarea
                             label="{{ $fileStorage->is_based_on_git ? __('Content (refreshed after a successful deployment)') : __('Content') }}"
-                            :helper="__("The content shown may be outdated. Click 'Load from server' to fetch the latest version.")"
+                            :helper="__('The content shown may be outdated. Click \'Load from server\' to fetch the latest version.')"
                             rows="20" id="content" :useMonacoEditor="$isYamlFile" monacoEditorLanguage="yaml" disabled></x-forms.textarea>
                     @else
                         <x-callout type="info" title="{{ __('Hidden (only admins can view)') }}">

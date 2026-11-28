@@ -9,7 +9,7 @@
     @if ($server->proxyType() === ProxyTypes::TRAEFIK->value)
         <x-application.settings-section id="server-proxy-certificates-section" :title="__('TLS certificates')"
             x-init="$wire.loadTraefikCertificates()"
-            :helper="__("Review certificates stored in Traefik's acme.json file. Traefik renews every certificate in this file, also when no route uses its domain any more. Deleting an entry removes it from local ACME storage. It does not revoke the certificate at the certificate authority. If a route still uses the domain, Traefik requests a new certificate after the restart.")">
+            :helper="__('Review certificates stored in Traefik\'s acme.json file. Traefik renews every certificate in this file, also when no route uses its domain any more. Deleting an entry removes it from local ACME storage. It does not revoke the certificate at the certificate authority. If a route still uses the domain, Traefik requests a new certificate after the restart.')">
             <x-slot:actions>
                 @php $unusedCertificates = collect($traefikCertificates)->where('in_use', false); @endphp
                 @if ($unusedCertificates->isNotEmpty())
@@ -41,7 +41,7 @@
             <div wire:loading.remove wire:target="loadTraefikCertificates">
                 @if ($traefikCertificatesLoaded && count($traefikCertificates) === 0)
                     <x-empty size="sm" :title="__('No TLS certificates found')"
-                        :description="__("Traefik's ACME storage does not contain certificate entries.")"
+                        :description="__('Traefik\'s ACME storage does not contain certificate entries.')"
                         icon-name="shield-star" />
                 @elseif (count($traefikCertificates) > 0)
                     <div class="overflow-hidden rounded-lg ring-1 ring-neutral-200 dark:ring-white/[0.08]">
