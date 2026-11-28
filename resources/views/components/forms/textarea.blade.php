@@ -24,15 +24,9 @@
             @if ($helper)
                 <x-helper :helper="$helper" />
             @endif
-            @if ($useMonacoEditor)
-                @php $plainEditor = request()->cookie('coolify_plain_editor') === '1'; @endphp
-                <button type="button"
-                    class="ml-auto text-xs font-normal text-neutral-500 underline underline-offset-2 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-100"
-                    onclick="document.cookie='coolify_plain_editor={{ $plainEditor ? '' : '1' }};path=/;max-age={{ $plainEditor ? 0 : 31536000 }}';location.reload();">{{ $plainEditor ? __('Use code editor') : __('Use plain text editor') }}</button>
-            @endif
         </div>
     @endif
-    @if ($useMonacoEditor && request()->cookie('coolify_plain_editor') !== '1')
+    @if ($useMonacoEditor)
         @php $monacoRows = (int) $attributes->get('rows', 0); @endphp
         <div class="w-full" @if ($monacoRows > 0) style="--editor-height: {{ $monacoRows * 23 + 38 }}px" @endif>
             <x-forms.monaco-editor id="{{ $modelBinding }}" language="{{ $monacoEditorLanguage }}" name="{{ $name }}"
